@@ -9,21 +9,21 @@ on:
 jobs:
   lint:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: ["16.x", "18.x"]
 
     steps:
       - uses: actions/checkout@v4
         name: "🛒 Checkout code"
 
+      - name: "Install Pnpm"
+        uses: pnpm/action-setup@v2
+        with:
+          version: "8"
+
       - name: "🔧 Set up Node.js"
         uses: actions/setup-node@v3
         with:
-          node-version: ${{ matrix.node-version }}
-
-      - name: "📦 Install pnpm"
-        run: npm install -g pnpm
+          node-version: "18.x"
+          cache: "pnpm"
 
       - name: "🚀 Install dependencies"
         run: pnpm install
@@ -34,21 +34,21 @@ jobs:
   build:
     needs: lint
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: ["16.x", "18.x"]
 
     steps:
       - uses: actions/checkout@v4
         name: "🛒 Checkout code"
 
+      - name: "Install Pnpm"
+        uses: pnpm/action-setup@v2
+        with:
+          version: "8"
+
       - name: "🔧 Set up Node.js"
         uses: actions/setup-node@v3
         with:
-          node-version: ${{ matrix.node-version }}
-
-      - name: "📦 Install pnpm"
-        run: npm install -g pnpm
+          node-version: "18.x"
+          cache: "pnpm"
 
       - name: "🚀 Install dependencies"
         run: pnpm install
