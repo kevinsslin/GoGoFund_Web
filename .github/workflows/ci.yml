@@ -6,6 +6,11 @@ on:
     branches:
       - "main"
 
+env:
+  POSTGRES_URL: ${{ secrets.POSTGRES_URL }}
+  MAGIC_CONNECT_API_KEY: ${{ secrets.MAGIC_CONNECT_API_KEY }}
+  RAINBOW_PROJECT_ID: ${{ secrets.RAINBOW_PROJECT_ID }}
+
 jobs:
   lint:
     runs-on: ubuntu-latest
