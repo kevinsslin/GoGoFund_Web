@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+
 import { MagicConnectConnector } from "@everipedia/wagmi-magic-connector";
 import { ThemeProvider } from "@material-tailwind/react";
 import {
@@ -19,13 +20,15 @@ import { configureChains, createConfig, WagmiConfig } from "wagmi";
 import { goerli, avalancheFuji } from "wagmi/chains";
 import { publicProvider } from "wagmi/providers/public";
 
+import { privateEnv } from "@/lib/env/private";
+
 import Navbar from "./navbar";
 
 const { chains, publicClient, webSocketPublicClient } = configureChains(
   [goerli, avalancheFuji],
   [publicProvider()],
 );
-const ProjectId = "966691db73928f3c8a904ea62261b457";
+const ProjectId = privateEnv.RAINBOW_PROJECT_ID;
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const rainbowMagicConnector = ({ chains }: any) => ({
@@ -37,7 +40,7 @@ const rainbowMagicConnector = ({ chains }: any) => ({
     const connector = new MagicConnectConnector({
       chains: chains,
       options: {
-        apiKey: "pk_live_32DBE398F99D1619",
+        apiKey: privateEnv.MAGIC_CONNECT_API_KEY,
         magicSdkConfiguration: {
           network: {
             rpcUrl: "https://rpc.ankr.com/eth_goerli",
@@ -55,9 +58,7 @@ const rainbowMagicConnector = ({ chains }: any) => ({
 const connectors = connectorsForWallets([
   {
     groupName: "Email",
-    wallets: [
-        rainbowMagicConnector({ chains }),
-    ],
+    wallets: [rainbowMagicConnector({ chains })],
   },
   {
     groupName: "Recommended",
