@@ -17,7 +17,7 @@ import {
 } from "@rainbow-me/rainbowkit/wallets";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { configureChains, createConfig, WagmiConfig } from "wagmi";
-import { goerli, avalancheFuji } from "wagmi/chains";
+import { sepolia } from "wagmi/chains";
 import { publicProvider } from "wagmi/providers/public";
 
 import { privateEnv } from "@/lib/env/private";
@@ -25,7 +25,7 @@ import { privateEnv } from "@/lib/env/private";
 import Navbar from "./navbar";
 
 const { chains, publicClient, webSocketPublicClient } = configureChains(
-  [goerli, avalancheFuji],
+  [sepolia],
   [publicProvider()],
 );
 const ProjectId = privateEnv.RAINBOW_PROJECT_ID;
@@ -43,7 +43,7 @@ const rainbowMagicConnector = ({ chains }: any) => ({
         apiKey: privateEnv.MAGIC_CONNECT_API_KEY,
         magicSdkConfiguration: {
           network: {
-            rpcUrl: "https://rpc.ankr.com/eth_goerli",
+            rpcUrl: "https://rpc.ankr.com/eth_sepolia",
             chainId: 5,
           },
         },
