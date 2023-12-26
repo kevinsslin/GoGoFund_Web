@@ -2,7 +2,7 @@
 
 import React from "react";
 
-import { MagicConnectConnector } from "@everipedia/wagmi-magic-connector";
+import { MagicConnectConnector } from "@magiclabs/wagmi-connector";
 import { ThemeProvider } from "@material-tailwind/react";
 import {
   RainbowKitProvider,

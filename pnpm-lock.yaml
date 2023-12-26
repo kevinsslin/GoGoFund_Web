@@ -5,9 +5,9 @@ settings:
   excludeLinksFromLockfile: false
 
 dependencies:
-  "@everipedia/wagmi-magic-connector":
-    specifier: ^1.0.2
-    version: 1.0.2(@types/react@18.2.45)(localforage@1.10.0)(react@18.2.0)(typescript@5.3.3)(viem@1.21.0)(zod@3.22.4)
+  "@magiclabs/wagmi-connector":
+    specifier: ^1.1.5
+    version: 1.1.5(@types/react@18.2.45)(localforage@1.10.0)(react@18.2.0)(typescript@5.3.3)(viem@1.21.0)(zod@3.22.4)
   "@material-tailwind/react":
     specifier: ^2.1.8
     version: 2.1.8(react-dom@18.2.0)(react@18.2.0)
@@ -32,6 +32,9 @@ dependencies:
   pg:
     specifier: ^8.11.3
     version: 8.11.3
+  pino-pretty:
+    specifier: ^10.3.0
+    version: 10.3.0
   react:
     specifier: ^18
     version: 18.2.0
@@ -3417,49 +3420,6 @@ packages:
       "@ethersproject/signing-key": 5.7.0
     dev: false
 
-  /@everipedia/wagmi-magic-connector@1.0.2(@types/react@18.2.45)(localforage@1.10.0)(react@18.2.0)(typescript@5.3.3)(viem@1.21.0)(zod@3.22.4):
-    resolution:
-      {
-        integrity: sha512-VvAvFFgGadtTJRE5v0VdLxDKPyDkwXLp8sd6YGsDky3d0gWwfiWyx6+Tz2U4TKJ1x5xU+mlxvpj3ExYi5BijvQ==,
-      }
-    engines: { node: ">=10" }
-    deprecated: We moved package to @magiclabs/wagmi-connector ! Please switch to continue receiving updates
-    peerDependencies:
-      viem: ^0.3.18
-    dependencies:
-      "@changesets/cli": 2.27.1
-      "@magic-ext/connect": 9.1.0
-      "@magic-ext/oauth": 11.4.0
-      "@magic-sdk/provider": 17.4.0(localforage@1.10.0)
-      "@wagmi/core": 1.4.12(@types/react@18.2.45)(react@18.2.0)(typescript@5.3.3)(viem@1.21.0)(zod@3.22.4)
-      magic-sdk: 17.4.0
-      tsc-esm-fix: 2.20.18
-      viem: 1.21.0(typescript@5.3.3)(zod@3.22.4)
-    transitivePeerDependencies:
-      - "@azure/app-configuration"
-      - "@azure/cosmos"
-      - "@azure/data-tables"
-      - "@azure/identity"
-      - "@azure/keyvault-secrets"
-      - "@azure/storage-blob"
-      - "@capacitor/preferences"
-      - "@netlify/blobs"
-      - "@planetscale/database"
-      - "@react-native-async-storage/async-storage"
-      - "@types/react"
-      - "@upstash/redis"
-      - "@vercel/kv"
-      - bufferutil
-      - encoding
-      - immer
-      - localforage
-      - react
-      - supports-color
-      - typescript
-      - utf-8-validate
-      - zod
-    dev: false
-
   /@expo/bunyan@4.0.0:
     resolution:
       {
@@ -4077,40 +4037,32 @@ packages:
       "@lit-labs/ssr-dom-shim": 1.1.2
     dev: false
 
-  /@magic-ext/connect@9.1.0:
+  /@magic-ext/oauth@12.6.0:
     resolution:
       {
-        integrity: sha512-0nBZ4621mgz+RGBhgQNhv3JBjlyVSekGV1L9P9TUTlhrLh3EsIMQ4MbD6+3jKS0cILghCn7NOBNu3Vdz4bKR7w==,
-      }
-    deprecated: Connect extension has been merged to magic-sdk, please download the latest magic-sdk to unlock more features
-    dev: false
-
-  /@magic-ext/oauth@11.4.0:
-    resolution:
-      {
-        integrity: sha512-BDgQolLq6ck5JkFFH0eIs81NOaMQYmr/p4wBrRdxwBBIQtYg3FF5qLPsOoppdEO7BifNhrEKKWkyNzH//Eafmw==,
+        integrity: sha512-nVXR6llS7nMPB3VcrFwE5gjG6Z4g3lIWuw6hav3k8YXTGAE+U3kmYcOAJBXoAMTAyGR3BGALrYlgGG/REr52Fg==,
       }
     dependencies:
       "@magic-sdk/types": 15.8.0
     dev: false
 
-  /@magic-sdk/commons@13.4.0(@magic-sdk/provider@17.4.0)(@magic-sdk/types@15.8.0):
+  /@magic-sdk/commons@14.6.0(@magic-sdk/provider@18.6.0)(@magic-sdk/types@15.8.0):
     resolution:
       {
-        integrity: sha512-F6XG0r0XEZmGB8OTPNFrRz6IgDhb39YxUrG2n/4hajb0vJuA28QjoexG/d7f6Rklvxq9oIBR1wMuqUzGs3oSnA==,
+        integrity: sha512-xYSXDZQ2nhbydZCsphaaMpcl5glsvH+yLkKkQJfXPwaHpow68yFC6z+/lbbqQqvR6vNPdWN+7dbKbTJHI+CnUQ==,
       }
     peerDependencies:
       "@magic-sdk/provider": ">=4.3.0"
       "@magic-sdk/types": ">=3.1.1"
     dependencies:
-      "@magic-sdk/provider": 17.4.0(localforage@1.10.0)
+      "@magic-sdk/provider": 18.6.0(localforage@1.10.0)
       "@magic-sdk/types": 15.8.0
     dev: false
 
-  /@magic-sdk/provider@17.4.0(localforage@1.10.0):
+  /@magic-sdk/provider@18.6.0(localforage@1.10.0):
     resolution:
       {
-        integrity: sha512-DvroR5qCumGtS8TY8wr/4bI9bvkUD222ghbNTsu9MFAgybksc6/ARUX8ttjFZVQXMIIe07PpZroxnxI+ih5mlA==,
+        integrity: sha512-7Q2MpUrVRWCBAbsUihsldY+4vqXgHCzqLtK5fvbnCfLGGjmjWf15ALMFwBSUskk1WCq0TVRTxe1xWAiHZ2i0iw==,
       }
     peerDependencies:
       localforage: ^1.7.4
@@ -4128,6 +4080,47 @@ packages:
       {
         integrity: sha512-xLQsBAg2JXUn39dRfZW6Z3LUT50qz/3pg6R658oVBr4LbJd/L8iAR0zCRmjLLNXzfYm1RkJYZWuHaxjJgKlkSA==,
       }
+    dev: false
+
+  /@magiclabs/wagmi-connector@1.1.5(@types/react@18.2.45)(localforage@1.10.0)(react@18.2.0)(typescript@5.3.3)(viem@1.21.0)(zod@3.22.4):
+    resolution:
+      {
+        integrity: sha512-WQYDU+NyhvgASPAI1CSGsTdD32aCIenb0pDxvSoBl7ZkyZkdzUugx5R03sBS6kmjZKtpEuqAh2+Kc9oxgpBGrw==,
+      }
+    engines: { node: ">=10" }
+    peerDependencies:
+      viem: ^1.2.10
+    dependencies:
+      "@changesets/cli": 2.27.1
+      "@magic-ext/oauth": 12.6.0
+      "@magic-sdk/provider": 18.6.0(localforage@1.10.0)
+      "@wagmi/core": 1.4.12(@types/react@18.2.45)(react@18.2.0)(typescript@5.3.3)(viem@1.21.0)(zod@3.22.4)
+      magic-sdk: 18.6.0
+      tsc-esm-fix: 2.20.18
+      viem: 1.21.0(typescript@5.3.3)(zod@3.22.4)
+    transitivePeerDependencies:
+      - "@azure/app-configuration"
+      - "@azure/cosmos"
+      - "@azure/data-tables"
+      - "@azure/identity"
+      - "@azure/keyvault-secrets"
+      - "@azure/storage-blob"
+      - "@capacitor/preferences"
+      - "@netlify/blobs"
+      - "@planetscale/database"
+      - "@react-native-async-storage/async-storage"
+      - "@types/react"
+      - "@upstash/redis"
+      - "@vercel/kv"
+      - bufferutil
+      - encoding
+      - immer
+      - localforage
+      - react
+      - supports-color
+      - typescript
+      - utf-8-validate
+      - zod
     dev: false
 
   /@manypkg/find-root@1.1.0:
@@ -6341,6 +6334,16 @@ packages:
       zod: 3.22.4
     dev: false
 
+  /abort-controller@3.0.0:
+    resolution:
+      {
+        integrity: sha512-h8lQ8tacZYnR3vNQTgibj+tODHI5/+l06Au2Pcriv/Gmet0eaj4TwWH41sO9wnHDiQsEj19q0drzdWdeAHtweg==,
+      }
+    engines: { node: ">=6.5" }
+    dependencies:
+      event-target-shim: 5.0.1
+    dev: false
+
   /accepts@1.3.8:
     resolution:
       {
@@ -7658,6 +7661,13 @@ packages:
         integrity: sha512-dOy+3AuW3a2wNbZHIuMZpTcgjGuLU/uBL/ubcZF9OXbDo8ff4O8yVp5Bf0efS8uEoYo5q4Fx7dY9OgQGXgAsQA==,
       }
 
+  /colorette@2.0.20:
+    resolution:
+      {
+        integrity: sha512-IfEDxwoWIjkeXL1eXcDiow4UbKjhLdq6/EuSVR9GMN7KVH3r9gQ83e73hsz1Nd1T3ijd5xv1wcWRYO+D6kCI2w==,
+      }
+    dev: false
+
   /combined-stream@1.0.8:
     resolution:
       {
@@ -8052,6 +8062,13 @@ packages:
         integrity: sha512-ND9qDTLc6diwj+Xe5cdAgVTbLVdXbtxTJRXRhli8Mowuaan+0EJOtdqJ0QCHNSSPyoXGx9HX2/VMnKeC34AChA==,
       }
     dev: true
+
+  /dateformat@4.6.3:
+    resolution:
+      {
+        integrity: sha512-2P0p0pFGzHS5EMnhdxQi7aJN+iMheud0UhG4dlE1DLAlvL8JHjJJTX/CSm4JXwV0Ka5nGk3zC5mcb5bUQUxxMA==,
+      }
+    dev: false
 
   /debounce@1.2.1:
     resolution:
@@ -9452,6 +9469,14 @@ packages:
       es5-ext: 0.10.62
     dev: true
 
+  /event-target-shim@5.0.1:
+    resolution:
+      {
+        integrity: sha512-i/2XbnSz/uxRCU6+NdVJgKWDTM427+MqYbkQzD321DuCQJUqOuJKIA0IM2+W2xtYHdKOmZ4dR6fExsd4SXL+WQ==,
+      }
+    engines: { node: ">=6" }
+    dev: false
+
   /eventemitter3@4.0.4:
     resolution:
       {
@@ -9720,6 +9745,13 @@ packages:
         integrity: sha512-GipyPsXO1anza0AOZdy69Im7hGFCNB7Y/NGjDlZGJ3GJJLtwNSb2vrzYrTYJRrRloVx7pl+bhUaTB8yiccPvFQ==,
       }
     engines: { node: "> 0.1.90" }
+    dev: false
+
+  /fast-copy@3.0.1:
+    resolution:
+      {
+        integrity: sha512-Knr7NOtK3HWRYGtHoJrjkaWepqT8thIVGAwt0p0aUs1zqkAzXZV4vo9fFNwyb5fcqK1GKYFYxldQdIDVKhUAfA==,
+      }
     dev: false
 
   /fast-deep-equal@3.1.3:
@@ -10611,6 +10643,13 @@ packages:
       }
     dev: true
 
+  /help-me@5.0.0:
+    resolution:
+      {
+        integrity: sha512-7xgomUX6ADmcYzFik0HzAxh/73YlKR9bmFzf51CZwR+b6YtzU2m0u49hQCqV6SvlqIqsaxovfwdvbnsw3b/zpg==,
+      }
+    dev: false
+
   /hey-listen@1.0.8:
     resolution:
       {
@@ -11412,6 +11451,14 @@ packages:
       }
     dev: false
 
+  /joycon@3.1.1:
+    resolution:
+      {
+        integrity: sha512-34wB/Y7MW7bzjKRjUKTa46I2Z7eV62Rkhva+KkopW7Qvv/OSWBqvkSY7vusOPrNuZcUG3tApvdVgNB8POj3SPw==,
+      }
+    engines: { node: ">=10" }
+    dev: false
+
   /js-sha3@0.8.0:
     resolution:
       {
@@ -12071,14 +12118,14 @@ packages:
       es5-ext: 0.10.62
     dev: true
 
-  /magic-sdk@17.4.0:
+  /magic-sdk@18.6.0:
     resolution:
       {
-        integrity: sha512-oIsj0D01pSDhiuscZ4KCUcT07pWlg2+wsqZHzs5IAYbd1d4PM6+ZvYjTeob9W0Cl5FB8NNE0W8GUumvTd4fqqA==,
+        integrity: sha512-6FdgZEKVEFZvrGlth2ZiipTEr7ihe0E4wbnPk1WlK3xIxFg3Gr5/Ca1PgWdkvNjKxjngySYykLXdCnwuNjt19w==,
       }
     dependencies:
-      "@magic-sdk/commons": 13.4.0(@magic-sdk/provider@17.4.0)(@magic-sdk/types@15.8.0)
-      "@magic-sdk/provider": 17.4.0(localforage@1.10.0)
+      "@magic-sdk/commons": 14.6.0(@magic-sdk/provider@18.6.0)(@magic-sdk/types@15.8.0)
+      "@magic-sdk/provider": 18.6.0(localforage@1.10.0)
       "@magic-sdk/types": 15.8.0
       localforage: 1.10.0
     transitivePeerDependencies:
@@ -13057,6 +13104,14 @@ packages:
       }
     dev: false
 
+  /on-exit-leak-free@2.1.2:
+    resolution:
+      {
+        integrity: sha512-0eJJY6hXLGf1udHwfNftBqH+g73EU4B504nZeKpz1sYRKafAghwxEJunB2O7rDZkL4PGfsMVnTXZ2EjibbqcsA==,
+      }
+    engines: { node: ">=14.0.0" }
+    dev: false
+
   /on-finished@2.3.0:
     resolution:
       {
@@ -13600,6 +13655,39 @@ packages:
     dependencies:
       duplexify: 4.1.2
       split2: 4.2.0
+    dev: false
+
+  /pino-abstract-transport@1.1.0:
+    resolution:
+      {
+        integrity: sha512-lsleG3/2a/JIWUtf9Q5gUNErBqwIu1tUKTT3dUzaf5DySw9ra1wcqKjJjLX1VTY64Wk1eEOYsVGSaGfCK85ekA==,
+      }
+    dependencies:
+      readable-stream: 4.5.1
+      split2: 4.2.0
+    dev: false
+
+  /pino-pretty@10.3.0:
+    resolution:
+      {
+        integrity: sha512-JthvQW289q3454mhM3/38wFYGWPiBMR28T3CpDNABzoTQOje9UKS7XCJQSnjWF9LQGQkGd8D7h0oq+qwiM3jFA==,
+      }
+    hasBin: true
+    dependencies:
+      colorette: 2.0.20
+      dateformat: 4.6.3
+      fast-copy: 3.0.1
+      fast-safe-stringify: 2.1.1
+      help-me: 5.0.0
+      joycon: 3.1.1
+      minimist: 1.2.8
+      on-exit-leak-free: 2.1.2
+      pino-abstract-transport: 1.1.0
+      pump: 3.0.0
+      readable-stream: 4.5.1
+      secure-json-parse: 2.7.0
+      sonic-boom: 3.7.0
+      strip-json-comments: 3.1.1
     dev: false
 
   /pino-std-serializers@4.0.0:
@@ -14465,6 +14553,20 @@ packages:
       util-deprecate: 1.0.2
     dev: false
 
+  /readable-stream@4.5.1:
+    resolution:
+      {
+        integrity: sha512-uQjbf34vmf/asGnOHQEw07Q4llgMACQZTWWa4MmICS0IKJoHbLwKCy71H3eR99Dw5iYejc6W+pqZZEeqRtUFAw==,
+      }
+    engines: { node: ^12.22.0 || ^14.17.0 || >=16.0.0 }
+    dependencies:
+      abort-controller: 3.0.0
+      buffer: 6.0.3
+      events: 3.3.0
+      process: 0.11.10
+      string_decoder: 1.3.0
+    dev: false
+
   /readdirp@3.6.0:
     resolution:
       {
@@ -14941,6 +15043,13 @@ packages:
       node-gyp-build: 4.7.1
     dev: false
 
+  /secure-json-parse@2.7.0:
+    resolution:
+      {
+        integrity: sha512-6aU+Rwsezw7VR8/nyvKTx8QpWH9FrcYiXXlqC4z5d5XQBDRqtbfsRjnwGyqbi3gddNtWHuEk9OANUotL26qKUw==,
+      }
+    dev: false
+
   /selfsigned@2.4.1:
     resolution:
       {
@@ -15229,6 +15338,15 @@ packages:
     resolution:
       {
         integrity: sha512-kuonw1YOYYNOve5iHdSahXPOK49GqwA+LZhI6Wz/l0rP57iKyXXIHaRagOBHAPmGwJC6od2Z9zgvZ5loSgMlVg==,
+      }
+    dependencies:
+      atomic-sleep: 1.0.0
+    dev: false
+
+  /sonic-boom@3.7.0:
+    resolution:
+      {
+        integrity: sha512-IudtNvSqA/ObjN97tfgNmOKyDOs4dNcg4cUUsHDebqsgb8wGBBwb31LIgShNO8fye0dFI52X1+tFoKKI6Rq1Gg==,
       }
     dependencies:
       atomic-sleep: 1.0.0
@@ -15631,7 +15749,6 @@ packages:
         integrity: sha512-6fPc+R4ihwqP6N/aIv2f1gMH8lOVtWQHoqC4yK6oSDVVocumAsfCqjkXnqiYMhmMwS/mEHLp7Vehlt3ql6lEig==,
       }
     engines: { node: ">=8" }
-    dev: true
 
   /structured-headers@0.4.1:
     resolution:
