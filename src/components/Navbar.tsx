@@ -1,8 +1,12 @@
+"use client";
+
 import React from "react";
 
+import Image from "next/image";
 import Link from "next/link";
 
-import { Navbar as MTNavbar, Typography } from "@material-tailwind/react";
+import { Navbar as MTNavbar } from "@material-tailwind/react";
+import Button from "@mui/material/Button";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 
 export function Navbar() {
@@ -37,25 +41,21 @@ export function Navbar() {
       placeholder={open ? "Loading..." : undefined}
     >
       <div className="container mx-auto flex items-center justify-between">
-        <Typography
-          as="a"
-          href="/"
-          variant="h6"
-          color={isScrolling ? "gray" : "black"}
-          className="cursor-pointer text-xl font-bold"
-          placeholder={open ? "Loading..." : undefined}
-        >
-          GoGoFund
-        </Typography>
+        <Image src="/logo.png" alt="GoGoFund Logo" width={400} height={250} />
         <ul
           className={`ml-10 hidden items-center gap-6 lg:flex ${
             isScrolling ? "text-gray-900" : "text-black"
           }`}
         >
-          <Link href="/events">Events</Link>
-          <Link href="/collection">Collection</Link>
-          <Link href="/history">History</Link>
+          <Link href="/events">All Events</Link>
+          <Link href="/history">Our Team</Link>
+          <Link href="/collection">My Collection</Link>
         </ul>
+        <div className="flex flex-row space-x-8">
+          <Button variant="contained" className="h-10 text-xl text-black">
+            Get Fund
+          </Button>
+        </div>
         <div className="hidden gap-2 lg:flex lg:items-center">
           <ConnectButton />
         </div>
