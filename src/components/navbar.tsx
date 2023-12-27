@@ -42,7 +42,7 @@ export function Navbar() {
           href="/"
           variant="h6"
           color={isScrolling ? "gray" : "black"}
-          className="text-xl font-bold cursor-pointer"
+          className="cursor-pointer text-xl font-bold"
           placeholder={open ? "Loading..." : undefined}
         >
           GoGoFund
