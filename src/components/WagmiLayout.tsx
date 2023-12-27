@@ -22,7 +22,7 @@ import { publicProvider } from "wagmi/providers/public";
 
 import { publicEnv } from "@/lib/env/public";
 
-import Navbar from "./navbar";
+import Navbar from "./Navbar";
 
 const { chains, publicClient, webSocketPublicClient } = configureChains(
   [sepolia],
