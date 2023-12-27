@@ -1,7 +1,8 @@
 "use client";
 
 import React from "react";
-import { MagicConnectConnector } from "@everipedia/wagmi-magic-connector";
+
+import { MagicConnectConnector } from "@magiclabs/wagmi-connector";
 import { ThemeProvider } from "@material-tailwind/react";
 import {
   RainbowKitProvider,
@@ -19,13 +20,15 @@ import { configureChains, createConfig, WagmiConfig } from "wagmi";
 import { sepolia } from "wagmi/chains";
 import { publicProvider } from "wagmi/providers/public";
 
+import { privateEnv } from "@/lib/env/private";
+
 import Navbar from "./navbar";
 
 const { chains, publicClient, webSocketPublicClient } = configureChains(
   [sepolia],
   [publicProvider()],
 );
-const ProjectId = "966691db73928f3c8a904ea62261b457";
+const ProjectId = privateEnv.RAINBOW_PROJECT_ID;
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const rainbowMagicConnector = ({ chains }: any) => ({
@@ -49,9 +52,7 @@ const rainbowMagicConnector = ({ chains }: any) => ({
 const connectors = connectorsForWallets([
   {
     groupName: "Email",
-    wallets: [
-        rainbowMagicConnector({ chains }),
-    ],
+    wallets: [rainbowMagicConnector({ chains })],
   },
   {
     groupName: "Recommended",

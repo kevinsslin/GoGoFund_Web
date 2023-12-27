@@ -1,6 +1,8 @@
-import "./globals.css";
 import { Roboto } from "next/font/google";
+
 import { Layout } from "@/components/WagmiLayout";
+
+import "./globals.css";
 
 const roboto = Roboto({
   subsets: ["latin"],
@@ -16,9 +18,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={roboto.className}>
-        <Layout>
-          {children}
-        </Layout>
+        <Layout>{children}</Layout>
       </body>
     </html>
   );

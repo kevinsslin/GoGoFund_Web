@@ -1,9 +1,10 @@
 import React from "react";
-import { Navbar as MTNavbar, Typography } from "@material-tailwind/react";
-import Link from "next/link";
-import { ConnectButton } from '@rainbow-me/rainbowkit';
 
-// Navbar component
+import Link from "next/link";
+
+import { Navbar as MTNavbar, Typography } from "@material-tailwind/react";
+import { ConnectButton } from "@rainbow-me/rainbowkit";
+
 export function Navbar() {
   const [open, setOpen] = React.useState(false);
   const [isScrolling, setIsScrolling] = React.useState(false);
@@ -45,7 +46,11 @@ export function Navbar() {
         >
           GoGoFund
         </Typography>
-        <ul className={`ml-10 hidden items-center gap-6 lg:flex ${isScrolling ? "text-gray-900" : "text-white"}`}>
+        <ul
+          className={`ml-10 hidden items-center gap-6 lg:flex ${
+            isScrolling ? "text-gray-900" : "text-white"
+          }`}
+        >
           <Link href="/events">Events</Link>
           <Link href="/mynft">MyNFT</Link>
           <Link href="/history">History</Link>
