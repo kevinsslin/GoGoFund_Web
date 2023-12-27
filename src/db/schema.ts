@@ -37,6 +37,7 @@ export const eventsTable = pgTable(
         onUpdate: "cascade",
       }),
     displayId: uuid("display_id").defaultRandom().notNull().unique(),
+    eventAddress: varchar("event_address", { length: 100 }),
     title: varchar("title", { length: 100 }).notNull(),
     description: jsonb("description").notNull(),
     startDate: varchar("start_date", { length: 100 }).notNull(),
@@ -131,7 +132,6 @@ export const transactionItemsTable = pgTable(
 
 // Relations
 // Note: Define relations as per your application logic
-// Relations
 export const usersRelations = relations(usersTable, ({ many }) => ({
   events: many(eventsTable),
 }));
