@@ -57,6 +57,13 @@ jobs:
 
       - name: "🚀 Install dependencies"
         run: pnpm install
+        
+      - name: "🔧 Set up Docker Compose"
+        run: docker-compose up -d
 
       - name: "🏗️ Build"
-        run: pnpm run build
+        run: docker-compose exec -T web pnpm run build
+
+      - name: "🔧 Shut down Docker Compose"
+        run: docker-compose down
+        

@@ -36,7 +36,7 @@ export function Navbar() {
     async function getUser() {
       try {
         const response = await fetch(`/api/users/${address}`);
-        if (!response.ok) {
+        if (response.status === 404) {
           const response = await fetch("/api/users", {
             method: "POST",
             headers: {
