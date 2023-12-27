@@ -41,18 +41,19 @@ export function Navbar() {
           as="a"
           href="/"
           variant="h6"
-          color={isScrolling ? "gray" : "white"}
+          color={isScrolling ? "gray" : "black"}
+          className="cursor-pointer text-xl font-bold"
           placeholder={open ? "Loading..." : undefined}
         >
           GoGoFund
         </Typography>
         <ul
           className={`ml-10 hidden items-center gap-6 lg:flex ${
-            isScrolling ? "text-gray-900" : "text-white"
+            isScrolling ? "text-gray-900" : "text-black"
           }`}
         >
-          <Link href="/about">About</Link>
-          <Link href="/donations">Donations</Link>
+          <Link href="/events">Events</Link>
+          <Link href="/collection">Collection</Link>
           <Link href="/history">History</Link>
         </ul>
         <div className="hidden gap-2 lg:flex lg:items-center">
