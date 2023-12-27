@@ -21,17 +21,16 @@ const events = [
 
 function EventsPage() {
   return (
-    <main className="flex min-h-screen flex-col pl-20 pr-20">
-      <h1 className="text-bold p-3 pb-5 text-5xl">All Events</h1>
+    <main className="flex min-h-screen flex-col pl-64 pr-64">
       <Grid container spacing={3} direction="row" justifyContent="flex-start">
         {events.map((e) => (
           <Grid
             item
             xs={12}
             sm={6}
-            md={4}
-            lg={3}
-            xl={3}
+            md={6}
+            lg={4}
+            xl={4}
             className="p-10"
             key={e.id}
           >

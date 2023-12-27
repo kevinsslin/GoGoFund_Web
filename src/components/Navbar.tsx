@@ -6,12 +6,14 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { Navbar as MTNavbar } from "@material-tailwind/react";
-import Button from "@mui/material/Button";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 
 export function Navbar() {
   const [open, setOpen] = React.useState(false);
   const [isScrolling, setIsScrolling] = React.useState(false);
+
+  const navBarStyle =
+    "text-2xl p-4 hover:text-dark-blue hover:border-b-4 font-bold";
 
   // Effect for handling resize events
   React.useEffect(() => {
@@ -37,26 +39,30 @@ export function Navbar() {
       shadow={false}
       blurred={false}
       color={isScrolling ? "white" : "transparent"}
-      className="fixed top-0 z-50 border-0"
+      className="text-black fixed top-0 z-50 border-0 bg-opacity-80 backdrop-blur-xl"
       placeholder={open ? "Loading..." : undefined}
     >
       <div className="container mx-auto flex items-center justify-between">
-        <Image src="/logo.png" alt="GoGoFund Logo" width={400} height={250} />
+        <Image src="/logo.png" alt="GoGoFund Logo" width={240} height={160} />
         <ul
           className={`ml-10 hidden items-center gap-6 lg:flex ${
             isScrolling ? "text-gray-900" : "text-black"
           }`}
         >
-          <Link href="/events">All Events</Link>
-          <Link href="/history">Our Team</Link>
-          <Link href="/collection">My Collection</Link>
+          <Link href="/events" className={navBarStyle}>
+            All Events
+          </Link>
+          <Link href="/history" className={navBarStyle}>
+            Our Team
+          </Link>
+          <Link href="/collection" className={navBarStyle}>
+            My Collection
+          </Link>
         </ul>
         <div className="flex flex-row space-x-8">
-          <Button variant="contained" className="h-10 text-xl text-black">
+          <button className="flex h-10 items-center justify-center rounded-2xl bg-dark-blue p-4 text-xl font-bold text-white">
             Get Fund
-          </Button>
-        </div>
-        <div className="hidden gap-2 lg:flex lg:items-center">
+          </button>
           <ConnectButton />
         </div>
       </div>

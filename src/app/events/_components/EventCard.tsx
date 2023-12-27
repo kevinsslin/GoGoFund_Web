@@ -40,7 +40,7 @@ export default function EventCard({
     },
     [`& .${linearProgressClasses.bar}`]: {
       borderRadius: 5,
-      backgroundColor: theme.palette.mode === "light" ? "#1a90ff" : "#308fe8",
+      backgroundColor: theme.palette.mode === "light" ? "#168ede" : "#308fe8",
     },
   }));
 
@@ -59,20 +59,20 @@ export default function EventCard({
             {name}
           </Typography>
         </div>
-        <p className="pl-6 text-xl">NT$ {money}</p>
+        <p className="pl-6 text-xl font-bold text-dark-blue">NT$ {money}</p>
         <div className="flex flex-row items-center p-2">
           <BorderLinearProgress
             variant="determinate"
             className="m-2"
             value={progess}
           />
-          <p>{progess}%</p>
+          <p className="text-light-blue">{progess}%</p>
         </div>
         <div className="flex flex-row items-center justify-end pb-2">
-          <AiOutlineUser />
-          <p className="p-2 font-bold">{person}</p>
-          <AiOutlineFieldTime />
-          <p className="p-2 font-bold">{time}</p>
+          <AiOutlineUser className="text-dark-blue" />
+          <p className="p-2 font-bold text-dark-blue">{person} people</p>
+          <AiOutlineFieldTime className="text-dark-blue" />
+          <p className="p-2 font-bold text-dark-blue">{time} days</p>
         </div>
       </Paper>
     </>
