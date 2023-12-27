@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import { useState, useEffect } from "react";
 
 import Image from "next/image";
 import Link from "next/link";
@@ -8,20 +8,21 @@ import Link from "next/link";
 import { Navbar as MTNavbar } from "@material-tailwind/react";
 import Button from "@mui/material/Button";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
+import { useAccount } from "wagmi";
 
 export function Navbar() {
-  const [open, setOpen] = React.useState(false);
-  const [isScrolling, setIsScrolling] = React.useState(false);
+  const [open, setOpen] = useState(false);
+  const [isScrolling, setIsScrolling] = useState(false);
 
   // Effect for handling resize events
-  React.useEffect(() => {
+  useEffect(() => {
     const handleResize = () => window.innerWidth >= 960 && setOpen(false);
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   // Effect for handling scroll events
-  React.useEffect(() => {
+  useEffect(() => {
     const handleScroll = () => {
       setIsScrolling(window.scrollY > 0);
     };
@@ -29,7 +30,46 @@ export function Navbar() {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+  const { address, isConnected } = useAccount();
 
+  useEffect(() => {
+    async function getUser() {
+      try {
+        const response = await fetch(`/api/users/${address}`);
+        if (!response.ok) {
+          const response = await fetch("/api/users", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              walletAddress: address?.toString(),
+              username: "user",
+            }),
+          });
+
+          if (!response.ok) {
+            const errorData = await response.json();
+            console.error("Error from API:", errorData.error);
+            // Handle error: Display it in UI, etc.
+          } else {
+            const userData = await response.json();
+            console.log("User data:", userData);
+            // Process userData as needed
+          }
+        }
+        const userData = await response.json();
+        // Process userData as needed
+        return userData;
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    }
+
+    if (isConnected && address) {
+      getUser();
+    }
+  }, [address, isConnected]);
   // Render Navbar
   return (
     <MTNavbar
