@@ -1,7 +1,7 @@
 export default function Home() {
   return (
-    <div className="h-screen">
+    <main className="flex min-h-screen flex-col items-center justify-between p-24">
       <p>Main Page</p>
-    </div>
+    </main>
   );
 }
