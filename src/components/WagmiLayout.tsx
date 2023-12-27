@@ -20,7 +20,7 @@ import { configureChains, createConfig, WagmiConfig } from "wagmi";
 import { sepolia } from "wagmi/chains";
 import { publicProvider } from "wagmi/providers/public";
 
-import { privateEnv } from "@/lib/env/private";
+import { publicEnv } from "@/lib/env/public";
 
 import Navbar from "./navbar";
 
@@ -28,7 +28,7 @@ const { chains, publicClient, webSocketPublicClient } = configureChains(
   [sepolia],
   [publicProvider()],
 );
-const ProjectId = privateEnv.RAINBOW_PROJECT_ID;
+const ProjectId = publicEnv.RAINBOW_PROJECT_ID;
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const rainbowMagicConnector = ({ chains }: any) => ({
@@ -40,11 +40,11 @@ const rainbowMagicConnector = ({ chains }: any) => ({
     const connector = new MagicConnectConnector({
       chains: chains,
       options: {
-        apiKey: privateEnv.MAGIC_CONNECT_API_KEY,
+        apiKey: publicEnv.MAGIC_CONNECT_API_KEY,
         magicSdkConfiguration: {
           network: {
             rpcUrl: "https://rpc.ankr.com/eth_sepolia",
-            chainId: 5,
+            chainId: 11155111,
           },
         },
       },
@@ -91,8 +91,16 @@ export function Layout({ children }: { children: React.ReactNode }) {
       <WagmiConfig config={wagmiConfig}>
         <RainbowKitProvider chains={chains} coolMode>
           <ThemeProvider>
-            <Navbar />
-            {children}
+            <div className="fixed left-0 right-0 top-0 z-50">
+              {" "}
+              {/* Adjust z-index as needed */}
+              <Navbar />
+            </div>
+            <div className="pt-16">
+              {" "}
+              {/* Adjust padding-top based on Navbar's height */}
+              {children}
+            </div>
           </ThemeProvider>
         </RainbowKitProvider>
       </WagmiConfig>
