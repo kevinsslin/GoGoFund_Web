@@ -16,13 +16,13 @@ import {
 } from "@rainbow-me/rainbowkit/wallets";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { configureChains, createConfig, WagmiConfig } from "wagmi";
-import { goerli, avalancheFuji } from "wagmi/chains";
+import { sepolia } from "wagmi/chains";
 import { publicProvider } from "wagmi/providers/public";
 
 import Navbar from "./navbar";
 
 const { chains, publicClient, webSocketPublicClient } = configureChains(
-  [goerli, avalancheFuji],
+  [sepolia],
   [publicProvider()],
 );
 const ProjectId = "966691db73928f3c8a904ea62261b457";
@@ -37,13 +37,7 @@ const rainbowMagicConnector = ({ chains }: any) => ({
     const connector = new MagicConnectConnector({
       chains: chains,
       options: {
-        apiKey: "pk_live_32DBE398F99D1619",
-        magicSdkConfiguration: {
-          network: {
-            rpcUrl: "https://rpc.ankr.com/eth_goerli",
-            chainId: 5,
-          },
-        },
+        apiKey: process.env.NEXT_PUBLIC_MAGIC_API_KEY || "pk_live_C417C83E51D79C20",
       },
     });
     return {

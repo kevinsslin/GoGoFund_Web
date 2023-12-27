@@ -46,8 +46,8 @@ export function Navbar() {
           GoGoFund
         </Typography>
         <ul className={`ml-10 hidden items-center gap-6 lg:flex ${isScrolling ? "text-gray-900" : "text-white"}`}>
-          <Link href="/about">About</Link>
-          <Link href="/donations">Donations</Link>
+          <Link href="/events">Events</Link>
+          <Link href="/mynft">MyNFT</Link>
           <Link href="/history">History</Link>
         </ul>
         <div className="hidden gap-2 lg:flex lg:items-center">
