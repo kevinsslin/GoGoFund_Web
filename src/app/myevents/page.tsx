@@ -64,12 +64,23 @@ function MyEventsPage() {
   ) => {
     const { name, value } = e.target;
     // Update formData with the new value
+    const updatedValue =
+      name === "targetValue" || name === "startDate" || name === "endDate"
+        ? parseInt(value, 10)
+        : value;
+
+    console.log(updatedValue);
+
     setFormData({
       ...formData,
+<<<<<<< HEAD
       [name]:
         name === "targetValue" || name === "startDate" || name === "endDate"
           ? Number(value)
           : value,
+=======
+      [name]: updatedValue,
+>>>>>>> main
     });
   };
 
@@ -86,13 +97,16 @@ function MyEventsPage() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    console.log("Submitting:", formData);
-    // check every fields type is correct
-    console.log(typeof formData.title);
-    console.log(typeof formData.startDate);
-    console.log(typeof formData.endDate);
-    console.log(typeof formData.targetValue);
-
+    console.log("FormData:", formData);
+    // const data = new FormData()
+    // for (const [key, value] of Object.entries(formData)) {
+    //   if (key === 'image' && value instanceof File) {
+    //     data.append('image', value, value.name);
+    //   } else {
+    //     data.append(key, String(value));
+    //   }
+    // }
+    // await createEvents(formData);
     try {
       const response = await fetch("/api/events", {
         method: "POST",
