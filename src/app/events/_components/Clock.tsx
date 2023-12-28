@@ -1,15 +1,17 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 
-interface CountdownTimerProps {
+type CountdownTimerProps = {
   targetDate: string; // 這裡的型態可以根據實際需求進行更改
-}
+};
 
-const CountdownTimer: React.FC<CountdownTimerProps> = ({ targetDate }) => {
+function CountdownTimer({ targetDate }: CountdownTimerProps) {
   const [currentTime, setCurrentTime] = useState(new Date());
-  const [targetTime, setTargetTime] = useState(new Date(targetDate));
-  const [remainingTime, setRemainingTime] = useState(calculateRemainingTime(currentTime, targetTime));
+  const [targetTime] = useState(new Date(targetDate));
+  const [remainingTime, setRemainingTime] = useState(
+    calculateRemainingTime(currentTime, targetTime),
+  );
 
   useEffect(() => {
     const intervalId = setInterval(() => {
@@ -39,26 +41,33 @@ const CountdownTimer: React.FC<CountdownTimerProps> = ({ targetDate }) => {
   }
 
   return (
-    <div className="flex justify-between flex-row text-dark-blue w-[80%] p-2 space-x-4">
-      <div className='flex flex-col items-center justify-center'>
-        <p className='w-20 h-15 border-2 p-2 flex items-center justify-center text-2xl'>{remainingTime.days}</p>
+    <div className="flex w-[80%] flex-row justify-between space-x-4 p-2 text-dark-blue">
+      <div className="flex flex-col items-center justify-center">
+        <p className="h-15 flex w-20 items-center justify-center border-2 p-2 text-2xl">
+          {remainingTime.days}
+        </p>
         days
       </div>
-      <div className='flex flex-col items-center justify-center'>
-        <p className='w-20 h-15 border-2 p-2 flex items-center justify-center text-2xl'>{remainingTime.hours}</p>
+      <div className="flex flex-col items-center justify-center">
+        <p className="h-15 flex w-20 items-center justify-center border-2 p-2 text-2xl">
+          {remainingTime.hours}
+        </p>
         hours
       </div>
-      <div className='flex flex-col items-center justify-center'>
-        <p className='w-20 h-15 border-2 p-2 flex items-center justify-center text-2xl'>{remainingTime.minutes}</p>
+      <div className="flex flex-col items-center justify-center">
+        <p className="h-15 flex w-20 items-center justify-center border-2 p-2 text-2xl">
+          {remainingTime.minutes}
+        </p>
         minutes
       </div>
-      <div className='flex flex-col items-center justify-center'>
-        <p className='w-20 h-15 border-2 p-2 flex items-center justify-center text-2xl'>{remainingTime.seconds}</p>
+      <div className="flex flex-col items-center justify-center">
+        <p className="h-15 flex w-20 items-center justify-center border-2 p-2 text-2xl">
+          {remainingTime.seconds}
+        </p>
         seconds
       </div>
     </div>
   );
-};
+}
 
 export default CountdownTimer;
-
