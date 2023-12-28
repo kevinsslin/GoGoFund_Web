@@ -143,8 +143,8 @@ export function Navbar() {
             <Link href="/events" className={navBarStyle}>
               All Events
             </Link>
-            <Link href="/history" className={navBarStyle}>
-              Our Team
+            <Link href="/myevents" className={navBarStyle}>
+              My Events
             </Link>
             <Link href="/collection" className={navBarStyle}>
               My Collection

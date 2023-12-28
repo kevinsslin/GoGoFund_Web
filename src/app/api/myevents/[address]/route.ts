@@ -31,18 +31,16 @@ export async function GET(
     });
 
     return NextResponse.json(
-      {
-        events: dbEvents.map((dbEvent) => ({
-          displayId: dbEvent.displayId,
-          title: dbEvent.title,
-          startDate: dbEvent.startDate,
-          endDate: dbEvent.endDate,
-          targetValue: dbEvent.targetValue,
-          currentValue: dbEvent.currentValue,
-          currency: dbEvent.currency,
-          imageSrc: dbEvent.imageSrc,
-        })),
-      },
+      dbEvents.map((dbEvent) => ({
+        displayId: dbEvent.displayId,
+        title: dbEvent.title,
+        startDate: dbEvent.startDate,
+        endDate: dbEvent.endDate,
+        targetValue: dbEvent.targetValue,
+        currentValue: dbEvent.currentValue,
+        currency: dbEvent.currency,
+        imageSrc: dbEvent.imageSrc,
+      })),
       { status: 200 },
     );
   } catch (error) {

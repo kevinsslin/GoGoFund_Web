@@ -1,6 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 
-import { eq } from "drizzle-orm";
+import { eq, not } from "drizzle-orm";
 import { z } from "zod";
 
 import { db } from "@/db";
@@ -129,7 +129,9 @@ export async function POST(req: NextRequest) {
 // GET /api/events
 export async function GET() {
   try {
-    const dbEvents = await db.query.eventsTable.findMany();
+    const dbEvents = await db.query.eventsTable.findMany({
+      where: not(eq(eventsTable.status, "pending")),
+    });
 
     return NextResponse.json(
       dbEvents.map((dbEvent) => ({
