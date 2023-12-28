@@ -32,7 +32,7 @@ const products: Product[] = [
 ];
 
 function ProductIntro() {
-  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(products[0]);
 
   const handleSelectProduct = (product: Product) => {
     setSelectedProduct(product);

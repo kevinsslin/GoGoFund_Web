@@ -4,7 +4,7 @@ import { eq, and } from "drizzle-orm";
 import { z } from "zod";
 
 import { db } from "@/db";
-import { eventsTable, usersTable } from "@/db/schema";
+import { eventsTable, nftsTable, usersTable } from "@/db/schema";
 
 // GET /api/events/:eventId
 export async function GET(
@@ -26,6 +26,12 @@ export async function GET(
     if (!dbEvent) {
       return NextResponse.json({ error: "Event Not Found" }, { status: 404 });
     }
+    const dbNFTs = await db.query.nftsTable.findMany({
+        where: eq(nftsTable.eventId, dbEvent.displayId),
+        });
+    if (!dbNFTs) {
+        console.log("dbNFTs no found");
+    }
 
     return NextResponse.json(
       {
@@ -39,6 +45,7 @@ export async function GET(
         currentValue: dbEvent.currentValue,
         currency: dbEvent.currency,
         imageSrc: dbEvent.imageSrc,
+        nft: dbNFTs,
       },
       { status: 200 },
     );
