@@ -6,6 +6,7 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Divider from "@mui/material/Divider";
 import Drawer from "@mui/material/Drawer";
+import FormControl from "@mui/material/FormControl";
 import Grid from "@mui/material/Grid";
 import Input from "@mui/material/Input";
 import InputLabel from "@mui/material/InputLabel";
@@ -13,6 +14,8 @@ import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
+import MenuItem from "@mui/material/MenuItem";
+import Select, { type SelectChangeEvent } from "@mui/material/Select";
 import TextArea from "@mui/material/TextareaAutosize";
 import { useAccount } from "wagmi";
 
@@ -78,7 +81,9 @@ function EventsPage() {
 
   // Define handleChange to update formData
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    e:
+      | React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+      | SelectChangeEvent,
   ) => {
     const { name, value } = e.target;
     // Update formData with the new value
@@ -221,17 +226,22 @@ function EventsPage() {
           </ListItem>
           <ListItem disablePadding>
             <ListItemButton>
-              <InputLabel htmlFor="currency"> Currency: </InputLabel>
-
-              <Input
-                id="currency"
-                name="currency"
-                type="text"
-                value={formData.currency}
-                onChange={handleChange}
-                required
-                className="ml-2"
-              />
+              <FormControl fullWidth>
+                <InputLabel htmlFor="currency">Currency:</InputLabel>
+                <Select
+                  labelId="currency"
+                  id="currency"
+                  name="currency"
+                  value={formData.currency}
+                  onChange={handleChange}
+                  required
+                  className="ml-2"
+                >
+                  <MenuItem value="NTD">NTD</MenuItem>
+                  <MenuItem value="USD">USD</MenuItem>
+                  <MenuItem value="BTC">BTC</MenuItem>
+                </Select>
+              </FormControl>
             </ListItemButton>
           </ListItem>
           <ListItem disablePadding>

@@ -27,10 +27,10 @@ export async function GET(
       return NextResponse.json({ error: "Event Not Found" }, { status: 404 });
     }
     const dbNFTs = await db.query.nftsTable.findMany({
-        where: eq(nftsTable.eventId, dbEvent.displayId),
-        });
+      where: eq(nftsTable.eventId, dbEvent.displayId),
+    });
     if (!dbNFTs) {
-        console.log("dbNFTs no found");
+      console.log("dbNFTs no found");
     }
 
     return NextResponse.json(
