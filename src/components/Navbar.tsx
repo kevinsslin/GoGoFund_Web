@@ -151,14 +151,11 @@ export function Navbar() {
             </Link>
           </ul>
           <div className="flex flex-row space-x-8">
-            <button className="flex h-10 items-center justify-center rounded-2xl bg-dark-blue p-4 text-xl font-bold text-white">
-              Get Fund
-            </button>
             <ConnectButton />
+            <Button onClick={handleClickOpen}>
+              <User size={32} />
+            </Button>
           </div>
-          <Button onClick={handleClickOpen}>
-            <User size={32} />
-          </Button>
         </div>
       </MTNavbar>
       <Dialog open={open} onClose={handleClose}>

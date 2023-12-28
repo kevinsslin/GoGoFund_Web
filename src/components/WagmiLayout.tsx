@@ -96,7 +96,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
               {/* Adjust z-index as needed */}
               <Navbar />
             </div>
-            <div className="pt-60">
+            <div className="pt-48">
               {" "}
               {/* Adjust padding-top based on Navbar's height */}
               {children}
