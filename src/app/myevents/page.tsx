@@ -20,24 +20,7 @@ import { type allEventDto } from "@/lib/types/db";
 
 import EventCard from "./_components/EventCard";
 
-// const events = [
-//   { name: "name", progess: 92.77, person: 1000, money: 9999, time: 20, id: 1 },
-//   { name: "apple", progess: 9.7, person: 102, money: 9, time: 320, id: 2 },
-//   { name: "kevin", progess: 10.1, person: 1, money: 1314, time: 200, id: 3 },
-//   { name: "wp1121", progess: 22.1, person: 30, money: 99678, time: 48, id: 4 },
-//   { name: "ntu", progess: 59.77, person: 92, money: 778594, time: 60, id: 5 },
-//   { name: "kk", progess: 80.2, person: 1980, money: 95532, time: 3944, id: 6 },
-//   {
-//     name: "books",
-//     progess: 100.77,
-//     person: 863,
-//     money: 78443,
-//     time: 302,
-//     id: 7,
-//   },
-// ];
-
-function EventsPage() {
+function MyEventsPage() {
   const [state, setState] = useState(false);
   const [dbEvents, setDbEvents] = useState<allEventDto[]>([]);
   const { address } = useAccount();
@@ -71,7 +54,7 @@ function EventsPage() {
     startDate: new Date().getTime(),
     endDate: new Date().getTime(),
     targetValue: 0,
-    currency: "",
+    currency: "NTD",
     image: null as File | null,
   });
 
@@ -81,9 +64,16 @@ function EventsPage() {
   ) => {
     const { name, value } = e.target;
     // Update formData with the new value
+    const updatedValue =
+      name === "targetValue" || name === "startDate" || name === "endDate"
+        ? parseInt(value, 10)
+        : value;
+
+    console.log(updatedValue);
+
     setFormData({
       ...formData,
-      [name]: value,
+      [name]: updatedValue,
     });
   };
 
@@ -100,7 +90,7 @@ function EventsPage() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    console.log("Submitting:", formData);
+    console.log("FormData:", formData);
     // const data = new FormData()
     // for (const [key, value] of Object.entries(formData)) {
     //   if (key === 'image' && value instanceof File) {
@@ -322,4 +312,4 @@ function EventsPage() {
   );
 }
 
-export default EventsPage;
+export default MyEventsPage;

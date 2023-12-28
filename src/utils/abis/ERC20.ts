@@ -1,7 +1,3 @@
-export const NTDAddress = "0x44dd4F22Ff2a54056cb37bc2F9f9aFC09A39Afd9";
-export const USDAddress = "0x628A91EeAf165e5C351cd1a8e6a758225F448Ab1";
-export const BTCAddress = "0x73d6B7ffef001547b1516F2E765f798588E4A742";
-
 export const ERC20ABI = [
   {
     type: "constructor",

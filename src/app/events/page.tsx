@@ -82,9 +82,14 @@ function EventsPage() {
   ) => {
     const { name, value } = e.target;
     // Update formData with the new value
+    const updatedValue =
+      name === "targetValue" || name === "startDate" || name === "endDate"
+        ? parseInt(value, 10)
+        : value;
+
     setFormData({
       ...formData,
-      [name]: value,
+      [name]: updatedValue,
     });
   };
 

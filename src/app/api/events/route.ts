@@ -39,7 +39,7 @@ const postEventRequestSchema = z.object({
   description: z.string(),
   startDate: z.number(),
   endDate: z.number(),
-  targetValue: z.number(),
+  targetValue: z.number().min(0),
   currency: z.enum(["USD", "BTC", "NTD"]),
   //   image: z.instanceof(File),
 });
