@@ -4,10 +4,7 @@ import { useEffect, useState } from "react";
 
 import Grid from "@mui/material/Grid";
 
-import { type allEventDto } from "@/lib/types/db";
-
 import EventCard from "./_components/EventCard";
-import GetFondDialog from "./_components/GetFondDialog";
 
 const events = [
   { name: "name", progess: 92.77, person: 1000, money: 9999, time: 20, id: 1 },
@@ -28,7 +25,6 @@ const events = [
 
 function EventsPage() {
   const [dbEvents, setDbEvents] = useState<allEventDto[]>([]);
-
   useEffect(() => {
     const fetchData = async () => {
       const response = await fetch("/api/events");
@@ -41,9 +37,6 @@ function EventsPage() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-center pl-32 pr-32">
       <div className="w-[80%]">
-        <div className="flex justify-end">
-          <GetFondDialog />
-        </div>
         <Grid container spacing={3} direction="row" justifyContent="flex-start">
           {events.map((e) => (
             <Grid
@@ -60,7 +53,7 @@ function EventsPage() {
                 id={e.id?.toString()}
                 key={e.id}
                 name={e.name}
-                currency="NT"
+                currency="NTD"
                 progess={e.progess}
                 money={e.money}
                 person={e.person}

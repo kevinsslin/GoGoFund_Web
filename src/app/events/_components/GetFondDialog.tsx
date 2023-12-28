@@ -3,6 +3,8 @@
 import { useState } from "react";
 import React from "react";
 
+import { useRouter } from "next/navigation";
+
 import { DialogTitle, MenuItem } from "@mui/material";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
@@ -14,8 +16,8 @@ import { useAccount } from "wagmi";
 
 function GetFondDialog() {
   const [open, setOpen] = React.useState(false);
-
   const { address } = useAccount();
+  const router = useRouter();
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -97,8 +99,7 @@ function GetFondDialog() {
         // Handle error: Display it in UI, etc.
       } else {
         const eventData = await response.json();
-        console.log("Event data:", eventData);
-        // Process eventData as needed
+        router.push(`/myevents/${eventData.displayId}`);
       }
     } catch (error) {
       console.error("Error:", error);
