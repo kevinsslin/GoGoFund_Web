@@ -14,6 +14,7 @@ import { styled } from "@mui/material/styles";
 
 export type CardListProps = {
   name: string;
+  currency: string;
   progess: number;
   money: number;
   person: number;
@@ -22,6 +23,7 @@ export type CardListProps = {
 
 export default function EventCard({
   name,
+  currency,
   progess,
   money,
   person,
@@ -59,7 +61,9 @@ export default function EventCard({
             {name}
           </Typography>
         </div>
-        <p className="pl-6 text-xl font-bold text-dark-blue">NT$ {money}</p>
+        <p className="pl-6 text-xl font-bold text-dark-blue">
+          {currency}$ {money}
+        </p>
         <div className="flex flex-row items-center p-2">
           <BorderLinearProgress
             variant="determinate"

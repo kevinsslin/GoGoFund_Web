@@ -5,13 +5,13 @@ import { z } from "zod";
 import { db } from "@/db";
 import { usersTable } from "@/db/schema";
 
-const postEventRequestSchema = z.object({
+const postUserRequestSchema = z.object({
   walletAddress: z.string(),
   username: z.string(),
 });
 
 // you can use z.infer to get the typescript type from a zod schema
-type PostEventRequest = z.infer<typeof postEventRequestSchema>;
+type PostUserRequest = z.infer<typeof postUserRequestSchema>;
 
 // POST /api/users
 export async function POST(req: NextRequest) {
@@ -19,13 +19,13 @@ export async function POST(req: NextRequest) {
 
   try {
     // parse will throw an error if the data doesn't match the schema
-    postEventRequestSchema.parse(data);
+    postUserRequestSchema.parse(data);
   } catch (error) {
     // in case of an error, we return a 400 response
     return NextResponse.json({ error: "Invalid request" }, { status: 400 });
   }
 
-  const { walletAddress, username } = data as PostEventRequest;
+  const { walletAddress, username } = data as PostUserRequest;
   try {
     // Saving the new user to the database
     const userId = await db

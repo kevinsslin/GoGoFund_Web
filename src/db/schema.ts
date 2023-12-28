@@ -6,7 +6,6 @@ import {
   uuid,
   varchar,
   integer,
-  jsonb,
 } from "drizzle-orm/pg-core";
 
 // Users Table
@@ -40,13 +39,14 @@ export const eventsTable = pgTable(
     displayId: uuid("display_id").defaultRandom().notNull().unique(),
     eventAddress: varchar("event_address", { length: 100 }),
     title: varchar("title", { length: 100 }).notNull(),
-    description: jsonb("description").notNull(),
+    description: varchar("description", { length: 200 }).notNull(),
     startDate: varchar("start_date", { length: 100 }).notNull(),
     endDate: varchar("end_date", { length: 100 }).notNull(),
     targetValue: integer("target_value").notNull(),
     currentValue: integer("current_value").notNull(),
-    currency: varchar("currency", { length: 100 }).notNull(),
+    currency: varchar("currency", { length: 3 }).notNull(),
     imageSrc: varchar("image_src", { length: 100 }).notNull(),
+    status: varchar("status", { length: 100 }).notNull(),
   },
   (table) => ({
     displayIdIndex: index("events_display_id_index").on(table.displayId),

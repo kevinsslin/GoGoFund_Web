@@ -156,8 +156,8 @@ export function Navbar() {
             </button>
             <ConnectButton />
           </div>
-          <Button variant="outlined" onClick={handleClickOpen}>
-            <User size={48} />
+          <Button onClick={handleClickOpen}>
+            <User size={32} />
           </Button>
         </div>
       </MTNavbar>
