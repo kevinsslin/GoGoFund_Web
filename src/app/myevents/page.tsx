@@ -81,9 +81,16 @@ function EventsPage() {
   ) => {
     const { name, value } = e.target;
     // Update formData with the new value
+    const updatedValue =
+      name === "targetValue" || name === "startDate" || name === "endDate"
+        ? parseInt(value, 10)
+        : value;
+
+    console.log(updatedValue);
+
     setFormData({
       ...formData,
-      [name]: value,
+      [name]: updatedValue,
     });
   };
 
@@ -100,7 +107,7 @@ function EventsPage() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    console.log("Submitting:", formData);
+    console.log("FormData:", formData);
     // const data = new FormData()
     // for (const [key, value] of Object.entries(formData)) {
     //   if (key === 'image' && value instanceof File) {

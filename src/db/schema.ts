@@ -59,12 +59,14 @@ export const nftsTable = pgTable(
   "nfts",
   {
     id: serial("id").primaryKey(),
+    displayId: uuid("display_id").defaultRandom().notNull().unique(),
     eventId: uuid("event_id")
       .notNull()
       .references(() => eventsTable.displayId, {
         onDelete: "cascade",
         onUpdate: "cascade",
       }),
+    description: varchar("description", { length: 200 }).notNull(),
     totalAmount: integer("total_amount").notNull(),
     nowAmount: integer("now_amount").notNull(),
     imageSrc: varchar("image_src", { length: 255 }).notNull(),
@@ -72,6 +74,7 @@ export const nftsTable = pgTable(
     name: varchar("name", { length: 100 }).notNull(),
   },
   (table) => ({
+    displayIdIndex: index("nfts_display_id_index").on(table.displayId),
     eventIdIndex: index("nfts_event_id_index").on(table.eventId),
   }),
 );
@@ -81,6 +84,7 @@ export const transactionTable = pgTable(
   "transactions",
   {
     id: serial("id").primaryKey(),
+    displayId: uuid("display_id").defaultRandom().notNull().unique(),
     userId: uuid("user_id")
       .notNull()
       .references(() => usersTable.displayId, {
@@ -93,10 +97,10 @@ export const transactionTable = pgTable(
         onDelete: "cascade",
         onUpdate: "cascade",
       }),
-    totalAmount: integer("total_amount").notNull(),
     transactionDate: varchar("transaction_date", { length: 100 }).notNull(),
   },
   (table) => ({
+    displayIdIndex: index("transactions_display_id_index").on(table.displayId),
     userTransactionIndex: index("transactions_user_id_index").on(table.userId),
     eventTransactionIndex: index("transactions_event_id_index").on(
       table.eventId,
@@ -109,15 +113,15 @@ export const transactionItemsTable = pgTable(
   "transaction_items",
   {
     id: serial("id").primaryKey(),
-    transactionId: integer("transaction_id")
+    transactionId: uuid("transaction_id")
       .notNull()
-      .references(() => transactionTable.id, {
+      .references(() => transactionTable.displayId, {
         onDelete: "cascade",
         onUpdate: "cascade",
       }),
-    nftId: integer("nft_id")
+    nftId: uuid("nft_id")
       .notNull()
-      .references(() => nftsTable.id, {
+      .references(() => nftsTable.displayId, {
         onDelete: "cascade",
         onUpdate: "cascade",
       }),
@@ -172,11 +176,11 @@ export const transactionItemsRelations = relations(
   ({ one }) => ({
     transaction: one(transactionTable, {
       fields: [transactionItemsTable.transactionId],
-      references: [transactionTable.id],
+      references: [transactionTable.displayId],
     }),
     nft: one(nftsTable, {
       fields: [transactionItemsTable.nftId],
-      references: [nftsTable.id],
+      references: [nftsTable.displayId],
     }),
   }),
 );
