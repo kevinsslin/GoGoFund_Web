@@ -73,14 +73,7 @@ function MyEventsPage() {
 
     setFormData({
       ...formData,
-<<<<<<< HEAD
-      [name]:
-        name === "targetValue" || name === "startDate" || name === "endDate"
-          ? Number(value)
-          : value,
-=======
       [name]: updatedValue,
->>>>>>> main
     });
   };
 
