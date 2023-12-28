@@ -7,13 +7,65 @@ import Link from "next/link";
 
 import { Navbar as MTNavbar } from "@material-tailwind/react";
 import Button from "@mui/material/Button";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+import TextField from "@mui/material/TextField";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
+import { User } from "lucide-react";
 import { useAccount } from "wagmi";
+
 
 export function Navbar() {
   const [open, setOpen] = useState(false);
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
   const [isScrolling, setIsScrolling] = useState(false);
+  const { address, isConnected } = useAccount();
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
 
+  const handleClose = () => {
+    setOpen(false);
+  };
+  const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setName(event.target.value);
+  };
+
+  const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setEmail(event.target.value);
+  };
+
+  const handleSave = async () => {
+    // Call updateUser function with name and email
+    try {
+      const response = await fetch(`/api/users/${address}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username: name,
+          email: email,
+        }),
+      });
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error("Error from API:", errorData.error);
+        // Handle error: Display it in UI, etc.
+      } else {
+        const userData = await response.json();
+        console.log("User data:", userData);
+        // Process userData as needed
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+    handleClose();
+  };
   // Effect for handling resize events
   useEffect(() => {
     const handleResize = () => window.innerWidth >= 960 && setOpen(false);
@@ -30,7 +82,6 @@ export function Navbar() {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
-  const { address, isConnected } = useAccount();
 
   useEffect(() => {
     async function getUser() {
@@ -72,35 +123,73 @@ export function Navbar() {
   }, [address, isConnected]);
   // Render Navbar
   return (
-    <MTNavbar
-      fullWidth
-      shadow={false}
-      blurred={false}
-      color={isScrolling ? "white" : "transparent"}
-      className="fixed top-0 z-50 border-0"
-      placeholder={open ? "Loading..." : undefined}
-    >
-      <div className="container mx-auto flex items-center justify-between">
-        <Image src="/logo.png" alt="GoGoFund Logo" width={400} height={250} />
-        <ul
-          className={`ml-10 hidden items-center gap-6 lg:flex ${
-            isScrolling ? "text-gray-900" : "text-black"
-          }`}
-        >
-          <Link href="/events">All Events</Link>
-          <Link href="/history">Our Team</Link>
-          <Link href="/collection">My Collection</Link>
-        </ul>
-        <div className="flex flex-row space-x-8">
-          <Button variant="contained" className="h-10 text-xl text-black">
-            Get Fund
+    <>
+      <MTNavbar
+        fullWidth
+        shadow={false}
+        blurred={false}
+        color={isScrolling ? "white" : "transparent"}
+        className="fixed top-0 z-50 border-0"
+        placeholder={open ? "Loading..." : undefined}
+      >
+        <div className="container mx-auto flex items-center justify-between">
+          <Image src="/logo.png" alt="GoGoFund Logo" width={400} height={250} />
+          <ul
+            className={`ml-10 hidden items-center gap-6 lg:flex ${
+              isScrolling ? "text-gray-900" : "text-black"
+            }`}
+          >
+            <Link href="/events">All Events</Link>
+            <Link href="/history">Our Team</Link>
+            <Link href="/collection">My Collection</Link>
+          </ul>
+          <div className="flex flex-row space-x-8">
+            <Button variant="contained" className="h-10 text-xl text-black">
+              Get Fund
+            </Button>
+          </div>
+          <div className="hidden gap-2 lg:flex lg:items-center">
+            <ConnectButton />
+          </div>
+          <Button variant="outlined" onClick={handleClickOpen}>
+            <User size={48} />
           </Button>
         </div>
-        <div className="hidden gap-2 lg:flex lg:items-center">
-          <ConnectButton />
-        </div>
-      </div>
-    </MTNavbar>
+      </MTNavbar>
+      <Dialog open={open} onClose={handleClose}>
+        <DialogTitle>Setting Profile</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            To receive notifications, please enter your email address here.
+          </DialogContentText>
+          <TextField
+            autoFocus
+            margin="dense"
+            id="name"
+            label="Name"
+            type="string"
+            fullWidth
+            variant="standard"
+            value={name}
+            onChange={handleNameChange}
+          />
+          <TextField
+            margin="dense"
+            id="email"
+            label="Email Address"
+            type="email"
+            fullWidth
+            variant="standard"
+            value={email}
+            onChange={handleEmailChange}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Cancel</Button>
+          <Button onClick={handleSave}>Save</Button>
+        </DialogActions>
+      </Dialog>
+    </>
   );
 }
 
