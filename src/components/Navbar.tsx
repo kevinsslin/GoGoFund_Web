@@ -17,11 +17,10 @@ import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { User } from "lucide-react";
 import { useAccount } from "wagmi";
 
-
 export function Navbar() {
   const [open, setOpen] = useState(false);
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
   const [isScrolling, setIsScrolling] = useState(false);
   const { address, isConnected } = useAccount();
   const handleClickOpen = () => {
@@ -66,7 +65,8 @@ export function Navbar() {
     }
     handleClose();
   };
-  const navBarStyle = "text-2xl p-4 hover:text-dark-blue hover:border-b-4 font-bold";
+  const navBarStyle =
+    "text-2xl p-4 hover:text-dark-blue hover:border-b-4 font-bold";
   // Effect for handling resize events
   useEffect(() => {
     const handleResize = () => window.innerWidth >= 960 && setOpen(false);
@@ -125,43 +125,43 @@ export function Navbar() {
   // Render Navbar
   return (
     <>
-    <MTNavbar
-      fullWidth
-      shadow={false}
-      blurred={false}
-      color={isScrolling ? "white" : "transparent"}
-      className="text-black fixed top-0 z-50 border-0 bg-opacity-80 backdrop-blur-xl"
-      placeholder={open ? "Loading..." : undefined}
-    >
-      <div className="container mx-auto flex items-center justify-between">
-        <Image src="/logo.png" alt="GoGoFund Logo" width={240} height={160} />
-        <ul
-          className={`ml-10 hidden items-center gap-6 lg:flex ${
-            isScrolling ? "text-gray-900" : "text-black"
-          }`}
-        >
-          <Link href="/events" className={navBarStyle}>
-            All Events
-          </Link>
-          <Link href="/history" className={navBarStyle}>
-            Our Team
-          </Link>
-          <Link href="/collection" className={navBarStyle}>
-            My Collection
-          </Link>
-        </ul>
-        <div className="flex flex-row space-x-8">
-          <button className="flex h-10 items-center justify-center rounded-2xl bg-dark-blue p-4 text-xl font-bold text-white">
-            Get Fund
-          </button>
-          <ConnectButton />
-        </div>
-        <Button variant="outlined" onClick={handleClickOpen}>
+      <MTNavbar
+        fullWidth
+        shadow={false}
+        blurred={false}
+        color={isScrolling ? "white" : "transparent"}
+        className="text-black fixed top-0 z-50 border-0 bg-opacity-80 backdrop-blur-xl"
+        placeholder={open ? "Loading..." : undefined}
+      >
+        <div className="container mx-auto flex items-center justify-between">
+          <Image src="/logo.png" alt="GoGoFund Logo" width={240} height={160} />
+          <ul
+            className={`ml-10 hidden items-center gap-6 lg:flex ${
+              isScrolling ? "text-gray-900" : "text-black"
+            }`}
+          >
+            <Link href="/events" className={navBarStyle}>
+              All Events
+            </Link>
+            <Link href="/history" className={navBarStyle}>
+              Our Team
+            </Link>
+            <Link href="/collection" className={navBarStyle}>
+              My Collection
+            </Link>
+          </ul>
+          <div className="flex flex-row space-x-8">
+            <button className="flex h-10 items-center justify-center rounded-2xl bg-dark-blue p-4 text-xl font-bold text-white">
+              Get Fund
+            </button>
+            <ConnectButton />
+          </div>
+          <Button variant="outlined" onClick={handleClickOpen}>
             <User size={48} />
           </Button>
-      </div>
-    </MTNavbar>
-    <Dialog open={open} onClose={handleClose}>
+        </div>
+      </MTNavbar>
+      <Dialog open={open} onClose={handleClose}>
         <DialogTitle>Setting Profile</DialogTitle>
         <DialogContent>
           <DialogContentText>
