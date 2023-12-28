@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react";
 
+import { useRouter } from "next/navigation";
+
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Divider from "@mui/material/Divider";
@@ -24,6 +26,7 @@ function MyEventsPage() {
   const [state, setState] = useState(false);
   const [dbEvents, setDbEvents] = useState<allEventDto[]>([]);
   const { address } = useAccount();
+  const router = useRouter();
   useEffect(() => {
     const fetchData = async () => {
       const response = await fetch(`/api/myevents/${address}`);
@@ -69,8 +72,6 @@ function MyEventsPage() {
         ? parseInt(value, 10)
         : value;
 
-    console.log(updatedValue);
-
     setFormData({
       ...formData,
       [name]: updatedValue,
@@ -111,8 +112,8 @@ function MyEventsPage() {
         // Handle error: Display it in UI, etc.
       } else {
         const eventData = await response.json();
-        console.log("Event data:", eventData);
-        // Process eventData as needed
+        console.log("Event created:", eventData);
+        router.push(`/myevents/${eventData.displayId}`);
       }
     } catch (error) {
       console.error("Error:", error);
@@ -128,12 +129,10 @@ function MyEventsPage() {
           </ListItem>
         </List>
         <Divider />
-
         <List>
           <ListItem disablePadding>
             <ListItemButton>
               <InputLabel htmlFor="name">Title : </InputLabel>
-
               <Input
                 id="name"
                 name="title"
@@ -176,7 +175,6 @@ function MyEventsPage() {
           <ListItem disablePadding>
             <ListItemButton>
               <InputLabel htmlFor="endDate">EndDate : </InputLabel>
-
               <Input
                 id="endDate"
                 name="endDate"
@@ -191,7 +189,6 @@ function MyEventsPage() {
           <ListItem disablePadding>
             <ListItemButton>
               <InputLabel htmlFor="targetValue">TargetValue : </InputLabel>
-
               <Input
                 id="targetValue"
                 name="targetValue"
@@ -206,7 +203,6 @@ function MyEventsPage() {
           <ListItem disablePadding>
             <ListItemButton>
               <InputLabel htmlFor="currency"> Currency: </InputLabel>
-
               <Input
                 id="currency"
                 name="currency"
@@ -221,7 +217,6 @@ function MyEventsPage() {
           <ListItem disablePadding>
             <ListItemButton>
               <InputLabel htmlFor="name">Image : </InputLabel>
-
               <Input
                 id="image"
                 name="image"
@@ -238,76 +233,57 @@ function MyEventsPage() {
     </Box>
   );
   return (
-    <main className="flex min-h-screen flex-col pl-64 pr-64">
-      <Button
-        variant="contained"
-        className="mb-10 mt-10"
-        onClick={toggleDrawer(true)}
-      >
-        Create Event
-      </Button>
-      <Grid container spacing={3} direction="row" justifyContent="flex-start">
-        {/* {events.map((e) => (
-          <Grid
-            item
-            xs={12}
-            sm={6}
-            md={6}
-            lg={4}
-            xl={4}
-            className="p-10"
-            key={e.id}
+    <main className="flex min-h-screen flex-col items-center justify-center pl-32 pr-32">
+      <div className="w-[80%]">
+        <div className="flex justify-end">
+          <button
+            className="w-30 m-4 flex h-10 items-center justify-center rounded-2xl bg-dark-blue p-4 text-xl font-bold text-white"
+            onClick={toggleDrawer(true)}
           >
-            <EventCard
-              key={e.id}
-              name={e.name}
-              currency="NT"
-              progess={e.progess}
-              money={e.money}
-              person={e.person}
-              time={e.time}
-            />
-          </Grid>
-        ))} */}
-        {dbEvents.map((e) => {
-          // Calculate time remaining in days
-          const timeRemaining =
-            (e.endDate - new Date().getTime()) / (1000 * 60 * 60 * 24);
-          const daysRemaining =
-            timeRemaining > 0 ? Math.ceil(timeRemaining) : 0;
+            Get Fund
+          </button>
+        </div>
+        <Grid container spacing={3} direction="row" justifyContent="flex-start">
+          {dbEvents.map((e) => {
+            // Calculate time remaining in days
+            const timeRemaining =
+              (e.endDate - new Date().getTime()) / (1000 * 60 * 60 * 24);
+            const daysRemaining =
+              timeRemaining > 0 ? Math.ceil(timeRemaining) : 0;
 
-          // Calculate progress
-          const progress =
-            e.targetValue !== 0 ? (e.currentValue / e.targetValue) * 100 : 0;
+            // Calculate progress
+            const progress =
+              e.targetValue !== 0 ? (e.currentValue / e.targetValue) * 100 : 0;
 
-          return (
-            <Grid
-              item
-              xs={12}
-              sm={6}
-              md={6}
-              lg={4}
-              xl={4}
-              className="p-10"
-              key={e.displayId}
-            >
-              <EventCard
-                id={e.displayId}
+            return (
+              <Grid
+                item
+                xs={12}
+                sm={12}
+                md={6}
+                lg={4}
+                xl={4}
+                className="p-10"
                 key={e.displayId}
-                name={e.title}
-                currency={e.currency}
-                progess={progress}
-                money={e.currentValue}
-                person={0} // Assuming this is correct; replace with actual data if available
-                time={daysRemaining}
-              />
-            </Grid>
-          );
-        })}
-      </Grid>
-      <Drawer anchor="right" open={state} onClose={toggleDrawer(false)}>
-        {list()}
-      </Drawer>
+              >
+                <EventCard
+                  id={e.displayId}
+                  key={e.displayId}
+                  name={e.title}
+                  currency={e.currency}
+                  progess={progress}
+                  money={e.currentValue}
+                  person={0} // Assuming this is correct; replace with actual data if available
+                  time={daysRemaining}
+                />
+              </Grid>
+            );
+          })}
+        </Grid>
+        <Drawer anchor="right" open={state} onClose={toggleDrawer(false)}>
+          {list()}
+        </Drawer>
+      </div>
     </main>
   );
 }
