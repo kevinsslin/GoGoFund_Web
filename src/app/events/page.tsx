@@ -249,20 +249,19 @@ function EventsPage() {
     </Box>
   );
   return (
-    <main className="flex min-h-screen flex-col pl-64 pr-64">
-      <Button
-        variant="contained"
-        className="mb-10 mt-10"
-        onClick={toggleDrawer(true)}
-      >
-        Create Event
-      </Button>
+    <main className="flex min-h-screen flex-col pl-32 pr-32 items-center justify-center">
+      <div className="w-[80%]">
+      <div className="flex justify-end">
+        <button className="flex h-10 w-30 items-center justify-center rounded-2xl bg-dark-blue p-4 m-4 text-xl font-bold text-white" onClick={toggleDrawer(true)}>
+          Get Fund
+        </button>
+      </div>
       <Grid container spacing={3} direction="row" justifyContent="flex-start">
         {events.map((e) => (
           <Grid
             item
             xs={12}
-            sm={6}
+            sm={12}
             md={6}
             lg={4}
             xl={4}
@@ -296,7 +295,7 @@ function EventsPage() {
             <Grid
               item
               xs={12}
-              sm={6}
+              sm={12}
               md={6}
               lg={4}
               xl={4}
@@ -320,6 +319,7 @@ function EventsPage() {
       <Drawer anchor="right" open={state} onClose={toggleDrawer(false)}>
         {list()}
       </Drawer>
+    </div>
     </main>
   );
 }
