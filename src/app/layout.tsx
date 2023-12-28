@@ -14,6 +14,7 @@ const roboto = Roboto({
 export const metadata: Metadata = {
   title: "GoGoFund",
   description: "A funding platform for the people, by the people.",
+  icons: "favicon.ico",
 };
 
 export default function RootLayout({
@@ -23,6 +24,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
+      {/* <Head>
+        <link rel="icon" href="/favicon.ico" />
+      </Head> */}
       <body className={roboto.className}>
         <Layout>{children}</Layout>
       </body>
