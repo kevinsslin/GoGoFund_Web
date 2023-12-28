@@ -46,7 +46,7 @@ export default function EventCard({
   }));
 
   return (
-    <Link href={`/events/${id}`}>
+    <Link href={`/myevents/${id}`}>
       <Paper className="w-50 p-2 hover:cursor-pointer">
         <div className="flex flex-col items-center justify-center">
           <Image
