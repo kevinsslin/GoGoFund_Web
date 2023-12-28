@@ -1,9 +1,9 @@
-function ppp() {
+function MyEventPage() {
   return (
     <div>
-      <h1>MyEvents</h1>
+      <h1>MyEventPage</h1>
     </div>
   );
 }
 
-export default ppp;
+export default MyEventPage;
