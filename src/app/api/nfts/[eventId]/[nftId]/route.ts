@@ -34,6 +34,11 @@ export async function PUT(
     putNFTRequestSchema.parse(data);
   } catch (error) {
     // in case of an error, we return a 400 response
+    if (error instanceof z.ZodError) {
+      console.error(error.errors);
+    } else {
+      console.error(error);
+    }
     return NextResponse.json({ error: "Invalid request" }, { status: 400 });
   }
   const { eventId, nftId } = params;

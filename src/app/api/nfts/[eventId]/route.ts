@@ -8,9 +8,9 @@ import { nftsTable, eventsTable, usersTable } from "@/db/schema";
 
 const postNFTRequestSchema = z.object({
   address: z.string(),
-  totalAmount: z.number().min(1),
+  totalAmount: z.number(),
   name: z.string(),
-  price: z.number().min(0),
+  price: z.number(),
   imageSrc: z.string(),
   description: z.string(),
 });
@@ -32,6 +32,7 @@ export async function POST(
   const data = await req.json();
 
   try {
+    console.log(data)
     // parse will throw an error if the data doesn't match the schema
     postNFTRequestSchema.parse(data);
   } catch (error) {
