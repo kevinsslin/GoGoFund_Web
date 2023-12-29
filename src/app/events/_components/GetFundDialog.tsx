@@ -78,6 +78,39 @@ function GetFundDialog() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    // 確認是否有空白欄位
+    for (const [key, value] of Object.entries(formData)) {
+      if (value === "") {
+        alert(`Please fill in the ${key} field.`);
+        return;
+      }
+    }
+    // 確認開始日期與結束日期是否晚於今日
+    const today = new Date();
+    const startDate = new Date(formData.startDate);
+    const endDate = new Date(formData.endDate);
+    if (startDate < today || endDate < today) {
+      alert("Incorrect date: The date cannot be earlier than today.");
+      return;
+    }
+    // 確認結束日期是否晚於開始日期
+    if (endDate < startDate) {
+      alert("Incorrect date: The end date cannot be earlier than the start date.");
+      return;
+    }
+    //確認數字是否小於0
+    if (formData.targetValue < 0) {
+      alert("Incorrect number: The target amount cannot be less than 0.");
+      return;
+    }
+    // 確認是否上傳圖片
+    if (!formData.image) {
+      alert("Please upload an image.");
+      return;
+    }
+
+    handleClose();
+
     console.log("Submitting:", formData);
     // const data = new FormData()
     // for (const [key, value] of Object.entries(formData)) {
@@ -219,7 +252,7 @@ function GetFundDialog() {
             className="pb-2"
           />
           <form onSubmit={handleSubmit} className="flex justify-center">
-            <Button type="submit" onClick={handleClose}>
+            <Button type="submit">
               Submit
             </Button>
           </form>
