@@ -27,6 +27,10 @@ export async function GET(
       return NextResponse.json({ error: "Event Not Found" }, { status: 404 });
     }
 
+    const dbNFTs = await db.query.nftsTable.findMany({
+      where: eq(eventsTable.displayId, eventId),
+    });
+
     return NextResponse.json(
       {
         id: dbEvent.id,
@@ -39,6 +43,15 @@ export async function GET(
         currentValue: dbEvent.currentValue,
         currency: dbEvent.currency,
         imageSrc: dbEvent.imageSrc,
+        nfts: dbNFTs.map((dbNFT) => ({
+          displayId: dbNFT.displayId,
+          name: dbNFT.name,
+          totalAmount: dbNFT.totalAmount,
+          nowAmount: dbNFT.nowAmount,
+          price: dbNFT.price,
+          description: dbNFT.description,
+          imageSrc: dbNFT.imageSrc,
+        })),
       },
       { status: 200 },
     );

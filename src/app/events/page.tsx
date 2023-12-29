@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 
 import Grid from "@mui/material/Grid";
 
+import type { allEventDto } from "@/lib/types/db";
+
 import EventCard from "./_components/EventCard";
 
 const events = [

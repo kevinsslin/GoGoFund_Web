@@ -41,7 +41,7 @@ const postEventRequestSchema = z.object({
   endDate: z.number(),
   targetValue: z.number().min(0),
   currency: z.enum(["USD", "BTC", "NTD"]),
-  //   image: z.instanceof(File),
+  image: z.string(),
 });
 // you can use z.infer to get the typescript type from a zod schema
 type PostEventRequest = z.infer<typeof postEventRequestSchema>;
@@ -70,6 +70,7 @@ export async function POST(req: NextRequest) {
     endDate,
     targetValue,
     currency,
+    image,
   } = data as PostEventRequest;
   try {
     console.log("try to upload image to pinata");
@@ -111,7 +112,7 @@ export async function POST(req: NextRequest) {
         targetValue,
         currentValue: 0,
         currency,
-        imageSrc: "",
+        imageSrc: image,
         status: "pending",
       })
       .execute();

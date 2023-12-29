@@ -1,5 +1,3 @@
-"use client";
-
 import { useState } from "react";
 import React from "react";
 
@@ -35,9 +33,8 @@ function GetFondDialog() {
     endDate: new Date().getTime(),
     targetValue: 0,
     currency: "",
-    image: null as File | null,
+    image: "",
   });
-
   // Define handleChange to update formData
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -65,12 +62,15 @@ function GetFondDialog() {
     });
   };
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files || e.target.files.length === 0) return;
     const file = e.target.files[0];
+    const formdata = new FormData();
+    formdata.append("image", file);
+    await uploadImage(file);
     setFormData({
       ...formData,
-      ["image"]: file,
+      ["image"]: "",
     });
   };
 
@@ -79,15 +79,6 @@ function GetFondDialog() {
     e.preventDefault();
 
     console.log("Submitting:", formData);
-    // const data = new FormData()
-    // for (const [key, value] of Object.entries(formData)) {
-    //   if (key === 'image' && value instanceof File) {
-    //     data.append('image', value, value.name);
-    //   } else {
-    //     data.append(key, String(value));
-    //   }
-    // }
-    // await createEvents(formData);
     try {
       const response = await fetch("/api/events", {
         method: "POST",
