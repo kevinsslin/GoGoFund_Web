@@ -21,6 +21,12 @@ export type allEventDto = {
   image: File | null;
 };
 
+export type updateEventType = {
+  title?: string;
+  description?: string;
+  targetValue?: number;
+};
+
 export type nft = {
   displayId: string;
   name: string;
