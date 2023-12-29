@@ -1,7 +1,13 @@
+"use client";
+
+import { useEffect, useState } from "react";
+
 import Image from "next/image";
+import { useParams } from "next/navigation";
 
 import Clock from "../_components/Clock";
 import ProductIntro from "../_components/ProductIntro";
+import type { allEventDto } from "@lib/types/db";
 import { CircularProgress } from "@mui/material";
 import type { CircularProgressProps } from "@mui/material";
 import Box from "@mui/material/Box";
@@ -14,7 +20,7 @@ function CircularProgressWithLabel(
 ) {
   return (
     <Box sx={{ position: "relative", display: "inline-flex" }}>
-      <CircularProgress variant="determinate" {...props} size="4rem" />
+      <CircularProgress variant="determinate" {...props} size="6rem" />
       <Box
         sx={{
           top: 0,
@@ -39,8 +45,25 @@ function CircularProgressWithLabel(
 }
 
 function EventsIdPage() {
+  const params = useParams();
+  const [dbEvent, setDbEvent] = useState<allEventDto>([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await fetch(`/api/events/${params.eventId}`);
+      const data = await response.json();
+      setDbEvent(data);
+    };
+    fetchData();
+  }, [params.eventId]);
+
+  function formatTimestamp(timestamp: string) {
+    const date = new Date(Number(timestamp));
+    return date.toLocaleDateString();
+  }
+
   return (
-    <main className="flex min-h-screen flex-col items-center">
+    <div className="flex min-h-screen flex-col items-center">
       <div className="flex flex-row justify-center">
         <div className="pr-24">
           <Image
@@ -51,23 +74,27 @@ function EventsIdPage() {
             className="p-5 "
           />
         </div>
-        <div>
-          <p className="p-4 text-6xl font-bold">name</p>
+        <div className="flex flex-col justify-center">
+          <p className="p-4 text-6xl font-bold">{dbEvent?.title}</p>
           <div className="flex flex-row items-center p-4">
-            <CircularProgressWithLabel value={75} />
+            <CircularProgressWithLabel
+              value={(dbEvent.currentValue / dbEvent.targetValue) * 100}
+            />
             <div className="pl-8">
-              <p className="text-md pb-2">目標金額 NTD$ 100000</p>
-              <p className="pt-2 text-xl font-bold">已募集 NTD$ 100000</p>
+              <p className="text-md pb-2">{`目標金額 NTD$ ${dbEvent?.targetValue}`}</p>
+              <p className="pt-2 text-xl font-bold">{`已募集 ${dbEvent?.currency}$ ${dbEvent?.currentValue}`}</p>
             </div>
           </div>
           <p className="text-md p-2">
-            募資期間 2023/12/26 12:00 – 2024/01/23 23:59
+            {`duration: ${formatTimestamp(
+              dbEvent.startDate,
+            )} – ${formatTimestamp(dbEvent.endDate)}`}
           </p>
           <NoSsr>
-            <Clock targetDate="2023-12-31" />
+            <Clock targetDate={dbEvent.endDate} />
           </NoSsr>
           <button className="h-15 m-4 flex w-64 items-center justify-center rounded-2xl bg-dark-blue p-4 text-xl font-bold text-white">
-            我要贊助
+            Fund the Project
           </button>
         </div>
       </div>
@@ -78,16 +105,12 @@ function EventsIdPage() {
           orientation="horizontal"
           sx={{ borderWidth: 1 }}
         />
-        <p className="break-all p-2 text-xl">
-          description gowswfk;w ckasdmaf wefwkjfadc aefwjenfjwnfw
-          efwejwwfjeqwrfnweref ewfwfwfr ertftwtwetft dsjsflsfvwsdf sefwefwe
-          ffweefwef regwsgfwr ewfwefw
-        </p>
+        <p className="break-all p-2 text-xl">{dbEvent.description}</p>
       </div>
       <div className="justify-cent flex w-[50%] flex-col p-8">
         <ProductIntro />
       </div>
-    </main>
+    </div>
   );
 }
 

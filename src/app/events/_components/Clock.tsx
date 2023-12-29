@@ -1,14 +1,16 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 
 type CountdownTimerProps = {
-  targetDate: string; // 這裡的型態可以根據實際需求進行更改
+  targetDate: string;
 };
 
 function CountdownTimer({ targetDate }: CountdownTimerProps) {
   const [currentTime, setCurrentTime] = useState(new Date());
-  const [targetTime] = useState(new Date(targetDate));
+  const targetTime = useMemo(() => {
+    return new Date(Number(targetDate));
+  }, [targetDate]);
   const [remainingTime, setRemainingTime] = useState(
     calculateRemainingTime(currentTime, targetTime),
   );
