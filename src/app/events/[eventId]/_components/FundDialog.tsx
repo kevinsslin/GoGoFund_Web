@@ -1,23 +1,54 @@
-"use client";
+import React, { useState, useEffect } from "react";
 
-import { useState } from "react";
-import React from "react";
+import {
+  DialogTitle,
+  Button,
+  Dialog,
+  DialogContent,
+  InputLabel,
+  TextField,
+} from "@mui/material";
+import { useAccount, useContractWrite, usePrepareContractWrite } from "wagmi";
 
-import { useRouter } from "next/navigation";
+import PoolABI from "@/utils/abis/Pool";
 
-import { DialogTitle, MenuItem } from "@mui/material";
-import Button from "@mui/material/Button";
-import Dialog from "@mui/material/Dialog";
-import DialogContent from "@mui/material/DialogContent";
-import Input from "@mui/material/Input";
-import InputLabel from "@mui/material/InputLabel";
-import TextField from "@mui/material/TextField";
-import { useAccount } from "wagmi";
+type nft = {
+  tokenId: number;
+  price: number;
+  totalAmount: number;
+  nowAmount: number;
+};
 
-function FundDialog() {
-  const [open, setOpen] = React.useState(false);
+type FundDialogProps = {
+  poolAddress: string;
+  nfts: nft[];
+};
+
+function FundDialog({ poolAddress, nfts }: FundDialogProps) {
+  const [open, setOpen] = useState(false);
   const { address } = useAccount();
-  const router = useRouter();
+
+  const [formData, setFormData] = useState({
+    to: address || "",
+    amounts: new Array(nfts.length).fill(""),
+  });
+  const [totalPrice, setTotalPrice] = useState(0);
+
+  useEffect(() => {
+    const newTotalPrice = formData.amounts.reduce((acc, amount, index) => {
+      const nftPrice = nfts[index]?.price || 0;
+      return acc + nftPrice * (Number(amount) || 0);
+    }, 0);
+    setTotalPrice(newTotalPrice);
+  }, [formData, nfts]);
+
+  const handleInputChange = (index, value) => {
+    setFormData((prevData) => {
+      const updatedAmounts = [...prevData.amounts];
+      updatedAmounts[index] = value;
+      return { ...prevData, amounts: updatedAmounts };
+    });
+  };
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -27,202 +58,59 @@ function FundDialog() {
     setOpen(false);
   };
 
-  const [formData, setFormData] = useState({
-    address: address?.toString() || "",
-    title: "",
-    description: "",
-    startDate: new Date().getTime(),
-    endDate: new Date().getTime(),
-    targetValue: 0,
-    currency: "",
-    image: null as File | null,
+  const { config } = usePrepareContractWrite({
+    address: poolAddress,
+    abi: PoolABI,
+    functionName: "mintBatch",
+    args: [
+      formData.to,
+      nfts.map((nft) => nft.tokenId),
+      formData.amounts.map(Number),
+    ],
   });
 
-  // Define handleChange to update formData
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-  ) => {
-    const { name, value } = e.target;
-    // Update formData with the new value
-    const updatedValue =
-      name === "targetValue"
-        ? parseInt(value, 10)
-        : name === "startDate" || name === "endDate"
-          ? Date.parse(value)
-          : value;
+  const { write } = useContractWrite(config);
 
-    setFormData({
-      ...formData,
-      [name]: updatedValue,
-    });
-  };
-
-  const handleSelectChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
-  };
-
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!e.target.files || e.target.files.length === 0) return;
-    const file = e.target.files[0];
-    setFormData({
-      ...formData,
-      ["image"]: file,
-    });
-  };
-
-  // Define handleSubmit to create a new event
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    console.log("Submitting:", formData);
-    // const data = new FormData()
-    // for (const [key, value] of Object.entries(formData)) {
-    //   if (key === 'image' && value instanceof File) {
-    //     data.append('image', value, value.name);
-    //   } else {
-    //     data.append(key, String(value));
-    //   }
-    // }
-    // await createEvents(formData);
-    try {
-      const response = await fetch("/api/events", {
-        method: "POST",
-        body: JSON.stringify(formData),
-      });
-      if (!response.ok) {
-        const errorData = await response.json();
-        console.error("Error from API:", errorData.error);
-        // Handle error: Display it in UI, etc.
-      } else {
-        const eventData = await response.json();
-        router.push(`/myevents/${eventData.displayId}`);
-      }
-    } catch (error) {
-      console.error("Error:", error);
+  const handleSubmit = () => {
+    if (write) {
+      write();
     }
+    handleClose();
   };
 
   return (
     <React.Fragment>
-      <button
-        className="w-30 m-4 flex h-10 items-center justify-center rounded-2xl bg-dark-blue p-4 text-xl font-bold text-white"
+      <Button
+        className="w-30 m-4 flex h-10 items-center justify-center rounded-2xl bg-dark-blue p-4 text-xl font-bold text-white hover:bg-light-blue"
         onClick={handleClickOpen}
       >
-        Get Fund
-      </button>
+        Fund
+      </Button>
       <Dialog
         open={open}
         onClose={handleClose}
         fullWidth={true}
         maxWidth={"md"}
       >
-        <DialogTitle>Create Event</DialogTitle>
+        <DialogTitle>Order</DialogTitle>
         <DialogContent className="space-y-2">
-          <InputLabel htmlFor="name">Title : </InputLabel>
-          <TextField
-            autoFocus
-            margin="dense"
-            id="title"
-            name="title"
-            type="text"
-            fullWidth
-            variant="standard"
-            onChange={handleChange}
-            required
-            className="pb-2"
-          />
-          <InputLabel htmlFor="name">Description : </InputLabel>
-          <TextField
-            autoFocus
-            margin="dense"
-            id="description"
-            name="description"
-            type="text"
-            multiline
-            variant="standard"
-            onChange={handleChange}
-            fullWidth
-            required
-            className="pb-2"
-          />
-          <InputLabel htmlFor="name">Start Date : </InputLabel>
-          <TextField
-            autoFocus
-            margin="dense"
-            id="startDate"
-            name="startDate"
-            type="date"
-            fullWidth
-            variant="standard"
-            onChange={handleChange}
-            required
-            className="pb-2"
-          />
-          <InputLabel htmlFor="name">End Date : </InputLabel>
-          <TextField
-            autoFocus
-            margin="dense"
-            id="endDate"
-            name="endDate"
-            type="date"
-            fullWidth
-            variant="standard"
-            onChange={handleChange}
-            required
-            className="pb-2"
-          />
-          <InputLabel htmlFor="name">TargetAmount : </InputLabel>
-          <TextField
-            autoFocus
-            margin="dense"
-            id="TargetAmount"
-            name="targetValue"
-            type="number"
-            fullWidth
-            variant="standard"
-            onChange={handleChange}
-            required
-            className="pb-2"
-          />
-          <InputLabel htmlFor="name">Currency : </InputLabel>
-          <TextField
-            id="Currency"
-            name="currency"
-            select
-            variant="standard"
-            sx={{ width: 200 }}
-            required
-            className="pb-2"
-            onChange={handleSelectChange}
-          >
-            <MenuItem value="NTD">
-              <em>NTD</em>
-            </MenuItem>
-            <MenuItem value="USD">
-              <em>USD</em>
-            </MenuItem>
-            <MenuItem value="BTC">
-              <em>BTC</em>
-            </MenuItem>
-          </TextField>
-          <InputLabel htmlFor="name">Image : </InputLabel>
-          <Input
-            id="image"
-            name="image"
-            type="file"
-            onChange={handleImageChange}
-            required
-            className="pb-2"
-          />
-          <form onSubmit={handleSubmit} className="flex justify-center">
-            <Button type="submit" onClick={handleClose}>
-              Submit
-            </Button>
-          </form>
+          {nfts.map((nft, index) => (
+            <div key={nft.tokenId}>
+              <InputLabel htmlFor={`tokenId-${nft.tokenId}`}>
+                {`Token ID: ${nft.tokenId}`}
+              </InputLabel>
+              <TextField
+                label={`Amount for Token ID ${nft.tokenId}`}
+                value={formData.amounts[index]}
+                onChange={(e) => handleInputChange(index, e.target.value)}
+                fullWidth
+              />
+            </div>
+          ))}
+          <div>Total Price: {totalPrice}</div>
+          <Button disabled={!write} onClick={handleSubmit}>
+            Submit
+          </Button>
         </DialogContent>
       </Dialog>
     </React.Fragment>
