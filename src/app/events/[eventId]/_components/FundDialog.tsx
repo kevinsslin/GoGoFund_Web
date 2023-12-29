@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import { useAccount, useContractWrite, usePrepareContractWrite } from "wagmi";
 
-import PoolABI from "@/utils/abis/Pool";
+import { PoolABI } from "@/utils/abis/Pool";
 
 type nft = {
   tokenId: number;
@@ -59,7 +59,7 @@ function FundDialog({ poolAddress, nfts }: FundDialogProps) {
   };
 
   const { config } = usePrepareContractWrite({
-    address: poolAddress,
+    address: poolAddress as `0x${string}`,
     abi: PoolABI,
     functionName: "mintBatch",
     args: [
@@ -71,10 +71,9 @@ function FundDialog({ poolAddress, nfts }: FundDialogProps) {
 
   const { write } = useContractWrite(config);
 
-  const handleSubmit = () => {
-    if (write) {
-      write();
-    }
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    write?.();
     handleClose();
   };
 
@@ -97,12 +96,13 @@ function FundDialog({ poolAddress, nfts }: FundDialogProps) {
           {nfts.map((nft, index) => (
             <div key={nft.tokenId}>
               <InputLabel htmlFor={`tokenId-${nft.tokenId}`}>
-                {`Token ID: ${nft.tokenId}`}
+                {`Token ID: ${nft.tokenId}, Price: ${nft.price}`}
               </InputLabel>
               <TextField
                 label={`Amount for Token ID ${nft.tokenId}`}
                 value={formData.amounts[index]}
                 onChange={(e) => handleInputChange(index, e.target.value)}
+                className="mt-4"
                 fullWidth
               />
             </div>

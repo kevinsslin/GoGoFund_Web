@@ -66,11 +66,11 @@ function EventsIdPage() {
   }
 
   // TODO: replace this with actual dbNFTs
-  const mockPoolAddress = "0x123456789";
+  const mockPoolAddress = "0x9d1a24c014eC5b534b1844d26fe64958966119dD";
   const mockNfts = [
-    { tokenId: 0, price: 100, totalAmount: 1000, nowAmount: 987 },
-    { tokenId: 1, price: 200, totalAmount: 2000, nowAmount: 987 },
-    { tokenId: 2, price: 300, totalAmount: 3000, nowAmount: 987 },
+    { tokenId: 0, price: 100, totalAmount: 100, nowAmount: 87 },
+    { tokenId: 1, price: 200, totalAmount: 200, nowAmount: 87 },
+    { tokenId: 2, price: 300, totalAmount: 300, nowAmount: 87 },
   ];
 
   return (
