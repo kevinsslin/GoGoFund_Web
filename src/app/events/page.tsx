@@ -31,10 +31,15 @@ function EventsPage() {
     const fetchData = async () => {
       const response = await fetch("/api/events");
       const data = await response.json();
-      setDbEvents(data);
+      // setDbEvents(data);
+
+      // 只顯示尚未結束的活動
+      const now = new Date().getTime();
+      setDbEvents(data.filter((e) => e.endDate > now));
     };
     fetchData();
   }, []);
+
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center pl-32 pr-32">
