@@ -5,15 +5,16 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import { useParams } from "next/navigation";
 
-import Clock from "../_components/Clock";
-import ProductIntro from "../_components/ProductIntro";
-import type { allEventDto } from "@lib/types/db";
+import Clock from "../../../components/Clock";
+import ProductIntro from "../../../components/ProductIntro";
 import { CircularProgress } from "@mui/material";
 import type { CircularProgressProps } from "@mui/material";
 import Box from "@mui/material/Box";
 import Divider from "@mui/material/Divider";
 import NoSsr from "@mui/material/NoSsr";
 import Typography from "@mui/material/Typography";
+
+import type { allEventDto } from "@/lib/types/db";
 
 function CircularProgressWithLabel(
   props: CircularProgressProps & { value: number },
