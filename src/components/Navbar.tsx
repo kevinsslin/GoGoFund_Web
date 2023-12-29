@@ -1,34 +1,27 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 import Image from "next/image";
 import Link from "next/link";
 
 import { Navbar as MTNavbar } from "@material-tailwind/react";
 import Button from "@mui/material/Button";
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import DialogTitle from "@mui/material/DialogTitle";
-import TextField from "@mui/material/TextField";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { User } from "lucide-react";
-import { useAccount } from "wagmi";
 
 import UserDialog from "./UserDialog";
 
 export function Navbar() {
   const [open, setOpen] = useState(false);
-  const [isScrolling, setIsScrolling] = useState(false);
+  const [isScrolling] = useState(false);
 
   const navBarStyle =
     "text-2xl p-4 hover:text-dark-blue hover:border-b-4 font-bold";
 
   const handleClickOpen = () => {
     setOpen(true);
-  }
+  };
 
   // Render Navbar
   return (

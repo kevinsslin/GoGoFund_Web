@@ -11,15 +11,19 @@ import DialogTitle from "@mui/material/DialogTitle";
 import TextField from "@mui/material/TextField";
 import { useAccount } from "wagmi";
 
-export function UserDialog( {open, setOpen} : {open: boolean, setOpen: any} ) {
+type UserDialogProps = {
+  open: boolean;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+};
+
+export function UserDialog({ open, setOpen }: UserDialogProps) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-  const [isScrolling, setIsScrolling] = useState(false);
   const { address, isConnected } = useAccount();
 
-    const handleClose = () => {
-        setOpen(false);
-    };
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setName(event.target.value);
@@ -62,17 +66,17 @@ export function UserDialog( {open, setOpen} : {open: boolean, setOpen: any} ) {
     const handleResize = () => window.innerWidth >= 960 && setOpen(false);
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
-  }, []);
+  }, [setOpen]);
 
-  // Effect for handling scroll events
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolling(window.scrollY > 0);
-    };
+  // // Effect for handling scroll events
+  // useEffect(() => {
+  //   const handleScroll = () => {
+  //     setIsScrolling(window.scrollY > 0);
+  //   };
 
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  //   window.addEventListener("scroll", handleScroll);
+  //   return () => window.removeEventListener("scroll", handleScroll);
+  // }, []);
 
   useEffect(() => {
     async function getUser() {
