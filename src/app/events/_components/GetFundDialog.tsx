@@ -77,8 +77,7 @@ function GetFundDialog() {
   // Define handleSubmit to create a new event
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
-    // 確認是否有空白欄位
+    
     for (const [key, value] of Object.entries(formData)) {
       if (value === "") {
         alert(`Please fill in the ${key} field.`);
