@@ -27,6 +27,7 @@ const config: Config = {
       bermuda: "#78dcca",
       "dark-blue": "#1e3f63",
       "light-blue": "#168ede",
+      "dark-gray": "#52525b",
     },
   },
   plugins: [],
