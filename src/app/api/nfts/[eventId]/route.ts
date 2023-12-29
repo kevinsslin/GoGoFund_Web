@@ -33,7 +33,7 @@ export async function POST(
   const data = await req.json();
 
   try {
-    console.log(data)
+    console.log(data);
     // parse will throw an error if the data doesn't match the schema
     postNFTRequestSchema.parse(data);
   } catch (error) {

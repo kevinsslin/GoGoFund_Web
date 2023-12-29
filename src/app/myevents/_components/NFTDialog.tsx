@@ -2,7 +2,9 @@
 
 import { useState } from "react";
 import React from "react";
+
 import { useParams, useRouter } from "next/navigation";
+
 import { DialogTitle } from "@mui/material";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
@@ -10,8 +12,9 @@ import DialogContent from "@mui/material/DialogContent";
 import InputLabel from "@mui/material/InputLabel";
 import TextField from "@mui/material/TextField";
 import { useAccount, useContractWrite, usePrepareContractWrite } from "wagmi";
-import { POOL_FACTORY_ADDRESS } from "@/utils/addresses";
+
 import { PoolFactoryABI } from "@/utils/abis/PoolFactory";
+import { POOL_FACTORY_ADDRESS } from "@/utils/addresses";
 
 // Define formData list
 interface FormData {
@@ -26,7 +29,7 @@ interface FormData {
 function GetFondDialog() {
   const [open, setOpen] = React.useState(false);
   const { address } = useAccount();
-  const {eventId} = useParams();
+  const { eventId } = useParams();
   const router = useRouter();
 
   const handleClickOpen = () => {
@@ -47,17 +50,16 @@ function GetFondDialog() {
   });
 
   const [poolData, setPoolData] = useState({
-    fundAsset: '', // address type
-    baseURI: '', // string type
+    fundAsset: "", // address type
+    baseURI: "", // string type
     startTimestamp: 0, // uint256 type, ensure this is in Unix timestamp format
     endTimestamp: 0, // uint256 type, ensure this is in Unix timestamp format
     targetAmount: 0, // uint256 type
     names: [], // string[] type
     ids: [], // uint256[] type
     mintPrices: [], // uint256[] type
-    maxSupplys: [] // uint256[] type
-});
-
+    maxSupplys: [], // uint256[] type
+  });
 
   // Define handleChange to update formData
   const handleChange = (
@@ -67,9 +69,7 @@ function GetFondDialog() {
 
     // Update formData with the new value
     const updatedValue =
-      name === "price" || name === "totalAmount"
-        ? parseInt(value, 10)
-        : value;
+      name === "price" || name === "totalAmount" ? parseInt(value, 10) : value;
 
     setFormData((prevState) => ({
       ...prevState,
@@ -113,11 +113,11 @@ function GetFondDialog() {
       poolData.names,
       poolData.ids,
       poolData.mintPrices,
-      poolData.maxSupplys
+      poolData.maxSupplys,
     ],
     onSuccess: (data) => {
-      console.log("Success",data);
-    }
+      console.log("Success", data);
+    },
   });
 
   const { write } = useContractWrite(config);
@@ -140,14 +140,14 @@ function GetFondDialog() {
           names: tempData.names,
           ids: tempData.ids,
           mintPrices: tempData.mintPrices,
-          maxSupplys: tempData.maxSupplys
+          maxSupplys: tempData.maxSupplys,
         });
         write?.();
       }
     } catch (error) {
       console.error("Error:", error);
     }
-  }
+  };
 
   return (
     <React.Fragment>

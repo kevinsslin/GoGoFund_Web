@@ -30,7 +30,6 @@ export async function GET(
     const nfts = await db.query.nftsTable.findMany({
       where: eq(nftsTable.eventId, dbEvent.displayId),
     });
-    
 
     return NextResponse.json(
       {

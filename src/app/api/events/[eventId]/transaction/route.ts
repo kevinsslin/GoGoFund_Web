@@ -1,9 +1,15 @@
 import { NextResponse, type NextRequest } from "next/server";
 
-import { z } from "zod";
 import { eq, and, not } from "drizzle-orm";
+import { z } from "zod";
+
 import { db } from "@/db";
-import { nftsTable, eventsTable, transactionTable, transactionItemsTable } from "@/db/schema";
+import {
+  nftsTable,
+  eventsTable,
+  transactionTable,
+  transactionItemsTable,
+} from "@/db/schema";
 
 // Define a schema for individual transaction items
 const transactionItemSchema = z.object({
@@ -61,11 +67,14 @@ export async function POST(
 
     for (const item of items) {
       // Saving the new transaction items to the database
-      await db.insert(transactionItemsTable).values({
-        transactionId: transaction.displayId,
-        nftId: item.nftId,
-        quantity: item.quantity,
-      }).execute();
+      await db
+        .insert(transactionItemsTable)
+        .values({
+          transactionId: transaction.displayId,
+          nftId: item.nftId,
+          quantity: item.quantity,
+        })
+        .execute();
 
       // Update the NFT table amount
       const dbNFT = await db.query.nftsTable.findFirst({
@@ -74,7 +83,8 @@ export async function POST(
       if (!dbNFT) {
         return NextResponse.json({ error: "NFT Not Found" }, { status: 404 });
       }
-      await db.update(nftsTable)
+      await db
+        .update(nftsTable)
         .set({
           nowAmount: dbNFT.nowAmount + item.quantity,
         })
@@ -82,16 +92,17 @@ export async function POST(
         .execute();
 
       // incrementing the currentValue based on the transaction
-      await db.update(eventsTable)
+      await db
+        .update(eventsTable)
         .set({
-          currentValue: dbEvent.currentValue + item.quantity*dbNFT.price,
+          currentValue: dbEvent.currentValue + item.quantity * dbNFT.price,
         })
         .where(eq(eventsTable.displayId, eventId))
         .execute();
     }
 
     // Saving the new transaction items to the database
-    
+
     return NextResponse.json({ status: 200 });
   } catch (error) {
     console.error("Error creating user:", error);
