@@ -1,15 +1,22 @@
-import React from 'react';
-import Avatar from '@mui/material/Avatar';
+"use client";
 
-import FolderIcon from '@mui/icons-material/Folder';
+import React from 'react';
+
 import { Divider, Grid } from '@mui/material';
 import EventCard from '../events/_components/EventCard';
+import UserDialog from '@/components/UserDialog';
+import AvatarSelector from './_component/AvatarSelect';
 
 
 
 function CollectionPage() {
+  const [open, setOpen] = React.useState(false);
 
-  const events = [
+  const handelClick = () => {
+    setOpen(true);
+  };
+
+  const mockdbevent = [
     { name: "name", progess: 92.77, person: 1000, money: 9999, time: 20, id: 1 },
     { name: "apple", progess: 9.7, person: 102, money: 9, time: 320, id: 2 },
     { name: "kevin", progess: 10.1, person: 1, money: 1314, time: 200, id: 3 },
@@ -31,13 +38,11 @@ function CollectionPage() {
   return (
     <main className='flex flex-row justify-center pr-32 pl-32 space-x-40'>
       <div className='flex flex-col items-start'>
-        <Avatar sx={{ width: 300, height: 300 }}>
-          <FolderIcon sx={{ width: 200, height: 200 }}/>
-        </Avatar>
+        <AvatarSelector />
         <p className='text-5xl pt-6'>username</p>
         <p className='text-2xl pt-6 pb-6'>b10303029@ntu.edu.tw</p>
-        <button className='text-lg p-2 border-2 rounded-md w-64' >edit profile</button>
-        <p className='text-lg pt-6'>5 collections</p>
+        <button className='text-lg p-2 border-2 rounded-md w-64' onClick={handelClick}>edit profile</button>
+        <p className='text-lg pt-6'>{mockdbevent.length} collections</p>
       </div>
       <div className='flex flex-col items-start w-[60%]'>
         <p className="flex justify-start p-2 text-4xl font-bold">My Collections</p>
@@ -48,31 +53,36 @@ function CollectionPage() {
         />
         <div className='p-4'></div>
         <Grid container spacing={3} direction="row" justifyContent="flex-start">
-          {events.map((e) => (
-            <Grid
-              item
-              xs={12}
-              sm={12}
-              md={6}
-              lg={4}
-              xl={4}
-              className="p-10"
-              key={e.id}
-            >
-              <EventCard
-                id={e.id?.toString()}
+          {mockdbevent.length === 0 ? (
+            <p className='text-4xl'>You have no events now.</p>
+          ) : (
+            mockdbevent.map((e) => (
+              <Grid
+                item
+                xs={12}
+                sm={12}
+                md={6}
+                lg={4}
+                xl={4}
+                className="p-10"
                 key={e.id}
-                name={e.name}
-                currency="NTD"
-                progess={e.progess}
-                money={e.money}
-                person={e.person}
-                time={e.time}
-              />
-            </Grid>
-          ))}
+              >
+                <EventCard
+                  id={e.id?.toString()}
+                  key={e.id}
+                  name={e.name}
+                  currency="NTD"
+                  progess={e.progess}
+                  money={e.money}
+                  person={e.person}
+                  time={e.time}
+                />
+              </Grid>
+            ))
+          )}
         </Grid>
       </div>
+      <UserDialog open={open} setOpen={setOpen} />
     </main>
   );
 }
