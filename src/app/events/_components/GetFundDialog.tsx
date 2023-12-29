@@ -85,7 +85,6 @@ function GetFundDialog() {
         return;
       }
     }
-    // 確認開始日期與結束日期是否晚於今日
     const today = new Date();
     const startDate = new Date(formData.startDate);
     const endDate = new Date(formData.endDate);
@@ -93,36 +92,25 @@ function GetFundDialog() {
       alert("Incorrect date: The date cannot be earlier than today.");
       return;
     }
-    // 確認結束日期是否晚於開始日期
+    
     if (endDate < startDate) {
       alert(
         "Incorrect date: The end date cannot be earlier than the start date.",
       );
       return;
     }
-    //確認數字是否小於0
+
     if (formData.targetValue < 0) {
       alert("Incorrect number: The target amount cannot be less than 0.");
       return;
     }
-    // 確認是否上傳圖片
+
     if (!formData.image) {
       alert("Please upload an image.");
       return;
     }
-
     handleClose();
-
-    console.log("Submitting:", formData);
-    // const data = new FormData()
-    // for (const [key, value] of Object.entries(formData)) {
-    //   if (key === 'image' && value instanceof File) {
-    //     data.append('image', value, value.name);
-    //   } else {
-    //     data.append(key, String(value));
-    //   }
-    // }
-    // await createEvents(formData);
+    
     try {
       const response = await fetch("/api/events", {
         method: "POST",
