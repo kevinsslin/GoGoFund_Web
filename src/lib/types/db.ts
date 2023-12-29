@@ -11,6 +11,7 @@ export type createEventDto = {
 
 export type allEventDto = {
   displayId: string;
+  description: string;
   title: string;
   startDate: number;
   endDate: number;

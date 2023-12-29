@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 
-import GetFondDialog from "../events/_components/GetFondDialog";
+import GetFondDialog from "../events/_components/GetFundDialog";
 import Grid from "@mui/material/Grid";
 import { useAccount } from "wagmi";
 

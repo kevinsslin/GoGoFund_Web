@@ -16,6 +16,8 @@ import Typography from "@mui/material/Typography";
 
 import type { allEventDto } from "@/lib/types/db";
 
+import FundDialog from "./_components/FundDialog";
+
 function CircularProgressWithLabel(
   props: CircularProgressProps & { value: number },
 ) {
@@ -58,10 +60,18 @@ function EventsIdPage() {
     fetchData();
   }, [params.eventId]);
 
-  function formatTimestamp(timestamp: string) {
+  function formatTimestamp(timestamp: number) {
     const date = new Date(Number(timestamp));
     return date.toLocaleDateString();
   }
+
+  // TODO: replace this with actual dbNFTs
+  const mockPoolAddress = "0x9d1a24c014eC5b534b1844d26fe64958966119dD";
+  const mockNfts = [
+    { tokenId: 0, price: 100, totalAmount: 100, nowAmount: 87 },
+    { tokenId: 1, price: 200, totalAmount: 200, nowAmount: 87 },
+    { tokenId: 2, price: 300, totalAmount: 300, nowAmount: 87 },
+  ];
 
   return (
     <div className="flex min-h-screen flex-col items-center">
@@ -82,8 +92,8 @@ function EventsIdPage() {
               value={(dbEvent.currentValue / dbEvent.targetValue) * 100}
             />
             <div className="pl-8">
-              <p className="text-md pb-2">{`目標金額 NTD$ ${dbEvent?.targetValue}`}</p>
-              <p className="pt-2 text-xl font-bold">{`已募集 ${dbEvent?.currency}$ ${dbEvent?.currentValue}`}</p>
+              <p className="text-md pb-2">{`Target Amount: NTD$ ${dbEvent?.targetValue}`}</p>
+              <p className="pt-2 text-xl font-bold">{`Current Amount: ${dbEvent?.currency}$ ${dbEvent?.currentValue}`}</p>
             </div>
           </div>
           <p className="text-md p-2">
@@ -94,9 +104,7 @@ function EventsIdPage() {
           <NoSsr>
             <Clock targetDate={dbEvent.endDate} />
           </NoSsr>
-          <button className="h-15 m-4 flex w-64 items-center justify-center rounded-2xl bg-dark-blue p-4 text-xl font-bold text-white">
-            Fund the Project
-          </button>
+          <FundDialog poolAddress={mockPoolAddress} nfts={mockNfts} />
         </div>
       </div>
       <div className="flex w-[50%] flex-col justify-start p-8">
