@@ -115,6 +115,9 @@ function GetFondDialog() {
       poolData.mintPrices,
       poolData.maxSupplys
     ],
+    onSuccess: (data) => {
+      console.log("Success",data);
+    }
   });
 
   const { write } = useContractWrite(config);
@@ -139,9 +142,7 @@ function GetFondDialog() {
           mintPrices: tempData.mintPrices,
           maxSupplys: tempData.maxSupplys
         });
-        const tx = write?.();
-        console.log(tx);
-
+        write?.();
       }
     } catch (error) {
       console.error("Error:", error);
