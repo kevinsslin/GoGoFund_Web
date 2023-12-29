@@ -1,6 +1,4 @@
-"use client";
-
-import { useRef, useEffect, useState } from "react";
+import { useState } from "react";
 
 import ClickAwayListener from "@mui/material/ClickAwayListener";
 import Input from "@mui/material/Input";
@@ -11,52 +9,50 @@ import { updateEvent } from "./actions";
 
 type Props = {
   eventTitle: string;
-  eventId: number;
+  eventId: string;
 };
 
 function EditTitle({ eventTitle, eventId }: Props) {
-  const [edittingTitle, setEdittingTitle] = useState(false);
-  const titleRef = useRef<HTMLInputElement>(null);
+  const [currentTitle, setCurrentTitle] = useState(eventTitle);
+  const [editingTitle, setEditingTitle] = useState(false);
 
   const { address } = useAccount();
 
-  useEffect(() => {
-    if (edittingTitle && titleRef.current) {
-      titleRef.current.value = eventTitle;
-    }
-  }, [edittingTitle, eventTitle]);
-
   const handleUpdateTitle = async () => {
-    if (!titleRef.current) return;
-
-    if (!titleRef.current.value) {
+    if (currentTitle === "") {
       alert("List title cannot be empty");
       return;
     }
-    updateEvent(address, eventId, { title: titleRef.current.value });
-    setEdittingTitle(false);
+
+    const updatedEvent = await updateEvent(address, eventId, {
+      title: currentTitle,
+    });
+    if (updatedEvent) {
+      setCurrentTitle(updatedEvent.title);
+    }
+    setEditingTitle(false);
   };
 
   return (
     <>
-      {edittingTitle ? (
+      {editingTitle ? (
         <ClickAwayListener onClickAway={handleUpdateTitle}>
           <Input
             autoFocus
-            defaultValue={eventTitle}
-            className="p-2 text-2xl"
+            type="text"
+            value={currentTitle}
+            onChange={(e) => setCurrentTitle(e.target.value)}
             placeholder="Enter a new title..."
             sx={{ width: "100%" }}
-            inputRef={titleRef}
           />
         </ClickAwayListener>
       ) : (
         <button
-          onClick={() => setEdittingTitle(true)}
+          onClick={() => setEditingTitle(true)}
           className="w-full rounded-md p-2 hover:bg-white/10"
         >
           <Typography className="break-all text-start text-5xl font-bold">
-            {eventTitle}
+            {currentTitle != null ? currentTitle : eventTitle}
           </Typography>
         </button>
       )}

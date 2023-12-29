@@ -5,9 +5,9 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import { useParams } from "next/navigation";
 
-import EditAmount from "../_components/EditAmount";
 import EditDescription from "../_components/EditDescription";
 import EditTitle from "../_components/EditTitle";
+import EditValue from "../_components/EditValue";
 import NFTDialog from "../_components/NFTDialog";
 import Divider from "@mui/material/Divider";
 
@@ -52,11 +52,17 @@ function MyEventsIdPage() {
           />
         </div>
         <div>
-          <EditTitle eventTitle={dbEvent.title} eventId={params.eventId as string} />
+          <EditTitle
+            eventTitle={dbEvent.title}
+            eventId={params.eventId as string}
+          />
           <div className="flex flex-col p-2">
             <div className="flex flex-row space-x-4">
               <p className="flex items-center justify-center text-lg">$</p>
-              <EditAmount />
+              <EditValue
+                eventTargetValue={dbEvent.targetValue}
+                eventId={params.eventId as string}
+              />
             </div>
             <p className="pt-2 text-lg">{`Current Amount: ${dbEvent?.currency}$ ${dbEvent?.currentValue}`}</p>
           </div>
@@ -75,7 +81,10 @@ function MyEventsIdPage() {
           orientation="horizontal"
           sx={{ borderWidth: 1 }}
         />
-        <EditDescription />
+        <EditDescription
+          eventDescription={dbEvent.description}
+          eventId={params.eventId as string}
+        />
       </div>
     </main>
   );

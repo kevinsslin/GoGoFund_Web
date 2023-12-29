@@ -24,5 +24,5 @@ export type allEventDto = {
 export type updateEventType = {
   title?: string;
   description?: string;
-  targetAmount?: number;
+  targetValue?: number;
 };

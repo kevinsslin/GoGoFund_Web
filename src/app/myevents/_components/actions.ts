@@ -16,6 +16,7 @@ export const updateEvent = async (
     } else {
       const eventData = await response.json();
       console.log("New event data:", eventData);
+      return eventData;
     }
   } catch (error) {
     console.error("Error:", error);
