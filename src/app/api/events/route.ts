@@ -1,6 +1,8 @@
 import { NextResponse, type NextRequest } from "next/server";
 
-import { eq, not } from "drizzle-orm";
+// TODO: recover it after publish feature
+// import { eq, not } from "drizzle-orm";
+import { eq } from "drizzle-orm";
 import { z } from "zod";
 
 import { db } from "@/db";
@@ -130,7 +132,8 @@ export async function POST(req: NextRequest) {
 export async function GET() {
   try {
     const dbEvents = await db.query.eventsTable.findMany({
-      where: not(eq(eventsTable.status, "pending")),
+      // TODO: recover it after finish publish feature
+      // where: not(eq(eventsTable.status, "pending")),
     });
 
     return NextResponse.json(
