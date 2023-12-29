@@ -1,12 +1,36 @@
+"use client";
+
+import { useState, useEffect } from "react";
+
 import Image from "next/image";
+import { useParams } from "next/navigation";
 
 import EditAmount from "../_components/EditAmount";
 import EditDescription from "../_components/EditDescription";
-import EditName from "../_components/EditName";
+import EditTitle from "../_components/EditTitle";
 import NFTDialog from "../_components/NFTDialog";
 import Divider from "@mui/material/Divider";
 
-function EventsIdPage() {
+import type { allEventDto } from "@/lib/types/db";
+
+function MyEventsIdPage() {
+  const params = useParams();
+  const [dbEvent, setDbEvent] = useState<allEventDto>([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await fetch(`/api/events/${params.eventId}`);
+      const data = await response.json();
+      setDbEvent(data);
+    };
+    fetchData();
+  }, [params.eventId]);
+
+  function formatTimestamp(timestamp: number) {
+    const date = new Date(Number(timestamp));
+    return date.toLocaleDateString();
+  }
+
   return (
     <main className="flex min-h-screen flex-col items-center">
       <div className="flex w-[50%] flex-col justify-start p-8">
@@ -28,18 +52,18 @@ function EventsIdPage() {
           />
         </div>
         <div>
-          <EditName />
+          <EditTitle eventTitle={dbEvent.title} eventId={params.eventId as string} />
           <div className="flex flex-col p-2">
             <div className="flex flex-row space-x-4">
-              <p className="flex items-center justify-center text-lg">
-                目標金額 NTD$
-              </p>
+              <p className="flex items-center justify-center text-lg">$</p>
               <EditAmount />
             </div>
-            <p className="pt-2 text-lg">已募集 NTD$ 100000</p>
+            <p className="pt-2 text-lg">{`Current Amount: ${dbEvent?.currency}$ ${dbEvent?.currentValue}`}</p>
           </div>
           <p className="p-2 text-lg">
-            募資期間 2023/12/26 12:00 – 2024/01/23 23:59
+            {`duration: ${formatTimestamp(
+              dbEvent.startDate,
+            )} – ${formatTimestamp(dbEvent.endDate)}`}
           </p>
           <NFTDialog />
         </div>
@@ -57,4 +81,4 @@ function EventsIdPage() {
   );
 }
 
-export default EventsIdPage;
+export default MyEventsIdPage;

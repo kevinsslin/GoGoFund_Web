@@ -2,7 +2,7 @@ import type { updateEventType } from "@/lib/types/db";
 
 export const updateEvent = async (
   address: `0x${string}` | undefined,
-  eventId: number,
+  eventId: string,
   formData: updateEventType,
 ) => {
   try {
