@@ -5,31 +5,31 @@ import React, { useState } from "react";
 
 import { Divider } from "@mui/material";
 import type { nft } from "@/lib/types/db";
-interface Product {
-  id: number;
-  name: string;
-  description: string;
-}
+// interface Product {
+//   id: number;
+//   name: string;
+//   description: string;
+// }
 
-const products: Product[] = [
-  {
-    id: 1,
-    name: "Product1",
-    description:
-      "apple apple vsdsvf erfgvefdbvedrbve rfbrtbrthbr tghbrtbhnrynhrhb rnbrnr hnyrnrynybyntynytn rthbrthb rthbtrhbrt htr hrth rthr",
-  },
-  {
-    id: 2,
-    name: "Product2",
-    description: "banana apple vsdsvf erfgvefd hbtrhbrt htr hrth rthr",
-  },
-  {
-    id: 3,
-    name: "Product3",
-    description:
-      "cat dbvedrbve rfbrtbrthbr tghbrtbhnrynhrhb rnbrnr hnyrnrynybyntynytn rthbrthb rthbtrhbrt htr hrth rthr",
-  },
-];
+// const products: Product[] = [
+//   {
+//     id: 1,
+//     name: "Product1",
+//     description:
+//       "apple apple vsdsvf erfgvefdbvedrbve rfbrtbrthbr tghbrtbhnrynhrhb rnbrnr hnyrnrynybyntynytn rthbrthb rthbtrhbrt htr hrth rthr",
+//   },
+//   {
+//     id: 2,
+//     name: "Product2",
+//     description: "banana apple vsdsvf erfgvefd hbtrhbrt htr hrth rthr",
+//   },
+//   {
+//     id: 3,
+//     name: "Product3",
+//     description:
+//       "cat dbvedrbve rfbrtbrthbr tghbrtbhnrynhrhb rnbrnr hnyrnrynybyntynytn rthbrthb rthbtrhbrt htr hrth rthr",
+//   },
+// ];
 
 function ProductIntro({ nfts = [] }: { nfts: nft[] }) {
   const [selectedProduct, setSelectedProduct] = useState<nft | null>(null);

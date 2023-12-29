@@ -2,8 +2,7 @@
 
 import { useState } from "react";
 import React from "react";
-
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 
 import { DialogTitle } from "@mui/material";
 import Button from "@mui/material/Button";
@@ -12,7 +11,6 @@ import DialogContent from "@mui/material/DialogContent";
 import InputLabel from "@mui/material/InputLabel";
 import TextField from "@mui/material/TextField";
 import { useAccount, useContractWrite, usePrepareContractWrite } from "wagmi";
-
 import { PoolFactoryABI } from "@/utils/abis/PoolFactory";
 import { POOL_FACTORY_ADDRESS } from "@/utils/addresses";
 
@@ -26,11 +24,14 @@ interface FormData {
   imageSrc: string;
 }
 
-function GetFondDialog() {
+interface NFTDialogProps {
+  onRefresh: () => Promise<void>;
+}
+
+function GetFondDialog ({ onRefresh }: NFTDialogProps) {
   const [open, setOpen] = React.useState(false);
   const { address } = useAccount();
   const { eventId } = useParams();
-  const router = useRouter();
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -94,7 +95,7 @@ function GetFondDialog() {
         // Handle error: Display it in UI, etc.
       } else {
         console.log("Success");
-        router.refresh();
+        await onRefresh();
       }
     } catch (error) {
       console.error("Error:", error);

@@ -12,7 +12,11 @@ import ProductIntro from "../../../components/ProductIntro";
 function EventsIdPage() {
   const { eventId } = useParams();
   const [dbEvents, setDbEvents] = useState<eventDetailDto | null>(null);
-
+  const refreshData = async () => {
+    const response = await fetch(`/api/events/${eventId}`);
+    const data = await response.json();
+    setDbEvents(data);
+  };
   useEffect(() => {
     const fetchData = async () => {
       const response = await fetch(`/api/events/${eventId}`);
@@ -62,7 +66,7 @@ function EventsIdPage() {
           <p className="p-2 text-lg">
             募資期間 {startDate} – {endDate}
           </p>
-          <NFTDialog />
+          <NFTDialog onRefresh={refreshData}/>
         </div>
       </div>
       <div className="flex w-[50%] flex-col justify-start p-8">
