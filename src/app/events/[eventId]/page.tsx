@@ -1,7 +1,7 @@
 import Image from "next/image";
 
-import Clock from "../_components/Clock";
-import ProductIntro from "../_components/ProductIntro";
+import Clock from "../../../components/Clock";
+import ProductIntro from "../../../components/ProductIntro";
 import { CircularProgress } from "@mui/material";
 import type { CircularProgressProps } from "@mui/material";
 import Box from "@mui/material/Box";
@@ -52,7 +52,7 @@ function EventsIdPage() {
           />
         </div>
         <div>
-          <p className="p-4 text-6xl font-bold">name</p>
+          <p className="break-all p-4 text-6xl font-bold">name</p>
           <div className="flex flex-row items-center p-4">
             <CircularProgressWithLabel value={75} />
             <div className="pl-8">
