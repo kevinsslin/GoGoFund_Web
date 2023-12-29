@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useMemo } from "react";
 
 type CountdownTimerProps = {
-  targetDate: string;
+  targetDate: number;
 };
 
 function CountdownTimer({ targetDate }: CountdownTimerProps) {

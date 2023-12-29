@@ -58,7 +58,7 @@ function EventsIdPage() {
     fetchData();
   }, [params.eventId]);
 
-  function formatTimestamp(timestamp: string) {
+  function formatTimestamp(timestamp: number) {
     const date = new Date(Number(timestamp));
     return date.toLocaleDateString();
   }
@@ -95,7 +95,7 @@ function EventsIdPage() {
             <Clock targetDate={dbEvent.endDate} />
           </NoSsr>
           <button className="h-15 m-4 flex w-64 items-center justify-center rounded-2xl bg-dark-blue p-4 text-xl font-bold text-white">
-            Fund the Project
+            Fund
           </button>
         </div>
       </div>
