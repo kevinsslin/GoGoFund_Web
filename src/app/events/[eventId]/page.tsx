@@ -116,7 +116,7 @@ function EventsIdPage() {
         />
         <p className="break-all p-2 text-xl">{dbEvent.description}</p>
       </div>
-      <div className="justify-cent flex w-[50%] flex-col p-8">
+      <div className="justify-cent flex w-[50%] flex-col p-10">
         <ProductIntro />
       </div>
     </div>

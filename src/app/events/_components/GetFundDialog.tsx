@@ -77,17 +77,39 @@ function GetFundDialog() {
   // Define handleSubmit to create a new event
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    
+    for (const [key, value] of Object.entries(formData)) {
+      if (value === "") {
+        alert(`Please fill in the ${key} field.`);
+        return;
+      }
+    }
+    const today = new Date();
+    const startDate = new Date(formData.startDate);
+    const endDate = new Date(formData.endDate);
+    if (startDate < today || endDate < today) {
+      alert("Incorrect date: The date cannot be earlier than today.");
+      return;
+    }
+    
+    if (endDate < startDate) {
+      alert(
+        "Incorrect date: The end date cannot be earlier than the start date.",
+      );
+      return;
+    }
 
-    console.log("Submitting:", formData);
-    // const data = new FormData()
-    // for (const [key, value] of Object.entries(formData)) {
-    //   if (key === 'image' && value instanceof File) {
-    //     data.append('image', value, value.name);
-    //   } else {
-    //     data.append(key, String(value));
-    //   }
-    // }
-    // await createEvents(formData);
+    if (formData.targetValue < 0) {
+      alert("Incorrect number: The target amount cannot be less than 0.");
+      return;
+    }
+
+    if (!formData.image) {
+      alert("Please upload an image.");
+      return;
+    }
+    handleClose();
+    
     try {
       const response = await fetch("/api/events", {
         method: "POST",
@@ -219,9 +241,7 @@ function GetFundDialog() {
             className="pb-2"
           />
           <form onSubmit={handleSubmit} className="flex justify-center">
-            <Button type="submit" onClick={handleClose}>
-              Submit
-            </Button>
+            <Button type="submit">Submit</Button>
           </form>
         </DialogContent>
       </Dialog>

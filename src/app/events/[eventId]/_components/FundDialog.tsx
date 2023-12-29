@@ -42,7 +42,7 @@ function FundDialog({ poolAddress, nfts }: FundDialogProps) {
     setTotalPrice(newTotalPrice);
   }, [formData, nfts]);
 
-  const handleInputChange = (index, value) => {
+  const handleInputChange = (index: number, value: string) => {
     setFormData((prevData) => {
       const updatedAmounts = [...prevData.amounts];
       updatedAmounts[index] = value;
@@ -80,7 +80,7 @@ function FundDialog({ poolAddress, nfts }: FundDialogProps) {
   return (
     <React.Fragment>
       <Button
-        className="w-30 m-4 flex h-10 items-center justify-center rounded-2xl bg-dark-blue p-4 text-xl font-bold text-white hover:bg-light-blue"
+        className="w-30 m-4 flex h-10 items-center justify-center rounded-2xl bg-dark-blue p-4 pb-2 pt-2 text-xl font-bold text-white hover:bg-light-blue"
         onClick={handleClickOpen}
       >
         Fund
@@ -89,28 +89,31 @@ function FundDialog({ poolAddress, nfts }: FundDialogProps) {
         open={open}
         onClose={handleClose}
         fullWidth={true}
-        maxWidth={"md"}
+        maxWidth={"xs"}
       >
         <DialogTitle>Order</DialogTitle>
-        <DialogContent className="space-y-2">
+        <DialogContent>
           {nfts.map((nft, index) => (
             <div key={nft.tokenId}>
               <InputLabel htmlFor={`tokenId-${nft.tokenId}`}>
                 {`Token ID: ${nft.tokenId}, Price: ${nft.price}`}
               </InputLabel>
               <TextField
-                label={`Amount for Token ID ${nft.tokenId}`}
                 value={formData.amounts[index]}
                 onChange={(e) => handleInputChange(index, e.target.value)}
-                className="mt-4"
+                className="pb-2"
                 fullWidth
+                variant="standard"
+                type="number"
               />
             </div>
           ))}
-          <div>Total Price: {totalPrice}</div>
-          <Button disabled={!write} onClick={handleSubmit}>
-            Submit
-          </Button>
+          <div className="flex flex-row justify-between">
+            <p className="pt-2 text-xl font-bold">Total Price: {totalPrice}</p>
+            <Button disabled={!write} onClick={handleSubmit}>
+              Submit
+            </Button>
+          </div>
         </DialogContent>
       </Dialog>
     </React.Fragment>

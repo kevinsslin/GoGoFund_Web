@@ -33,6 +33,7 @@ export async function GET(
         id: dbUser.id,
         walletAddress: dbUser.walletAddress,
         username: dbUser.username,
+        email: dbUser.email,
       },
       { status: 200 },
     );

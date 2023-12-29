@@ -1,16 +1,30 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import EventCard from "../events/_components/EventCard";
 import { Divider, Grid } from "@mui/material";
+import { useAccount } from "wagmi";
 
 import UserDialog from "@/components/UserDialog";
 
 import AvatarSelector from "./_component/AvatarSelect";
 
 function CollectionPage() {
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const { address } = useAccount();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await fetch(`/api/users/${address}`);
+      const data = await response.json();
+      setName(data.username);
+      setEmail(data.email);
+    };
+    fetchData();
+  }, [address]);
 
   const handelClick = () => {
     setOpen(true);
@@ -58,8 +72,8 @@ function CollectionPage() {
     <main className="flex flex-row justify-center space-x-40 pl-32 pr-32">
       <div className="flex flex-col items-start">
         <AvatarSelector />
-        <p className="pt-6 text-5xl">username</p>
-        <p className="pb-6 pt-6 text-2xl">b10303029@ntu.edu.tw</p>
+        <p className="pt-6 text-5xl">{name}</p>
+        <p className="pb-6 pt-6 text-2xl">{email}</p>
         <button
           className="w-64 rounded-md border-2 p-2 text-lg"
           onClick={handelClick}
