@@ -14,6 +14,7 @@ const postUserRequestSchema = z.object({
 type PostUserRequest = z.infer<typeof postUserRequestSchema>;
 
 // POST /api/users
+/// Create User
 export async function POST(req: NextRequest) {
   const data = await req.json();
 

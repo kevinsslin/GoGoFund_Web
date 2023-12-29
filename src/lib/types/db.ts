@@ -26,3 +26,27 @@ export type updateEventType = {
   description?: string;
   targetValue?: number;
 };
+
+export type nft = {
+  displayId: string;
+  name: string;
+  totalAmount: number;
+  nowAmount: number;
+  price: number;
+  description: string;
+  imageSrc: string;
+};
+
+export type eventDetailDto = {
+  id: number;
+  eventAddress: string;
+  title: string;
+  description: string;
+  startDate: string; // or Date
+  endDate: string; // or Date
+  targetValue: number;
+  currentValue: number;
+  currency: string;
+  imageSrc: string;
+  nfts: nft[]; // replace 'any' with the correct type for NFTs
+};
