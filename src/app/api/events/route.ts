@@ -49,6 +49,7 @@ const postEventRequestSchema = z.object({
 type PostEventRequest = z.infer<typeof postEventRequestSchema>;
 
 // POST /api/events
+/// Create Event
 export async function POST(req: NextRequest) {
   console.log("POST /api/events");
   const data = await req.json();
@@ -129,6 +130,7 @@ export async function POST(req: NextRequest) {
 }
 
 // GET /api/events
+/// Get All Events
 export async function GET() {
   try {
     const dbEvents = await db.query.eventsTable.findMany({

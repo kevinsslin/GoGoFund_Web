@@ -3,23 +3,34 @@
 import { useState } from "react";
 import React from "react";
 
+import { useParams, useRouter } from "next/navigation";
+
 import { DialogTitle } from "@mui/material";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
 import InputLabel from "@mui/material/InputLabel";
 import TextField from "@mui/material/TextField";
+import { useAccount, useContractWrite, usePrepareContractWrite } from "wagmi";
+
+import { PoolFactoryABI } from "@/utils/abis/PoolFactory";
+import { POOL_FACTORY_ADDRESS } from "@/utils/addresses";
 
 // Define formData list
 interface FormData {
-  id: string;
-  price: string;
-  totalamount: string;
+  address: string;
+  price: number;
+  name: string;
+  description: string;
+  totalAmount: number;
+  imageSrc: string;
 }
 
 function GetFondDialog() {
   const [open, setOpen] = React.useState(false);
-  const [formDataArray, setFormDataArray] = useState<FormData[]>([]);
+  const { address } = useAccount();
+  const { eventId } = useParams();
+  const router = useRouter();
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -30,9 +41,24 @@ function GetFondDialog() {
   };
 
   const [formData, setFormData] = useState<FormData>({
-    id: "",
-    price: "",
-    totalamount: "",
+    address: address?.toString() || "",
+    name: "",
+    description: "",
+    price: 0,
+    totalAmount: 0,
+    imageSrc: "",
+  });
+
+  const [poolData, setPoolData] = useState({
+    fundAsset: "", // address type
+    baseURI: "", // string type
+    startTimestamp: 0, // uint256 type, ensure this is in Unix timestamp format
+    endTimestamp: 0, // uint256 type, ensure this is in Unix timestamp format
+    targetAmount: 0, // uint256 type
+    names: [], // string[] type
+    ids: [], // uint256[] type
+    mintPrices: [], // uint256[] type
+    maxSupplys: [], // uint256[] type
   });
 
   // Define handleChange to update formData
@@ -41,9 +67,13 @@ function GetFondDialog() {
   ) => {
     const { name, value } = e.target;
 
+    // Update formData with the new value
+    const updatedValue =
+      name === "price" || name === "totalAmount" ? parseInt(value, 10) : value;
+
     setFormData((prevState) => ({
       ...prevState,
-      [name]: value,
+      [name]: updatedValue,
     }));
   };
 
@@ -53,36 +83,70 @@ function GetFondDialog() {
 
     console.log("Submitting:", formData);
 
-    setFormDataArray((prevState) => [...prevState, formData]);
+    try {
+      const response = await fetch(`/api/nfts/${eventId}`, {
+        method: "POST",
+        body: JSON.stringify(formData),
+      });
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error("Error from API:", errorData.error);
+        // Handle error: Display it in UI, etc.
+      } else {
+        console.log("Success");
+        router.refresh();
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+  const { config } = usePrepareContractWrite({
+    address: POOL_FACTORY_ADDRESS as `0x${string}`,
+    abi: PoolFactoryABI,
+    functionName: "createPool",
+    args: [
+      poolData.fundAsset,
+      poolData.baseURI,
+      poolData.startTimestamp,
+      poolData.endTimestamp,
+      poolData.targetAmount,
+      poolData.names,
+      poolData.ids,
+      poolData.mintPrices,
+      poolData.maxSupplys,
+    ],
+    onSuccess: (data) => {
+      console.log("Success", data);
+    },
+  });
 
-    console.log(formDataArray);
-
-    // const data = new FormData()
-    // for (const [key, value] of Object.entries(formData)) {
-    //   if (key === 'image' && value instanceof File) {
-    //     data.append('image', value, value.name);
-    //   } else {
-    //     data.append(key, String(value));
-    //   }
-    // }
-    // await createEvents(formData);
-    // try {
-    //   const response = await fetch("/api/events", {
-    //     method: "POST",
-    //     body: JSON.stringify(formData),
-    //   });
-    //   if (!response.ok) {
-    //     const errorData = await response.json();
-    //     console.error("Error from API:", errorData.error);
-    //     // Handle error: Display it in UI, etc.
-    //   } else {
-    //     const eventData = await response.json();
-    //     console.log("Event data:", eventData);
-    //     // Process eventData as needed
-    //   }
-    // } catch (error) {
-    //   console.error("Error:", error);
-    // }
+  const { write } = useContractWrite(config);
+  const handlePublish = async () => {
+    try {
+      const response = await fetch(`/api/events/${eventId}/publish`);
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error("Error from API:", errorData.error);
+        // Handle error: Display it in UI, etc.
+      } else {
+        console.log("Success");
+        const tempData = await response.json();
+        setPoolData({
+          fundAsset: tempData.fundAsset,
+          baseURI: tempData.baseURI,
+          startTimestamp: tempData.startTimestamp,
+          endTimestamp: tempData.endTimestamp,
+          targetAmount: tempData.targetAmount,
+          names: tempData.names,
+          ids: tempData.ids,
+          mintPrices: tempData.mintPrices,
+          maxSupplys: tempData.maxSupplys,
+        });
+        write?.();
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
   };
 
   return (
@@ -93,20 +157,26 @@ function GetFondDialog() {
       >
         Add NFT Product
       </button>
+      <button
+        className="h-15 m-4 flex w-64 items-center justify-center rounded-2xl bg-dark-blue p-4 text-xl font-bold text-white"
+        onClick={handlePublish}
+      >
+        Pubkish
+      </button>
       <Dialog
         open={open}
         onClose={handleClose}
         fullWidth={true}
         maxWidth={"md"}
       >
-        <DialogTitle>Create Event</DialogTitle>
+        <DialogTitle>Create NFT</DialogTitle>
         <DialogContent className="space-y-2">
-          <InputLabel htmlFor="name">NFT Id : </InputLabel>
+          <InputLabel htmlFor="name">NFT Name : </InputLabel>
           <TextField
             autoFocus
             margin="dense"
-            id="NFT Id"
-            name="id"
+            id="NFT Name"
+            name="name"
             type="text"
             fullWidth
             variant="standard"
@@ -132,8 +202,21 @@ function GetFondDialog() {
             autoFocus
             margin="dense"
             id="Total Amount"
-            name="totalamount"
+            name="totalAmount"
             type="number"
+            fullWidth
+            variant="standard"
+            onChange={handleChange}
+            required
+            className="pb-2"
+          />
+          <InputLabel htmlFor="name">Description : </InputLabel>
+          <TextField
+            autoFocus
+            margin="dense"
+            id="Description"
+            name="description"
+            type="string"
             fullWidth
             variant="standard"
             onChange={handleChange}

@@ -8,10 +8,12 @@ import { eventsTable, usersTable } from "@/db/schema";
 
 const publishEventRequestSchema = z.object({
   eventId: z.string(),
+  eventAddress: z.string(),
 });
 type publishEventRequest = z.infer<typeof publishEventRequestSchema>;
 
 // PUT /api/myevents/:address/publish
+/// Set Event Status to Ready and eventAddress
 export async function PUT(
   req: NextRequest,
   {
@@ -25,7 +27,7 @@ export async function PUT(
   const { address } = params;
   const data = await req.json();
   try {
-    const { eventId } = data as publishEventRequest;
+    const { eventId, eventAddress } = data as publishEventRequest;
     // Get the User
     const dbUser = await db.query.usersTable.findFirst({
       where: eq(usersTable.walletAddress, address),
@@ -46,8 +48,7 @@ export async function PUT(
     }
 
     console.log("dbEvent", dbEvent);
-    //TODO : 打合約 拿到eventAddress
-    const eventAddress = "0x1234567890";
+
     // Update the Event
     return NextResponse.json(
       {

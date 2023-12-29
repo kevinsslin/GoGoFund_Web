@@ -1,9 +1,15 @@
 import { NextResponse, type NextRequest } from "next/server";
 
+import { eq, and, not } from "drizzle-orm";
 import { z } from "zod";
 
 import { db } from "@/db";
-import { transactionTable, transactionItemsTable } from "@/db/schema";
+import {
+  nftsTable,
+  eventsTable,
+  transactionTable,
+  transactionItemsTable,
+} from "@/db/schema";
 
 // Define a schema for individual transaction items
 const transactionItemSchema = z.object({
@@ -21,6 +27,9 @@ const postTransactionRequestSchema = z.object({
 type PostTransactionRequest = z.infer<typeof postTransactionRequestSchema>;
 
 // POST /api/events/:eventId/transaction
+/// create new transaction to Transaction Table add new transaction items to TransactionItems Table
+/// update current value of event
+/// update supply of nft
 export async function POST(
   req: NextRequest,
   { params }: { params: { eventId: string } },
@@ -36,6 +45,16 @@ export async function POST(
   const { userId, items } = data as PostTransactionRequest;
   const { eventId } = params;
   try {
+    //get Event
+    const dbEvent = await db.query.eventsTable.findFirst({
+      where: and(
+        eq(eventsTable.displayId, eventId),
+        not(eq(eventsTable.status, "pending")),
+      ),
+    });
+    if (!dbEvent) {
+      return NextResponse.json({ error: "Event Not Found" }, { status: 404 });
+    }
     // Saving the new transaction to the database
     const [transaction] = await db
       .insert(transactionTable)
@@ -46,17 +65,44 @@ export async function POST(
       })
       .returning();
 
-    // Saving the new transaction items to the database
-    await db
-      .insert(transactionItemsTable)
-      .values(
-        items.map((item) => ({
+    for (const item of items) {
+      // Saving the new transaction items to the database
+      await db
+        .insert(transactionItemsTable)
+        .values({
           transactionId: transaction.displayId,
           nftId: item.nftId,
           quantity: item.quantity,
-        })),
-      )
-      .execute();
+        })
+        .execute();
+
+      // Update the NFT table amount
+      const dbNFT = await db.query.nftsTable.findFirst({
+        where: eq(nftsTable.displayId, item.nftId),
+      });
+      if (!dbNFT) {
+        return NextResponse.json({ error: "NFT Not Found" }, { status: 404 });
+      }
+      await db
+        .update(nftsTable)
+        .set({
+          nowAmount: dbNFT.nowAmount + item.quantity,
+        })
+        .where(eq(nftsTable.displayId, item.nftId))
+        .execute();
+
+      // incrementing the currentValue based on the transaction
+      await db
+        .update(eventsTable)
+        .set({
+          currentValue: dbEvent.currentValue + item.quantity * dbNFT.price,
+        })
+        .where(eq(eventsTable.displayId, eventId))
+        .execute();
+    }
+
+    // Saving the new transaction items to the database
+
     return NextResponse.json({ status: 200 });
   } catch (error) {
     console.error("Error creating user:", error);

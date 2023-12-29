@@ -10,7 +10,8 @@ import {
   transactionItemsTable,
 } from "@/db/schema";
 
-// POST /api/transactions/:address
+// Get /api/transactions/:address
+/// Get All Transactions with Event and NFTs
 export async function GET(
   res: NextRequest,
   { params }: { params: { address: string } },
@@ -24,6 +25,7 @@ export async function GET(
     if (!dbUser) {
       return NextResponse.json({ error: "User Not Found" }, { status: 404 });
     }
+    // Get All Transactions
     const dbTransactions = await db.query.transactionTable.findMany({
       where: eq(transactionTable.userId, dbUser.displayId),
     });
@@ -36,6 +38,7 @@ export async function GET(
 
     return NextResponse.json(
       dbTransactions.map(async (dbTransaction) => {
+        // Get the Event
         const dbEvent = await db.query.eventsTable.findFirst({
           where: eq(eventsTable.displayId, dbTransaction.eventId),
         });
@@ -45,6 +48,7 @@ export async function GET(
             { status: 404 },
           );
         }
+        // Get the Transaction Items
         const dbTransactiionItems =
           await db.query.transactionItemsTable.findMany({
             where: eq(

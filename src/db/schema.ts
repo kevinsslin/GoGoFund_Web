@@ -72,6 +72,7 @@ export const nftsTable = pgTable(
     imageSrc: varchar("image_src", { length: 255 }).notNull(),
     price: integer("price").notNull(),
     name: varchar("name", { length: 100 }).notNull(),
+    tokenId: varchar("token_id", { length: 100 }),
   },
   (table) => ({
     displayIdIndex: index("nfts_display_id_index").on(table.displayId),
