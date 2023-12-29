@@ -42,7 +42,7 @@ function FundDialog({ poolAddress, nfts }: FundDialogProps) {
     setTotalPrice(newTotalPrice);
   }, [formData, nfts]);
 
-  const handleInputChange = (index:number, value:string) => {
+  const handleInputChange = (index: number, value: string) => {
     setFormData((prevData) => {
       const updatedAmounts = [...prevData.amounts];
       updatedAmounts[index] = value;
@@ -80,7 +80,7 @@ function FundDialog({ poolAddress, nfts }: FundDialogProps) {
   return (
     <React.Fragment>
       <Button
-        className="w-30 m-4 pt-2 pb-2 flex h-10 items-center justify-center rounded-2xl bg-dark-blue p-4 text-xl font-bold text-white hover:bg-light-blue"
+        className="w-30 m-4 flex h-10 items-center justify-center rounded-2xl bg-dark-blue p-4 pb-2 pt-2 text-xl font-bold text-white hover:bg-light-blue"
         onClick={handleClickOpen}
       >
         Fund
@@ -109,7 +109,7 @@ function FundDialog({ poolAddress, nfts }: FundDialogProps) {
             </div>
           ))}
           <div className="flex flex-row justify-between">
-            <p className="font-bold pt-2 text-xl">Total Price: {totalPrice}</p>
+            <p className="pt-2 text-xl font-bold">Total Price: {totalPrice}</p>
             <Button disabled={!write} onClick={handleSubmit}>
               Submit
             </Button>

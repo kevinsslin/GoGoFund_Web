@@ -40,7 +40,6 @@ function EventsPage() {
     fetchData();
   }, []);
 
-
   return (
     <main className="flex min-h-screen flex-col items-center justify-center pl-32 pr-32">
       <div className="w-[80%]">

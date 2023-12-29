@@ -95,7 +95,9 @@ function GetFundDialog() {
     }
     // 確認結束日期是否晚於開始日期
     if (endDate < startDate) {
-      alert("Incorrect date: The end date cannot be earlier than the start date.");
+      alert(
+        "Incorrect date: The end date cannot be earlier than the start date.",
+      );
       return;
     }
     //確認數字是否小於0
@@ -252,9 +254,7 @@ function GetFundDialog() {
             className="pb-2"
           />
           <form onSubmit={handleSubmit} className="flex justify-center">
-            <Button type="submit">
-              Submit
-            </Button>
+            <Button type="submit">Submit</Button>
           </form>
         </DialogContent>
       </Dialog>

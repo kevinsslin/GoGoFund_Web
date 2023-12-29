@@ -40,7 +40,7 @@ function ProductIntro() {
 
   return (
     <div>
-      <div className="flex flex-row justify-start pb-2 space-x-8">
+      <div className="flex flex-row justify-start space-x-8 pb-2">
         {mockproducts.map((product) => (
           <button
             key={product.id}

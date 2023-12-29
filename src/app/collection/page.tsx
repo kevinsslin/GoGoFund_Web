@@ -4,12 +4,11 @@ import React, { useEffect, useState } from "react";
 
 import EventCard from "../events/_components/EventCard";
 import { Divider, Grid } from "@mui/material";
+import { useAccount } from "wagmi";
 
 import UserDialog from "@/components/UserDialog";
 
 import AvatarSelector from "./_component/AvatarSelect";
-
-import { useAccount } from "wagmi";
 
 function CollectionPage() {
   const [open, setOpen] = useState(false);
