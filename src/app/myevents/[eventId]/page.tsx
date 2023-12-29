@@ -1,11 +1,9 @@
 import Image from "next/image";
-
 import EditAmount from "../_components/EditAmount";
 import EditDescription from "../_components/EditDescription";
 import EditName from "../_components/EditName";
 import NFTDialog from "../_components/NFTDialog";
 import Divider from "@mui/material/Divider";
-
 function EventsIdPage() {
   return (
     <main className="flex min-h-screen flex-col items-center">

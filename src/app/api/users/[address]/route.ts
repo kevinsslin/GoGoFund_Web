@@ -48,8 +48,8 @@ export async function GET(
 }
 
 const updateUserRequestSchema = z.object({
-  username: z.string(),
-  email: z.string().email(),
+  username: z.string().optional(),
+  email: z.string().email().optional(),
 });
 type updateUserRequest = z.infer<typeof updateUserRequestSchema>;
 // PUT /api/users/:address

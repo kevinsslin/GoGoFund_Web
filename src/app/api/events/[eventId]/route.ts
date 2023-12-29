@@ -62,9 +62,9 @@ export async function GET(
 
 const updateEventRequestSchema = z.object({
   address: z.string(),
-  title: z.string(),
-  description: z.string(),
-  imageSrc: z.string(),
+  title: z.string().optional(),
+  description: z.string().optional(),
+  imageSrc: z.string().optional(),
 });
 type updateEventRequest = z.infer<typeof updateEventRequestSchema>;
 

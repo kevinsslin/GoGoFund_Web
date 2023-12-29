@@ -9,7 +9,9 @@ import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
 import InputLabel from "@mui/material/InputLabel";
 import TextField from "@mui/material/TextField";
-import { useAccount } from "wagmi";
+import { useAccount, useContractWrite, usePrepareContractWrite } from "wagmi";
+import { POOL_FACTORY_ADDRESS } from "@/utils/addresses";
+import { PoolFactoryABI } from "@/utils/abis/PoolFactory";
 
 // Define formData list
 interface FormData {
@@ -43,6 +45,19 @@ function GetFondDialog() {
     totalAmount: 0,
     imageSrc: "",
   });
+
+  const [poolData, setPoolData] = useState({
+    fundAsset: '', // address type
+    baseURI: '', // string type
+    startTimestamp: 0, // uint256 type, ensure this is in Unix timestamp format
+    endTimestamp: 0, // uint256 type, ensure this is in Unix timestamp format
+    targetAmount: 0, // uint256 type
+    names: [], // string[] type
+    ids: [], // uint256[] type
+    mintPrices: [], // uint256[] type
+    maxSupplys: [] // uint256[] type
+});
+
 
   // Define handleChange to update formData
   const handleChange = (
@@ -85,6 +100,53 @@ function GetFondDialog() {
       console.error("Error:", error);
     }
   };
+  const { config } = usePrepareContractWrite({
+    address: POOL_FACTORY_ADDRESS as `0x${string}`,
+    abi: PoolFactoryABI,
+    functionName: "createPool",
+    args: [
+      poolData.fundAsset,
+      poolData.baseURI,
+      poolData.startTimestamp,
+      poolData.endTimestamp,
+      poolData.targetAmount,
+      poolData.names,
+      poolData.ids,
+      poolData.mintPrices,
+      poolData.maxSupplys
+    ],
+  });
+
+  const { write } = useContractWrite(config);
+  const handlePublish = async () => {
+    try {
+      const response = await fetch(`/api/events/${eventId}/publish`);
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error("Error from API:", errorData.error);
+        // Handle error: Display it in UI, etc.
+      } else {
+        console.log("Success");
+        const tempData = await response.json();
+        setPoolData({
+          fundAsset: tempData.fundAsset,
+          baseURI: tempData.baseURI,
+          startTimestamp: tempData.startTimestamp,
+          endTimestamp: tempData.endTimestamp,
+          targetAmount: tempData.targetAmount,
+          names: tempData.names,
+          ids: tempData.ids,
+          mintPrices: tempData.mintPrices,
+          maxSupplys: tempData.maxSupplys
+        });
+        const tx = write?.();
+        console.log(tx);
+
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  }
 
   return (
     <React.Fragment>
@@ -93,6 +155,12 @@ function GetFondDialog() {
         onClick={handleClickOpen}
       >
         Add NFT Product
+      </button>
+      <button
+        className="h-15 m-4 flex w-64 items-center justify-center rounded-2xl bg-dark-blue p-4 text-xl font-bold text-white"
+        onClick={handlePublish}
+      >
+        Pubkish
       </button>
       <Dialog
         open={open}
