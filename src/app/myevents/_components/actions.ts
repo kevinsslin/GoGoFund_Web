@@ -1,37 +1,21 @@
-import { type createEventDto } from "@/lib/types/db";
+import type { updateEventType } from "@/lib/types/db";
 
-export const createEvents = async (formData: createEventDto) => {
+export const updateEvent = async (
+  address: `0x${string}` | undefined,
+  eventId: number,
+  formData: updateEventType,
+) => {
   try {
-    const response = await fetch("/api/events", {
-      method: "POST",
+    const response = await fetch(`/api/myevents/${address}/${eventId}`, {
+      method: "PUT",
       body: JSON.stringify(formData),
     });
     if (!response.ok) {
       const errorData = await response.json();
       console.error("Error from API:", errorData.error);
-      // Handle error: Display it in UI, etc.
     } else {
       const eventData = await response.json();
-      console.log("Event data:", eventData);
-      // Process eventData as needed
-    }
-  } catch (error) {
-    console.error("Error:", error);
-  }
-};
-
-export const getEvents = async () => {
-  try {
-    const response = await fetch("/api/events");
-    if (!response.ok) {
-      const errorData = await response.json();
-      console.error("Error from API:", errorData.error);
-      // Handle error: Display it in UI, etc.
-    } else {
-      const eventData = await response.json();
-      console.log("Event data:", eventData);
-      return eventData;
-      // Process eventData as needed
+      console.log("New event data:", eventData);
     }
   } catch (error) {
     console.error("Error:", error);

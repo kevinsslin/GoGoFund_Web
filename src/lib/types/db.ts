@@ -20,3 +20,9 @@ export type allEventDto = {
   currency: string;
   image: File | null;
 };
+
+export type updateEventType = {
+  title?: string;
+  description?: string;
+  targetAmount?: number;
+};
