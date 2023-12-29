@@ -14,7 +14,7 @@ import InputLabel from "@mui/material/InputLabel";
 import TextField from "@mui/material/TextField";
 import { useAccount } from "wagmi";
 
-function GetFondDialog() {
+function FundDialog() {
   const [open, setOpen] = React.useState(false);
   const { address } = useAccount();
   const router = useRouter();
@@ -229,4 +229,4 @@ function GetFondDialog() {
   );
 }
 
-export default GetFondDialog;
+export default FundDialog;
