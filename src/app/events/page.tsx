@@ -31,9 +31,6 @@ function EventsPage() {
     const fetchData = async () => {
       const response = await fetch("/api/events");
       const data = await response.json();
-      // setDbEvents(data);
-
-      // 只顯示尚未結束的活動
       const now = new Date().getTime();
       setDbEvents(data.filter((e) => e.endDate > now));
     };
