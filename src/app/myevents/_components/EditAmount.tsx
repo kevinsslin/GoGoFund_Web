@@ -6,8 +6,8 @@ import ClickAwayListener from "@mui/material/ClickAwayListener";
 import Input from "@mui/material/Input";
 import Typography from "@mui/material/Typography";
 
-function EditName() {
-  const [dbevent, setdbevent] = useState({ amount: 500 });
+function EditName({ amount }: { amount: number }) {
+  const [dbevent, setdbevent] = useState({ amount: amount });
   const [edittingName, setEdittingName] = useState(false);
   const inputRef1 = useRef<HTMLInputElement | null>(null); // 修改這裡
 

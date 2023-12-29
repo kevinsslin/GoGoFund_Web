@@ -161,7 +161,7 @@ function GetFondDialog() {
         className="h-15 m-4 flex w-64 items-center justify-center rounded-2xl bg-dark-blue p-4 text-xl font-bold text-white"
         onClick={handlePublish}
       >
-        Pubkish
+        Publish
       </button>
       <Dialog
         open={open}

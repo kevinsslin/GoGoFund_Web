@@ -4,7 +4,7 @@
 import React, { useState } from "react";
 
 import { Divider } from "@mui/material";
-
+import type { nft } from "@/lib/types/db";
 interface Product {
   id: number;
   name: string;
@@ -31,19 +31,19 @@ const products: Product[] = [
   },
 ];
 
-function ProductIntro() {
-  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+function ProductIntro({ nfts = [] }: { nfts: nft[] }) {
+  const [selectedProduct, setSelectedProduct] = useState<nft | null>(null);
 
-  const handleSelectProduct = (product: Product) => {
+  const handleSelectProduct = (product: nft) => {
     setSelectedProduct(product);
   };
 
   return (
     <div>
       <div className="flex justify-start pb-2">
-        {products.map((product) => (
+        {nfts.map((product) => (
           <button
-            key={product.id}
+            key={product.displayId}
             onClick={() => handleSelectProduct(product)}
             className="p-2 text-4xl font-bold text-dark-blue hover:border"
           >

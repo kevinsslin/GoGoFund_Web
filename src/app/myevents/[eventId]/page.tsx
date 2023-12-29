@@ -1,12 +1,33 @@
+"use client";
 import Image from "next/image";
-
+import { useEffect, useState } from "react";
 import EditAmount from "../_components/EditAmount";
 import EditDescription from "../_components/EditDescription";
 import EditName from "../_components/EditName";
+import { useParams } from "next/navigation";
+import type { eventDetailDto } from "@/lib/types/db";
 import NFTDialog from "../_components/NFTDialog";
 import Divider from "@mui/material/Divider";
-
+import ProductIntro from "../../../components/ProductIntro";
 function EventsIdPage() {
+  const { eventId } = useParams();
+  const [dbEvents, setDbEvents] = useState<eventDetailDto | null>(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await fetch(`/api/events/${eventId}`);
+      console.log(response);
+      const data = await response.json();
+      setDbEvents(data);
+    };
+    fetchData();
+  }, [eventId]);
+
+  if (!dbEvents) {
+    return <div>loading...</div>;
+  }
+  const endDate = new Date(Number(dbEvents.endDate)).toLocaleDateString("en-US")
+  const startDate = new Date(Number(dbEvents.startDate)).toLocaleDateString("en-US");
   return (
     <main className="flex min-h-screen flex-col items-center">
       <div className="flex w-[50%] flex-col justify-start p-8">
@@ -32,14 +53,14 @@ function EventsIdPage() {
           <div className="flex flex-col p-2">
             <div className="flex flex-row space-x-4">
               <p className="flex items-center justify-center text-lg">
-                目標金額 NTD$
+                目標金額 $
               </p>
-              <EditAmount />
+              <EditAmount amount={dbEvents.targetValue}/>
             </div>
-            <p className="pt-2 text-lg">已募集 NTD$ 100000</p>
+            <p className="pt-2 text-lg">已募集 {dbEvents.currency}$ {dbEvents.currentValue}</p>
           </div>
           <p className="p-2 text-lg">
-            募資期間 2023/12/26 12:00 – 2024/01/23 23:59
+            募資期間 {startDate} – {endDate}
           </p>
           <NFTDialog />
         </div>
@@ -51,7 +72,10 @@ function EventsIdPage() {
           orientation="horizontal"
           sx={{ borderWidth: 1 }}
         />
-        <EditDescription />
+        <EditDescription description={dbEvents.description}/>
+      </div>
+      <div className="justify-cent flex w-[50%] flex-col p-8">
+        <ProductIntro nfts={dbEvents.nfts}/>
       </div>
     </main>
   );
