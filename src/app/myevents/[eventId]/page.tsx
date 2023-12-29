@@ -9,7 +9,7 @@ import Divider from "@mui/material/Divider";
 function EventsIdPage() {
   return (
     <main className="flex min-h-screen flex-col items-center">
-      <div className="flex w-[50%] flex-col justify-start p-8">
+      <div className="flex w-[50%] flex-col justify-start pl-8 pr-8 pb-8">
         <p className="flex justify-start p-2 text-4xl font-bold">Information</p>
         <Divider
           variant="middle"

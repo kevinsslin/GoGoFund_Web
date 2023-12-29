@@ -42,7 +42,7 @@ function FundDialog({ poolAddress, nfts }: FundDialogProps) {
     setTotalPrice(newTotalPrice);
   }, [formData, nfts]);
 
-  const handleInputChange = (index, value) => {
+  const handleInputChange = (index:number, value:string) => {
     setFormData((prevData) => {
       const updatedAmounts = [...prevData.amounts];
       updatedAmounts[index] = value;

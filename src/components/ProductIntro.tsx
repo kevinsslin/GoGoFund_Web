@@ -11,7 +11,7 @@ interface Product {
   description: string;
 }
 
-const products: Product[] = [
+const mockproducts: Product[] = [
   {
     id: 1,
     name: "Product1",
@@ -40,12 +40,12 @@ function ProductIntro() {
 
   return (
     <div>
-      <div className="flex justify-start pb-2">
-        {products.map((product) => (
+      <div className="flex flex-row justify-start pb-2 space-x-8">
+        {mockproducts.map((product) => (
           <button
             key={product.id}
             onClick={() => handleSelectProduct(product)}
-            className="p-2 text-4xl font-bold text-dark-blue hover:border"
+            className="text-4xl font-bold hover:text-dark-blue"
           >
             {product.name}
           </button>
@@ -67,7 +67,14 @@ function ProductIntro() {
             </p>
           </div>
         ) : (
-          <p>請選擇一個商品</p>
+          <div>
+            <p className="break-all p-2 pt-2 text-3xl font-bold">
+              {mockproducts[0].name}
+            </p>
+            <p className="break-all p-2 text-xl">
+              {mockproducts[0].description}
+            </p>
+          </div>
         )}
       </div>
     </div>
