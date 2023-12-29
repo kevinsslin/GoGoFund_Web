@@ -11,12 +11,13 @@ import { type allEventDto } from "@/lib/types/db";
 import EventCard from "./_components/EventCard";
 
 function MyEventsPage() {
-  const [dbEvents, setDbEvents] = useState<allEventDto[]>([]);
+  const [dbEvents, setDbEvents] = useState<allEventDto[] | null>(null);
   const { address } = useAccount();
   useEffect(() => {
     const fetchData = async () => {
       const response = await fetch(`/api/myevents/${address}`);
       const data = await response.json();
+      console.log(data);
       setDbEvents(data);
     };
     fetchData();
@@ -28,7 +29,7 @@ function MyEventsPage() {
           <GetFondDialog />
         </div>
         <Grid container spacing={3} direction="row" justifyContent="flex-start">
-          {dbEvents.map((e) => {
+          {dbEvents && dbEvents.map((e) => {
             // Calculate time remaining in days
             const timeRemaining =
               (e.endDate - new Date().getTime()) / (1000 * 60 * 60 * 24);
