@@ -5,6 +5,8 @@ import { eq } from "drizzle-orm";
 import { db } from "@/db";
 import { eventsTable, nftsTable } from "@/db/schema";
 import { USD_ADDRESS, NTD_ADDRESS, BTC_ADDRESS } from "@/utils/addresses";
+// GET /api/events/:eventId/publish
+/// get the event info for the construct conract
 export async function GET(
     req: NextRequest,
     {

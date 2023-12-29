@@ -7,6 +7,7 @@ import { db } from "@/db";
 import { usersTable } from "@/db/schema";
 
 // GET /api/users/:address
+/// Get User by Address
 export async function GET(
   req: NextRequest,
   {
@@ -53,6 +54,7 @@ const updateUserRequestSchema = z.object({
 });
 type updateUserRequest = z.infer<typeof updateUserRequestSchema>;
 // PUT /api/users/:address
+/// Update User
 export async function PUT(
   req: NextRequest,
   {

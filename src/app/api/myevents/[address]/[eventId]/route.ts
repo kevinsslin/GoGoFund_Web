@@ -18,6 +18,7 @@ const updateEventRequestSchema = z.object({
 type updateEventRequest = z.infer<typeof updateEventRequestSchema>;
 
 // PUT /api/myevents/:address/:eventId
+/// Update Event
 export async function PUT(
   req: NextRequest,
   {
