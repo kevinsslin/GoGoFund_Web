@@ -103,7 +103,7 @@ export async function POST(req: NextRequest) {
     }
 
     // create event
-    const newEventId = await db
+    const [newEventId] = await db
       .insert(eventsTable)
       .values({
         userId: dbUser.displayId,
@@ -117,9 +117,9 @@ export async function POST(req: NextRequest) {
         imageSrc: "",
         status: "pending",
       })
-      .execute();
+      .returning()
 
-    return NextResponse.json({ id: newEventId }, { status: 200 });
+    return NextResponse.json({ event : newEventId }, { status: 200 });
   } catch (error) {
     console.error("Error creating event:", error);
     return NextResponse.json(

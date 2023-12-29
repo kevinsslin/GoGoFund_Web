@@ -14,7 +14,7 @@ import Divider from "@mui/material/Divider";
 import NoSsr from "@mui/material/NoSsr";
 import Typography from "@mui/material/Typography";
 
-import type { allEventDto } from "@/lib/types/db";
+import type { eventDetailDto } from "@/lib/types/db";
 
 import FundDialog from "./_components/FundDialog";
 
@@ -49,7 +49,7 @@ function CircularProgressWithLabel(
 
 function EventsIdPage() {
   const params = useParams();
-  const [dbEvent, setDbEvent] = useState<allEventDto>([]);
+  const [dbEvent, setDbEvent] = useState<eventDetailDto | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -66,13 +66,10 @@ function EventsIdPage() {
   }
 
   // TODO: replace this with actual dbNFTs
-  const mockPoolAddress = "0x9d1a24c014eC5b534b1844d26fe64958966119dD";
-  const mockNfts = [
-    { tokenId: 0, price: 100, totalAmount: 100, nowAmount: 87 },
-    { tokenId: 1, price: 200, totalAmount: 200, nowAmount: 87 },
-    { tokenId: 2, price: 300, totalAmount: 300, nowAmount: 87 },
-  ];
-
+  if (!dbEvent) {
+    return <div>loading...</div>;
+  }
+  const timeExpect = (dbEvent.startDate > new Date().getTime()) ? dbEvent.startDate : dbEvent.endDate;
   return (
     <div className="flex min-h-screen flex-col items-center">
       <div className="flex flex-row justify-center">
@@ -102,9 +99,9 @@ function EventsIdPage() {
             )} – ${formatTimestamp(dbEvent.endDate)}`}
           </p>
           <NoSsr>
-            <Clock targetDate={dbEvent.endDate} />
+            <Clock targetDate={timeExpect} />
           </NoSsr>
-          <FundDialog poolAddress={mockPoolAddress} nfts={mockNfts} />
+          <FundDialog poolAddress={dbEvent.eventAddress} nfts={dbEvent.nfts} />
         </div>
       </div>
       <div className="flex w-[50%] flex-col justify-start p-8">
@@ -117,7 +114,7 @@ function EventsIdPage() {
         <p className="break-all p-2 text-xl">{dbEvent.description}</p>
       </div>
       <div className="justify-cent flex w-[50%] flex-col p-8">
-        <ProductIntro />
+        <ProductIntro nfts={dbEvent.nfts}/>
       </div>
     </div>
   );

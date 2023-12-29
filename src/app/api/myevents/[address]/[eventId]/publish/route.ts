@@ -21,13 +21,14 @@ export async function PUT(
   }: {
     params: {
       address: string;
+      eventId: string;
     };
   },
 ) {
-  const { address } = params;
+  const { address,eventId } = params;
   const data = await req.json();
   try {
-    const { eventId, eventAddress } = data as publishEventRequest;
+    const { eventAddress } = data as publishEventRequest;
     // Get the User
     const dbUser = await db.query.usersTable.findFirst({
       where: eq(usersTable.walletAddress, address),
@@ -46,14 +47,26 @@ export async function PUT(
     if (!dbEvent) {
       return NextResponse.json({ error: "Event Not Found" }, { status: 404 });
     }
+    if (!eventAddress || eventAddress === "") {
+      return NextResponse.json(
+        { error: "Event Address Not Found" },
+        { status: 404 },
+      );
+    }
 
     console.log("dbEvent", dbEvent);
+    const updatedEvent = await db
+      .update(eventsTable)
+      .set({
+        status: "ready",
+        eventAddress: eventAddress,
+      })
+      .where(eq(eventsTable.id, dbEvent.id));
 
     // Update the Event
     return NextResponse.json(
       {
-        eventAddress: eventAddress,
-        status: "Ready",
+        updatedEvent,
       },
       { status: 200 },
     );

@@ -39,6 +39,7 @@ export async function GET(
         return {
           id: dbEvent.id,
           displayId: dbEvent.displayId,
+          description: dbEvent.description,
           title: dbEvent.title,
           startDate: dbEvent.startDate,
           endDate: dbEvent.endDate,

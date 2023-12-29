@@ -32,7 +32,7 @@ function GetFondDialog ({ onRefresh }: NFTDialogProps) {
   const [open, setOpen] = React.useState(false);
   const { address } = useAccount();
   const { eventId } = useParams();
-
+  const [resultAddress, setResultAddress] = useState("");
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -118,6 +118,9 @@ function GetFondDialog ({ onRefresh }: NFTDialogProps) {
     ],
     onSuccess: (data) => {
       console.log("Success", data);
+
+      setResultAddress(data.result?.toString() || "");
+      console.log(resultAddress);
     },
   });
 
@@ -144,6 +147,11 @@ function GetFondDialog ({ onRefresh }: NFTDialogProps) {
           maxSupplys: tempData.maxSupplys,
         });
         write?.();
+        console.log("Success");
+        await fetch(`/api/myevents/${address}/${eventId}/publish`, {
+          method: "PUT",
+          body: JSON.stringify({ eventAddress: resultAddress}),
+        });
       }
     } catch (error) {
       console.error("Error:", error);

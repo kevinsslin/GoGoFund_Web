@@ -11,13 +11,7 @@ import {
 import { useAccount, useContractWrite, usePrepareContractWrite } from "wagmi";
 
 import { PoolABI } from "@/utils/abis/Pool";
-
-type nft = {
-  tokenId: number;
-  price: number;
-  totalAmount: number;
-  nowAmount: number;
-};
+import type { nft } from "@/lib/types/db";
 
 type FundDialogProps = {
   poolAddress: string;
@@ -30,7 +24,7 @@ function FundDialog({ poolAddress, nfts }: FundDialogProps) {
 
   const [formData, setFormData] = useState({
     to: address || "",
-    amounts: new Array(nfts.length).fill(""),
+    amounts: new Array(nfts?.length).fill(""),
   });
   const [totalPrice, setTotalPrice] = useState(0);
 
@@ -42,7 +36,7 @@ function FundDialog({ poolAddress, nfts }: FundDialogProps) {
     setTotalPrice(newTotalPrice);
   }, [formData, nfts]);
 
-  const handleInputChange = (index, value) => {
+  const handleInputChange = (index:number, value:string) => {
     setFormData((prevData) => {
       const updatedAmounts = [...prevData.amounts];
       updatedAmounts[index] = value;
@@ -64,15 +58,14 @@ function FundDialog({ poolAddress, nfts }: FundDialogProps) {
     functionName: "mintBatch",
     args: [
       formData.to,
-      nfts.map((nft) => nft.tokenId),
+      nfts.map((nft) => nft.id),
       formData.amounts.map(Number),
     ],
   });
 
   const { write } = useContractWrite(config);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleSubmit = () => {
     write?.();
     handleClose();
   };
@@ -94,12 +87,12 @@ function FundDialog({ poolAddress, nfts }: FundDialogProps) {
         <DialogTitle>Order</DialogTitle>
         <DialogContent className="space-y-2">
           {nfts.map((nft, index) => (
-            <div key={nft.tokenId}>
-              <InputLabel htmlFor={`tokenId-${nft.tokenId}`}>
-                {`Token ID: ${nft.tokenId}, Price: ${nft.price}`}
+            <div key={nft.id}>
+              <InputLabel htmlFor={`tokenId-${nft.id}`}>
+                {`Token ID: ${nft.id}, Price: ${nft.price}`}
               </InputLabel>
               <TextField
-                label={`Amount for Token ID ${nft.tokenId}`}
+                label={`Amount for Token ID ${nft.id}`}
                 value={formData.amounts[index]}
                 onChange={(e) => handleInputChange(index, e.target.value)}
                 className="mt-4"

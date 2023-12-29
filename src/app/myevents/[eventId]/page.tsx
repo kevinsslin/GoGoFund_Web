@@ -53,7 +53,7 @@ function EventsIdPage() {
           />
         </div>
         <div>
-          <EditName />
+          <EditName name={dbEvents.title} />
           <div className="flex flex-col p-2">
             <div className="flex flex-row space-x-4">
               <p className="flex items-center justify-center text-lg">
