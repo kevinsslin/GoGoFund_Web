@@ -2,35 +2,56 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 ## Getting Started
 
-First, run the development server:
+First, our api key is only for demo test, so we provide in .env.example for quickly setting up.
+
+1. install by pnpm
+
+2. run the docker and migrate 
+
+3. use pnpm run dev to start
+
+Other, 
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+copy .env.example to .env 
+
+pnpm i
+
+docker compose up -d
+
+pnpm migrate
+
+pnpm run dev
 ```
+
+All Events Page:
+
+查看所有發布的 events
+
+點擊 event card 可以看到更詳細活動的資訊
+
+在單個 event 頁面可以投資該活動( 錢包需有錢 )
+
+My Events Page:
+
+點擊右上 get fund 可以創建募資活動
+
+之後須至 my event 中編輯並發行 nft 商品，該活動才會出現至 All events page
+
+在單個 event 的 page 中可以編輯標題、敘述、金額等等
+
+My Collection:
+
+可以查看所有參與的項目
+
+點擊該 card 可以查看購買過的商品
+
+左側也可以編輯個人資料
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+團隊分工
+b09901063 鄭鈞元 : 後端建置、api撰寫
+b10303046 林柏呈 : 區塊鏈合約撰寫、串接至前端
+b10303029 黃榆婷 : 前端頁面設計、實作前端

@@ -6,34 +6,7 @@ import { eq, not } from "drizzle-orm";
 import { z } from "zod";
 
 import { db } from "@/db";
-import { usersTable, eventsTable } from "@/db/schema";
-
-// import { privateEnv } from "@/lib/env/private";
-// export const config = {
-//     api: {
-//       bodyParser: false,
-//     },
-//   };
-// async function uploadToPinata(formData: FormData) {
-//     try {
-//       const res = await fetch("https://api.pinata.cloud/pinning/pinFileToIPFS", {
-//         method: "POST",
-//         body: formData,
-//         headers: {
-//           Authorization: `Bearer ${privateEnv.PINATA_JWT}`, // Replace with your actual JWT token
-//         }
-//       });
-
-//       if (!res.ok) {
-//         throw new Error(`HTTP error! Status: ${res.status}`);
-//       }
-
-//       const data = await res.json();
-//       return data;
-//     } catch (error) {
-//       console.error("Error uploading file:", error);
-//     }
-//   }
+import { usersTable, eventsTable, transactionTable } from "@/db/schema";
 
 const postEventRequestSchema = z.object({
   address: z.string(),
@@ -76,23 +49,6 @@ export async function POST(req: NextRequest) {
   } = data as PostEventRequest;
   try {
     console.log("try to upload image to pinata");
-    // const formData = new FormData();
-
-    // formData.append('file', file)
-
-    // const pinataMetadata = JSON.stringify({
-    //   name: 'File name',
-    // });
-    // formData.append('pinataMetadata', pinataMetadata);
-
-    // const pinataOptions = JSON.stringify({
-    //   cidVersion: 0,
-    // });
-    // formData.append('pinataOptions', pinataOptions);
-
-    // const res = await uploadToPinata(formData);
-
-    // const imageSrc = res.IpfsHash;
 
     // Get the User
     const dbUser = await db.query.usersTable.findFirst({
@@ -134,23 +90,32 @@ export async function POST(req: NextRequest) {
 export async function GET() {
   try {
     const dbEvents = await db.query.eventsTable.findMany({
-      // TODO: recover it after finish publish feature
       where: not(eq(eventsTable.status, "pending")),
     });
 
-    return NextResponse.json(
-      dbEvents.map((dbEvent) => ({
-        displayId: dbEvent.displayId,
-        title: dbEvent.title,
-        startDate: dbEvent.startDate,
-        endDate: dbEvent.endDate,
-        targetValue: dbEvent.targetValue,
-        currentValue: dbEvent.currentValue,
-        currency: dbEvent.currency,
-        imageSrc: dbEvent.imageSrc,
-      })),
-      { status: 200 },
+    const eventsWithTransactionCount = await Promise.all(
+      dbEvents.map(async (dbEvent) => {
+        // Fetch the transactions for each event
+        const transactions = await db.query.transactionTable.findMany({
+          where: eq(transactionTable.eventId, dbEvent.displayId),
+        });
+
+        // Return the event data along with the transaction count
+        return {
+          displayId: dbEvent.displayId,
+          title: dbEvent.title,
+          startDate: dbEvent.startDate,
+          endDate: dbEvent.endDate,
+          targetValue: dbEvent.targetValue,
+          currentValue: dbEvent.currentValue,
+          currency: dbEvent.currency,
+          imageSrc: dbEvent.imageSrc,
+          transactionCount: transactions.length, // Include the transaction count
+        };
+      }),
     );
+
+    return NextResponse.json(eventsWithTransactionCount, { status: 200 });
   } catch (error) {
     console.error("Error getting events:", error);
     return NextResponse.json(

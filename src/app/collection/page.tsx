@@ -34,6 +34,17 @@ function CollectionPage() {
 
   const handleCloseDialog = () => {
     setIsDialogOpen(false);
+    refreshData();
+  };
+
+  const refreshData = async () => {
+    const response = await fetch(`/api/mycollection/${address}`);
+    const data = await response.json();
+    setDbEvents(data);
+    const response2 = await fetch(`/api/users/${address}`);
+    const data2 = await response2.json();
+    setName(data2.username);
+    setEmail(data2.email);
   };
 
   useEffect(() => {
@@ -50,24 +61,23 @@ function CollectionPage() {
     };
     fetchUser();
     fetchEvents();
-  }, [address]);
+  }, [address, open]);
 
   const handelClick = () => {
     setOpen(true);
   };
   function formatDate(dateString: string) {
     const options: Intl.DateTimeFormatOptions = {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
       weekday: "short",
       hour: "2-digit",
       minute: "2-digit",
       hour12: true,
     };
     const date = new Date(dateString);
-    return (
-      date.toLocaleDateString("en-US", options) +
-      " " +
-      date.toLocaleTimeString("en-US", options)
-    );
+    return date.toLocaleDateString("en-US", options);
   }
 
   return (
@@ -148,13 +158,18 @@ function CollectionPage() {
         </div>
         <UserDialog open={open} setOpen={setOpen} />
       </main>
-      <Dialog open={isDialogOpen} onClose={handleCloseDialog}>
+      <Dialog open={isDialogOpen} onClose={handleCloseDialog} maxWidth={"md"}>
         {selectedEvent &&
           selectedEvent.map((transaction, index) => (
             <React.Fragment key={index}>
               <DialogTitle>
                 {formatDate(transaction.transactionDate)}
               </DialogTitle>
+              <Divider
+                variant="middle"
+                orientation="horizontal"
+                sx={{ borderWidth: 1, width: "100%" }}
+              />
               <DialogContent className="space-y-2">
                 {transaction.items.map((item, index) => (
                   <div key={index} className="flex flex-row space-x-2">

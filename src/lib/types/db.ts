@@ -20,6 +20,7 @@ export type allEventDto = {
   currentValue: number;
   currency: string;
   imageSrc: string;
+  transactionCount: number;
 };
 
 export type updateEventType = {
