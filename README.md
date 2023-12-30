@@ -22,7 +22,31 @@ docker compose up -d
 pnpm migrate
 
 pnpm run dev
+```
 
+All Events Page:
+
+查看所有發布的 events
+
+點擊 event card 可以看到更詳細活動的資訊
+
+在單個 event 頁面可以投資該活動( 錢包需有錢 )
+
+My Events Page:
+
+點擊右上 get fund 可以創建募資活動
+
+之後須至 my event 中編輯並發行 nft 商品，該活動才會出現至 All events page
+
+在單個 event 的 page 中可以編輯標題、敘述、金額等等
+
+My Collection:
+
+可以查看所有參與的項目
+
+點擊該 card 可以查看購買過的商品
+
+左側也可以編輯個人資料
 
 
 
