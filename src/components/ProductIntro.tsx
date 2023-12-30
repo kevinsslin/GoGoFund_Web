@@ -4,7 +4,9 @@
 import React, { useState } from "react";
 
 import { Divider } from "@mui/material";
+
 import type { nft } from "@/lib/types/db";
+
 // interface Product {
 //   id: number;
 //   name: string;

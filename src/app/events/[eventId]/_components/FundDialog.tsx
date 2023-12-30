@@ -10,8 +10,8 @@ import {
 } from "@mui/material";
 import { useAccount, useContractWrite, usePrepareContractWrite } from "wagmi";
 
-import { PoolABI } from "@/utils/abis/Pool";
 import type { nft } from "@/lib/types/db";
+import { PoolABI } from "@/utils/abis/Pool";
 
 type FundDialogProps = {
   poolAddress: string;
@@ -36,7 +36,7 @@ function FundDialog({ poolAddress, nfts }: FundDialogProps) {
     setTotalPrice(newTotalPrice);
   }, [formData, nfts]);
 
-  const handleInputChange = (index:number, value:string) => {
+  const handleInputChange = (index: number, value: string) => {
     setFormData((prevData) => {
       const updatedAmounts = [...prevData.amounts];
       updatedAmounts[index] = value;

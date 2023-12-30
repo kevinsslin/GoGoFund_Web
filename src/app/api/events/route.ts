@@ -117,9 +117,9 @@ export async function POST(req: NextRequest) {
         imageSrc: "",
         status: "pending",
       })
-      .returning()
+      .returning();
 
-    return NextResponse.json({ event : newEventId }, { status: 200 });
+    return NextResponse.json({ event: newEventId }, { status: 200 });
   } catch (error) {
     console.error("Error creating event:", error);
     return NextResponse.json(

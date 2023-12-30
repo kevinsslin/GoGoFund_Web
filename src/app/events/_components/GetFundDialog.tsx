@@ -98,7 +98,7 @@ function GetFundDialog() {
         console.error("Error from API:", errorData.error);
         // Handle error: Display it in UI, etc.
       } else {
-        const {event} = await response.json();
+        const { event } = await response.json();
         router.push(`/myevents/${event.displayId}`);
       }
     } catch (error) {

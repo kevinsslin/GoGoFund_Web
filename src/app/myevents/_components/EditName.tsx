@@ -6,7 +6,7 @@ import ClickAwayListener from "@mui/material/ClickAwayListener";
 import Input from "@mui/material/Input";
 import Typography from "@mui/material/Typography";
 
-function EditName({name}: { name: string }) {
+function EditName({ name }: { name: string }) {
   const [dbevent, setdbevent] = useState({ name: name });
   const [edittingName, setEdittingName] = useState(false);
   const inputRef1 = useRef<HTMLInputElement>(null);

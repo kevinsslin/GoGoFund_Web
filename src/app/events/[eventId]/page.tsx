@@ -69,7 +69,10 @@ function EventsIdPage() {
   if (!dbEvent) {
     return <div>loading...</div>;
   }
-  const timeExpect = (dbEvent.startDate > new Date().getTime()) ? dbEvent.startDate : dbEvent.endDate;
+  const timeExpect =
+    dbEvent.startDate > new Date().getTime()
+      ? dbEvent.startDate
+      : dbEvent.endDate;
   return (
     <div className="flex min-h-screen flex-col items-center">
       <div className="flex flex-row justify-center">
@@ -114,7 +117,7 @@ function EventsIdPage() {
         <p className="break-all p-2 text-xl">{dbEvent.description}</p>
       </div>
       <div className="justify-cent flex w-[50%] flex-col p-8">
-        <ProductIntro nfts={dbEvent.nfts}/>
+        <ProductIntro nfts={dbEvent.nfts} />
       </div>
     </div>
   );

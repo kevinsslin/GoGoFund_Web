@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import React from "react";
+
 import { useParams } from "next/navigation";
 
 import { DialogTitle } from "@mui/material";
@@ -11,6 +12,7 @@ import DialogContent from "@mui/material/DialogContent";
 import InputLabel from "@mui/material/InputLabel";
 import TextField from "@mui/material/TextField";
 import { useAccount, useContractWrite, usePrepareContractWrite } from "wagmi";
+
 import { PoolFactoryABI } from "@/utils/abis/PoolFactory";
 import { POOL_FACTORY_ADDRESS } from "@/utils/addresses";
 
@@ -28,7 +30,7 @@ interface NFTDialogProps {
   onRefresh: () => Promise<void>;
 }
 
-function GetFondDialog ({ onRefresh }: NFTDialogProps) {
+function GetFondDialog({ onRefresh }: NFTDialogProps) {
   const [open, setOpen] = React.useState(false);
   const { address } = useAccount();
   const { eventId } = useParams();
@@ -150,7 +152,7 @@ function GetFondDialog ({ onRefresh }: NFTDialogProps) {
         console.log("Success");
         await fetch(`/api/myevents/${address}/${eventId}/publish`, {
           method: "PUT",
-          body: JSON.stringify({ eventAddress: resultAddress}),
+          body: JSON.stringify({ eventAddress: resultAddress }),
         });
       }
     } catch (error) {

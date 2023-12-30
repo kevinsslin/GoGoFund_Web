@@ -46,4 +46,3 @@ export type eventDetailDto = {
   imageSrc: string;
   nfts: nft[]; // replace 'any' with the correct type for NFTs
 };
-

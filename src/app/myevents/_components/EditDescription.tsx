@@ -6,7 +6,7 @@ import ClickAwayListener from "@mui/material/ClickAwayListener";
 import Input from "@mui/material/Input";
 import Typography from "@mui/material/Typography";
 
-function Playlist({ description }: { description: string}) {
+function Playlist({ description }: { description: string }) {
   const [dbevent, setdbevent] = useState({ description: description });
   const [edittingDescription, setEdittingDescription] = useState(false);
   const inputRef2 = useRef<HTMLInputElement>(null);

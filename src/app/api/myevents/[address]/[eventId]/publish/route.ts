@@ -25,7 +25,7 @@ export async function PUT(
     };
   },
 ) {
-  const { address,eventId } = params;
+  const { address, eventId } = params;
   const data = await req.json();
   try {
     const { eventAddress } = data as publishEventRequest;
