@@ -15,13 +15,13 @@ function ProductIntro({ nfts = [] }: { nfts: nft[] }) {
   };
 
   return (
-    <div>
+    <div className="pb-12">
       <div className="flex flex-row justify-start space-x-8 pb-2">
         {nfts.map((product) => (
           <button
             key={product.displayId}
             onClick={() => handleSelectProduct(product)}
-            className="p-2 text-4xl font-bold text-dark-blue hover:border"
+            className="pl-2 text-4xl font-bold hover:text-dark-blue"
           >
             {product.name}
           </button>
@@ -34,25 +34,19 @@ function ProductIntro({ nfts = [] }: { nfts: nft[] }) {
       />
       <div>
         {selectedProduct ? (
-          <div>
-            <p className="break-all p-2 text-3xl font-bold">
-              {selectedProduct.name}
-            </p>
+          <div className="pl-2">
             <p className="break-all p-2 text-xl">
-              {selectedProduct.description}
-            </p>
-            <p className="break-all p-2 text-3xl font-bold">
-              {selectedProduct.totalAmount}
+              price : $ {selectedProduct.price}
             </p>
             <p className="break-all p-2 text-xl">
               remain : {selectedProduct.totalAmount - selectedProduct.nowAmount}
             </p>
-            <p className="break-all p-2 text-3xl font-bold">
-              {selectedProduct.price}
+            <p className="break-all p-2 text-xl">
+              {selectedProduct.description}
             </p>
           </div>
         ) : (
-          <p>請選擇一個商品</p>
+          <p className="p-2 text-xl">No products.</p>
         )}
       </div>
     </div>

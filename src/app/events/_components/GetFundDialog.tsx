@@ -9,7 +9,6 @@ import { DialogTitle, MenuItem } from "@mui/material";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
-import Input from "@mui/material/Input";
 import InputLabel from "@mui/material/InputLabel";
 import TextField from "@mui/material/TextField";
 import { useAccount } from "wagmi";
@@ -65,15 +64,6 @@ function GetFundDialog() {
     });
   };
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!e.target.files || e.target.files.length === 0) return;
-    const file = e.target.files[0];
-    setFormData({
-      ...formData,
-      ["image"]: file,
-    });
-  };
-
   // Define handleSubmit to create a new event
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -101,11 +91,6 @@ function GetFundDialog() {
 
     if (formData.targetValue < 0) {
       alert("Incorrect number: The target amount cannot be less than 0.");
-      return;
-    }
-
-    if (!formData.image) {
-      alert("Please upload an image.");
       return;
     }
     handleClose();
@@ -172,6 +157,9 @@ function GetFundDialog() {
             className="pb-2"
           />
           <InputLabel htmlFor="name">Start Date : </InputLabel>
+          <InputLabel htmlFor="name">
+            Please ensure the selected day is late than today.
+          </InputLabel>
           <TextField
             autoFocus
             margin="dense"
@@ -231,15 +219,6 @@ function GetFundDialog() {
               <em>BTC</em>
             </MenuItem>
           </TextField>
-          <InputLabel htmlFor="name">Image : </InputLabel>
-          <Input
-            id="image"
-            name="image"
-            type="file"
-            onChange={handleImageChange}
-            required
-            className="pb-2"
-          />
           <form onSubmit={handleSubmit} className="flex justify-center">
             <Button type="submit">Submit</Button>
           </form>

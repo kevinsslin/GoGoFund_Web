@@ -26,7 +26,7 @@ function MyEventsPage() {
     return <div>loading...</div>;
   }
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center pl-32 pr-32">
+    <main className="flex min-h-screen flex-col items-center pl-32 pr-32">
       <div className="w-[80%]">
         <div className="flex justify-end">
           <GetFondDialog />
