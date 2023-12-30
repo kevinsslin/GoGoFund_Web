@@ -48,7 +48,10 @@ My Collection:
 
 左側也可以編輯個人資料
 
-
-
-
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+
+
+團隊分工
+b09901063 鄭鈞元 : 後端建置、api撰寫
+b10303046 林柏呈 : 區塊鏈合約撰寫、串接至前端
+b10303029 黃榆婷 : 前端頁面設計、實作前端
