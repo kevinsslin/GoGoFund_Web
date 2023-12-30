@@ -65,7 +65,6 @@ function EventsIdPage() {
     return date.toLocaleDateString();
   }
 
-  // TODO: replace this with actual dbNFTs
   if (!dbEvent) {
     return <div>loading...</div>;
   }

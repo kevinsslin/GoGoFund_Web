@@ -14,6 +14,7 @@ function EventsPage() {
     const fetchData = async () => {
       const response = await fetch("/api/events");
       const data = await response.json();
+      console.log(data);
       const now = new Date().getTime();
       setDbEvents(data.filter((e: { endDate: number }) => e.endDate > now));
     };
@@ -21,7 +22,7 @@ function EventsPage() {
   }, []);
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center pl-32 pr-32">
+    <main className="flex min-h-screen flex-col items-center pl-32 pr-32">
       <div className="w-[80%]">
         <Grid container spacing={3} direction="row" justifyContent="flex-start">
           {dbEvents.map((e) => {
@@ -53,7 +54,7 @@ function EventsPage() {
                   currency={e.currency}
                   progess={progress}
                   money={e.currentValue}
-                  person={0} // Assuming this is correct; replace with actual data if available
+                  person={e.transactionCount} // Assuming this is correct; replace with actual data if available
                   time={daysRemaining}
                 />
               </Grid>

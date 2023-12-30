@@ -66,9 +66,7 @@ function CollectionPage() {
       hour12: true,
     };
     const date = new Date(dateString);
-    return (
-      date.toLocaleDateString("en-US", options)
-    );
+    return date.toLocaleDateString("en-US", options);
   }
 
   return (
@@ -157,9 +155,10 @@ function CollectionPage() {
                 {formatDate(transaction.transactionDate)}
               </DialogTitle>
               <Divider
-                  variant="middle"
-                  orientation="horizontal"
-                  sx={{ borderWidth: 1, width: "100%" }}/>
+                variant="middle"
+                orientation="horizontal"
+                sx={{ borderWidth: 1, width: "100%" }}
+              />
               <DialogContent className="space-y-2">
                 {transaction.items.map((item, index) => (
                   <div key={index} className="flex flex-row space-x-2">
