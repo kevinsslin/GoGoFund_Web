@@ -126,7 +126,7 @@ function GetFondDialog({ onRefresh }: NFTDialogProps) {
     },
   });
 
-  const { write } = useContractWrite(config);
+  const { write, isSuccess } = useContractWrite(config);
   const handlePublish = async () => {
     try {
       const response = await fetch(`/api/events/${eventId}/publish`);
@@ -149,11 +149,13 @@ function GetFondDialog({ onRefresh }: NFTDialogProps) {
           maxSupplys: tempData.maxSupplys,
         });
         write?.();
-        console.log("Success");
-        await fetch(`/api/myevents/${address}/${eventId}/publish`, {
-          method: "PUT",
-          body: JSON.stringify({ eventAddress: resultAddress }),
-        });
+        if (isSuccess) {
+          console.log("isContractSuccess");
+          await fetch(`/api/myevents/${address}/${eventId}/publish`, {
+            method: "PUT",
+            body: JSON.stringify({ eventAddress: resultAddress }),
+          });
+        }
       }
     } catch (error) {
       console.error("Error:", error);

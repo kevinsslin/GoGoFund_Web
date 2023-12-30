@@ -1,59 +1,65 @@
-"use client";
-
-import { useRef, useEffect, useState } from "react";
+import { useState } from "react";
 
 import ClickAwayListener from "@mui/material/ClickAwayListener";
 import Input from "@mui/material/Input";
 import Typography from "@mui/material/Typography";
+import { useAccount } from "wagmi";
 
-function Playlist({ description }: { description: string }) {
-  const [dbevent, setdbevent] = useState({ description: description });
-  const [edittingDescription, setEdittingDescription] = useState(false);
-  const inputRef2 = useRef<HTMLInputElement>(null);
+import { updateEvent } from "./actions";
 
-  useEffect(() => {
-    if (edittingDescription && inputRef2.current) {
-      inputRef2.current.value = dbevent.description;
-    }
-  }, [edittingDescription, dbevent.description]); // Update input value when editingName or dbevent.name changes
+function EditDescription({
+  eventDescription,
+  eventId,
+}: {
+  eventDescription: string;
+  eventId: string;
+}) {
+  const [currentDescription, setCurrentDescription] =
+    useState(eventDescription);
+  const [editingDescription, setEditingDescription] = useState(false);
+
+  const { address } = useAccount();
 
   const handleUpdateDesc = async () => {
-    if (!inputRef2.current) return;
-
-    if (!inputRef2.current.value) {
+    if (currentDescription === "") {
       alert("List description cannot be empty");
       return;
     }
 
-    const newDesc = inputRef2.current.value;
-    if (newDesc !== dbevent.description) {
-      setdbevent({ description: newDesc });
+    const updatedEvent = await updateEvent(address, eventId, {
+      description: currentDescription,
+    });
+    if (updatedEvent) {
+      setCurrentDescription(updatedEvent.description);
     }
-    setEdittingDescription(false);
+    setEditingDescription(false);
   };
 
   return (
     <>
-      {edittingDescription ? (
+      {editingDescription ? (
         <ClickAwayListener onClickAway={handleUpdateDesc}>
           <Input
             autoFocus
-            defaultValue={dbevent.description}
-            className="grow break-all p-2 text-xl"
+            type="text"
+            value={currentDescription}
+            onChange={(e) => setCurrentDescription(e.target.value)}
             placeholder="Enter a new description..."
             sx={{ fontSize: "2rem", width: "100%" }}
-            inputRef={inputRef2}
             multiline
             rows={3}
           />
         </ClickAwayListener>
       ) : (
         <button
-          onClick={() => setEdittingDescription(true)}
-          className="w-2rem rounded-md p-2 hover:bg-white/10"
+          onClick={() => {
+            setCurrentDescription(eventDescription); // Reset description to the latest value when starting editing
+            setEditingDescription(true);
+          }}
+          className="w-full rounded-md p-2 hover:bg-white/10"
         >
           <Typography className="break-all p-2 text-start text-xl">
-            {dbevent.description}
+            {currentDescription != null ? currentDescription : eventDescription}
           </Typography>
         </button>
       )}
@@ -61,4 +67,4 @@ function Playlist({ description }: { description: string }) {
   );
 }
 
-export default Playlist;
+export default EditDescription;

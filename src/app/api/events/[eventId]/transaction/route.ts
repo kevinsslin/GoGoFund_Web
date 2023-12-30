@@ -5,6 +5,7 @@ import { z } from "zod";
 
 import { db } from "@/db";
 import {
+  usersTable,
   nftsTable,
   eventsTable,
   transactionTable,
@@ -13,13 +14,13 @@ import {
 
 // Define a schema for individual transaction items
 const transactionItemSchema = z.object({
-  nftId: z.string().uuid(), // nftId is a UUID string
+  nftId: z.number(), // nftId is a UUID string
   quantity: z.number().min(1), // Quantity should be at least 1
 });
 
 // Define the main schema for a transaction request
 const postTransactionRequestSchema = z.object({
-  userId: z.string().uuid(), // Validate UUID format for user ID
+  address: z.string(), // User's wallet address
   items: z.array(transactionItemSchema), // Array of transaction items
 });
 
@@ -42,9 +43,16 @@ export async function POST(
     // in case of an error, we return a 400 response
     return NextResponse.json({ error: "Invalid request" }, { status: 400 });
   }
-  const { userId, items } = data as PostTransactionRequest;
+  const { address, items } = data as PostTransactionRequest;
   const { eventId } = params;
   try {
+    //get User
+    const dbUser = await db.query.usersTable.findFirst({
+      where: eq(usersTable.walletAddress, address),
+    });
+    if (!dbUser) {
+      return NextResponse.json({ error: "User Not Found" }, { status: 404 });
+    }
     //get Event
     const dbEvent = await db.query.eventsTable.findFirst({
       where: and(
@@ -59,26 +67,32 @@ export async function POST(
     const [transaction] = await db
       .insert(transactionTable)
       .values({
-        userId,
+        userId: dbUser.displayId,
         eventId,
         transactionDate: new Date()?.toString(),
       })
       .returning();
 
     for (const item of items) {
+      const dbNFTs = await db.query.nftsTable.findFirst({
+        where: eq(nftsTable.id, item.nftId),
+      });
+      if (!dbNFTs) {
+        return NextResponse.json({ error: "NFT Not Found" }, { status: 404 });
+      }
       // Saving the new transaction items to the database
       await db
         .insert(transactionItemsTable)
         .values({
           transactionId: transaction.displayId,
-          nftId: item.nftId,
+          nftId: dbNFTs.displayId,
           quantity: item.quantity,
         })
         .execute();
 
       // Update the NFT table amount
       const dbNFT = await db.query.nftsTable.findFirst({
-        where: eq(nftsTable.displayId, item.nftId),
+        where: eq(nftsTable.id, item.nftId),
       });
       if (!dbNFT) {
         return NextResponse.json({ error: "NFT Not Found" }, { status: 404 });
@@ -88,7 +102,7 @@ export async function POST(
         .set({
           nowAmount: dbNFT.nowAmount + item.quantity,
         })
-        .where(eq(nftsTable.displayId, item.nftId))
+        .where(eq(nftsTable.id, item.nftId))
         .execute();
 
       // incrementing the currentValue based on the transaction

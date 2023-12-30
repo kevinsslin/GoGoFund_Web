@@ -7,32 +7,6 @@ import { Divider } from "@mui/material";
 
 import type { nft } from "@/lib/types/db";
 
-// interface Product {
-//   id: number;
-//   name: string;
-//   description: string;
-// }
-
-// const products: Product[] = [
-//   {
-//     id: 1,
-//     name: "Product1",
-//     description:
-//       "apple apple vsdsvf erfgvefdbvedrbve rfbrtbrthbr tghbrtbhnrynhrhb rnbrnr hnyrnrynybyntynytn rthbrthb rthbtrhbrt htr hrth rthr",
-//   },
-//   {
-//     id: 2,
-//     name: "Product2",
-//     description: "banana apple vsdsvf erfgvefd hbtrhbrt htr hrth rthr",
-//   },
-//   {
-//     id: 3,
-//     name: "Product3",
-//     description:
-//       "cat dbvedrbve rfbrtbrthbr tghbrtbhnrynhrhb rnbrnr hnyrnrynybyntynytn rthbrthb rthbtrhbrt htr hrth rthr",
-//   },
-// ];
-
 function ProductIntro({ nfts = [] }: { nfts: nft[] }) {
   const [selectedProduct, setSelectedProduct] = useState<nft | null>(null);
 
@@ -42,7 +16,7 @@ function ProductIntro({ nfts = [] }: { nfts: nft[] }) {
 
   return (
     <div>
-      <div className="flex justify-start pb-2">
+      <div className="flex flex-row justify-start space-x-8 pb-2">
         {nfts.map((product) => (
           <button
             key={product.displayId}
@@ -66,6 +40,15 @@ function ProductIntro({ nfts = [] }: { nfts: nft[] }) {
             </p>
             <p className="break-all p-2 text-xl">
               {selectedProduct.description}
+            </p>
+            <p className="break-all p-2 text-3xl font-bold">
+              {selectedProduct.totalAmount}
+            </p>
+            <p className="break-all p-2 text-xl">
+              remain : {selectedProduct.totalAmount-selectedProduct.nowAmount}
+            </p>
+            <p className="break-all p-2 text-3xl font-bold">
+              {selectedProduct.price}
             </p>
           </div>
         ) : (

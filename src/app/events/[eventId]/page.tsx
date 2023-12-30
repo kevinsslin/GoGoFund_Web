@@ -104,7 +104,11 @@ function EventsIdPage() {
           <NoSsr>
             <Clock targetDate={timeExpect} />
           </NoSsr>
-          <FundDialog poolAddress={dbEvent.eventAddress} nfts={dbEvent.nfts} />
+          <FundDialog
+            eventId={dbEvent.displayId}
+            poolAddress={dbEvent.eventAddress}
+            nfts={dbEvent.nfts}
+          />
         </div>
       </div>
       <div className="flex w-[50%] flex-col justify-start p-8">
@@ -116,7 +120,7 @@ function EventsIdPage() {
         />
         <p className="break-all p-2 text-xl">{dbEvent.description}</p>
       </div>
-      <div className="justify-cent flex w-[50%] flex-col p-8">
+      <div className="justify-cent flex w-[50%] flex-col p-10">
         <ProductIntro nfts={dbEvent.nfts} />
       </div>
     </div>

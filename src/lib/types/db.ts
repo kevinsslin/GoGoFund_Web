@@ -22,6 +22,12 @@ export type allEventDto = {
   imageSrc: string;
 };
 
+export type updateEventType = {
+  title?: string;
+  description?: string;
+  targetValue?: number;
+};
+
 export type nft = {
   id: number;
   displayId: string;
@@ -34,6 +40,7 @@ export type nft = {
 };
 
 export type eventDetailDto = {
+  displayId: string;
   id: number;
   eventAddress: string;
   title: string;

@@ -6,15 +6,15 @@ import Image from "next/image";
 import { useParams } from "next/navigation";
 
 import ProductIntro from "../../../components/ProductIntro";
-import EditAmount from "../_components/EditAmount";
 import EditDescription from "../_components/EditDescription";
-import EditName from "../_components/EditName";
+import EditTitle from "../_components/EditTitle";
+import EditValue from "../_components/EditValue";
 import NFTDialog from "../_components/NFTDialog";
 import Divider from "@mui/material/Divider";
 
 import type { eventDetailDto } from "@/lib/types/db";
 
-function EventsIdPage() {
+function MyEventsIdPage() {
   const { eventId } = useParams();
   const [dbEvents, setDbEvents] = useState<eventDetailDto | null>(null);
   const refreshData = async () => {
@@ -43,7 +43,7 @@ function EventsIdPage() {
   );
   return (
     <main className="flex min-h-screen flex-col items-center">
-      <div className="flex w-[50%] flex-col justify-start p-8">
+      <div className="flex w-[50%] flex-col justify-start pb-8 pl-8 pr-8">
         <p className="flex justify-start p-2 text-4xl font-bold">Information</p>
         <Divider
           variant="middle"
@@ -62,13 +62,16 @@ function EventsIdPage() {
           />
         </div>
         <div>
-          <EditName name={dbEvents.title} />
+          <EditTitle eventId={eventId as string} eventTitle={dbEvents.title} />
           <div className="flex flex-col p-2">
             <div className="flex flex-row space-x-4">
               <p className="flex items-center justify-center text-lg">
-                目標金額 $
+                目標金額 NTD$
               </p>
-              <EditAmount amount={dbEvents.targetValue} />
+              <EditValue
+                eventId={eventId as string}
+                eventTargetValue={dbEvents.targetValue}
+              />
             </div>
             <p className="pt-2 text-lg">
               已募集 {dbEvents.currency}$ {dbEvents.currentValue}
@@ -87,7 +90,10 @@ function EventsIdPage() {
           orientation="horizontal"
           sx={{ borderWidth: 1 }}
         />
-        <EditDescription description={dbEvents.description} />
+        <EditDescription
+          eventDescription={dbEvents.description}
+          eventId={eventId as string}
+        />
       </div>
       <div className="justify-cent flex w-[50%] flex-col p-8">
         <ProductIntro nfts={dbEvents.nfts} />
@@ -96,4 +102,4 @@ function EventsIdPage() {
   );
 }
 
-export default EventsIdPage;
+export default MyEventsIdPage;
