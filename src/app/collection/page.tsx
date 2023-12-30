@@ -9,6 +9,7 @@ import { useAccount } from "wagmi";
 import UserDialog from "@/components/UserDialog";
 
 import AvatarSelector from "./_component/AvatarSelect";
+import { use } from "chai";
 
 function CollectionPage() {
   const [open, setOpen] = useState(false);
@@ -67,7 +68,14 @@ function CollectionPage() {
       id: 7,
     },
   ];
-
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await fetch(`/api/mycollection/${address}`);
+      const data = await response.json();
+      console.log(data);
+    };
+    fetchData();
+  }, [address]);
   return (
     <main className="flex flex-row justify-center space-x-40 pl-32 pr-32">
       <div className="flex flex-col items-start">

@@ -17,6 +17,8 @@ import {
 
 import type { nft } from "@/lib/types/db";
 import { PoolABI } from "@/utils/abis/Pool";
+import { get } from "http";
+import { is } from "drizzle-orm";
 
 type FundDialogProps = {
   eventId: string;
@@ -82,7 +84,7 @@ function FundDialog({ eventId, poolAddress, nfts }: FundDialogProps) {
   });
 
   // const { write:mintBatch, isSuccess:isMintBatchSuccess } = useContractWrite(mintBatchConfig ? mintBatchConfig : mintConfig);
-  const { writeAsync: mint, isSuccess: isMintSuccess } = useContractWrite(
+  const { writeAsync: mint } = useContractWrite(
     mintConfig ? mintConfig : mintBatchConfig,
   );
   const { isSuccess } = useTransaction({
@@ -93,8 +95,8 @@ function FundDialog({ eventId, poolAddress, nfts }: FundDialogProps) {
     const getTxHash = await mint?.();
     console.log("submitting", getTxHash);
     setTxHash(getTxHash?.hash || "");
-    if (isMintSuccess && isSuccess && txHash) {
-      console.log("isContractSuccess");
+    if (txHash) {
+      if (isSuccess) {
       await fetch(`/api/events/${eventId}/transaction`, {
         method: "POST",
         body: JSON.stringify({
@@ -102,6 +104,8 @@ function FundDialog({ eventId, poolAddress, nfts }: FundDialogProps) {
           items: filteredNftsAndAmounts,
         }),
       });
+      console.log("Success");
+      }
     }
     handleClose();
   };
