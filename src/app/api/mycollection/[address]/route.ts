@@ -4,15 +4,18 @@ import { eq } from "drizzle-orm";
 
 import { db } from "@/db";
 import {
+  nftsTable,
   usersTable,
   eventsTable,
   transactionTable,
   transactionItemsTable,
 } from "@/db/schema";
+import type { nft } from "@/lib/types/db";
 
 interface TransactionItem {
   nftId: string;
   quantity: number;
+  nft: nft | undefined;
 }
 
 interface Transaction {
@@ -78,16 +81,26 @@ export async function GET(
       const dbTransactionItems = await db.query.transactionItemsTable.findMany({
         where: eq(transactionItemsTable.transactionId, dbTransaction.displayId),
       });
+      // Fetch all NFT details asynchronously
+      const itemsWithNFT = await Promise.all(
+        dbTransactionItems.map(async (item) => {
+          const nft = await db.query.nftsTable.findFirst({
+            where: eq(nftsTable.displayId, item.nftId),
+          });
+          return {
+            nftId: item.nftId,
+            quantity: item.quantity,
+            nft: nft,
+          };
+        }),
+      );
 
       // Add the current transaction to the event
       event.transactions.push({
         id: dbTransaction.id,
         displayId: dbTransaction.displayId,
         transactionDate: dbTransaction.transactionDate,
-        items: dbTransactionItems.map((item) => ({
-          nftId: item.nftId,
-          quantity: item.quantity,
-        })),
+        items: itemsWithNFT,
       });
     }
 

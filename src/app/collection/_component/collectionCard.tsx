@@ -44,36 +44,36 @@ export default function EventCard({
   }));
 
   return (
-      <Paper className="w-50 p-2 hover:cursor-pointer">
-        <div className="flex flex-col items-center justify-center">
-          <Image
-            src="/events.jpeg"
-            alt="event"
-            width={300}
-            height={300}
-            className="p-5 "
-          />
-          <Typography className="break-all font-bold" variant="h4">
-            {name}
-          </Typography>
-        </div>
-        <p className="pl-6 text-xl font-bold text-dark-blue">
-          {currency}$ {money}
-        </p>
-        <div className="flex flex-row items-center p-2">
-          <BorderLinearProgress
-            variant="determinate"
-            className="m-2"
-            value={progess>100 ? 100 : progess}
-          />
-          <p className="text-light-blue">{progess}%</p>
-        </div>
-        <div className="flex flex-row items-center justify-end pb-2">
-          <AiOutlineUser className="text-dark-blue" />
-          <p className="p-2 font-bold text-dark-blue">{person} people</p>
-          <AiOutlineFieldTime className="text-dark-blue" />
-          <p className="p-2 font-bold text-dark-blue">{time} days</p>
-        </div>
-      </Paper>
+    <Paper className="w-50 p-2 hover:cursor-pointer">
+      <div className="flex flex-col items-center justify-center">
+        <Image
+          src="/events.jpeg"
+          alt="event"
+          width={300}
+          height={300}
+          className="p-5 "
+        />
+        <Typography className="break-all font-bold" variant="h4">
+          {name}
+        </Typography>
+      </div>
+      <p className="pl-6 text-xl font-bold text-dark-blue">
+        {currency}$ {money}
+      </p>
+      <div className="flex flex-row items-center p-2">
+        <BorderLinearProgress
+          variant="determinate"
+          className="m-2"
+          value={progess > 100 ? 100 : progess}
+        />
+        <p className="text-light-blue">{progess}%</p>
+      </div>
+      <div className="flex flex-row items-center justify-end pb-2">
+        <AiOutlineUser className="text-dark-blue" />
+        <p className="p-2 font-bold text-dark-blue">{person} people</p>
+        <AiOutlineFieldTime className="text-dark-blue" />
+        <p className="p-2 font-bold text-dark-blue">{time} days</p>
+      </div>
+    </Paper>
   );
 }

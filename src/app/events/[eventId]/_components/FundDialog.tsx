@@ -95,14 +95,14 @@ function FundDialog({ eventId, poolAddress, nfts }: FundDialogProps) {
     setTxHash(getTxHash?.hash || "");
     if (txHash) {
       if (isSuccess) {
-      await fetch(`/api/events/${eventId}/transaction`, {
-        method: "POST",
-        body: JSON.stringify({
-          address: address?.toString(),
-          items: filteredNftsAndAmounts,
-        }),
-      });
-      console.log("Success");
+        await fetch(`/api/events/${eventId}/transaction`, {
+          method: "POST",
+          body: JSON.stringify({
+            address: address?.toString(),
+            items: filteredNftsAndAmounts,
+          }),
+        });
+        console.log("Success");
       }
     }
     handleClose();

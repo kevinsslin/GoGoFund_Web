@@ -67,7 +67,7 @@ export default function EventCard({
           <BorderLinearProgress
             variant="determinate"
             className="m-2"
-            value={progess>100 ? 100 : progess}
+            value={progess > 100 ? 100 : progess}
           />
           <p className="text-light-blue">{progess}%</p>
         </div>
