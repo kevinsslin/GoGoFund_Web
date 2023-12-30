@@ -34,15 +34,6 @@ function MyEventsPage() {
         <Grid container spacing={3} direction="row" justifyContent="flex-start">
           {Array.isArray(dbEvents) &&
             dbEvents.map((e) => {
-              if (
-                !e ||
-                !e.endDate ||
-                !e.currentValue ||
-                !e.targetValue ||
-                !e.displayId
-              ) {
-                return null;
-              }
               // Calculate time remaining in days
               const timeRemaining =
                 (e.endDate - new Date().getTime()) / (1000 * 60 * 60 * 24);
