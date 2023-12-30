@@ -109,7 +109,7 @@ function FundDialog({ eventId, poolAddress, nfts }: FundDialogProps) {
   return (
     <React.Fragment>
       <Button
-        className="w-30 m-4 pt-2 pb-2 flex h-10 items-center justify-center rounded-2xl bg-dark-blue p-4 pb-2 pt-2 text-xl font-bold text-white hover:bg-light-blue"
+        className="w-30 m-4 flex h-10 items-center justify-center rounded-2xl bg-dark-blue p-4 pb-2 pb-2 pt-2 pt-2 text-xl font-bold text-white hover:bg-light-blue"
         onClick={handleClickOpen}
       >
         Fund

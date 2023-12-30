@@ -157,7 +157,9 @@ function GetFundDialog() {
             className="pb-2"
           />
           <InputLabel htmlFor="name">Start Date : </InputLabel>
-          <InputLabel htmlFor="name">Please ensure the selected day is late than today.</InputLabel>
+          <InputLabel htmlFor="name">
+            Please ensure the selected day is late than today.
+          </InputLabel>
           <TextField
             autoFocus
             margin="dense"

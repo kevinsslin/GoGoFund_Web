@@ -19,8 +19,12 @@ import type { eventDetailDto } from "@/lib/types/db";
 import FundDialog from "./_components/FundDialog";
 
 function CircularProgressWithLabel(
-  props: CircularProgressProps & { value: number }, truevalue: number
+  props: CircularProgressProps & { value: number },
 ) {
+  // 如果大於100%就顯示100%
+  if (props.value > 100) {
+    props.value = 100;
+  }
   return (
     <Box sx={{ position: "relative", display: "inline-flex" }}>
       <CircularProgress variant="determinate" {...props} size="6rem" />
@@ -89,7 +93,11 @@ function EventsIdPage() {
           <p className="p-4 text-6xl font-bold">{dbEvent?.title}</p>
           <div className="flex flex-row items-center p-4">
             <CircularProgressWithLabel
-              value={(dbEvent.currentValue / dbEvent.targetValue) * 100 > 100 ? 100 : (dbEvent.currentValue / dbEvent.targetValue) * 100}
+              value={
+                (dbEvent.currentValue / dbEvent.targetValue) * 100 > 100
+                  ? 100
+                  : (dbEvent.currentValue / dbEvent.targetValue) * 100
+              }
             />
             <div className="pl-8">
               <p className="text-md pb-2">{`Target Amount: NTD$ ${dbEvent?.targetValue}`}</p>
