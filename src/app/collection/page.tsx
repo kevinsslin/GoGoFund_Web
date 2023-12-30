@@ -34,6 +34,17 @@ function CollectionPage() {
 
   const handleCloseDialog = () => {
     setIsDialogOpen(false);
+    refreshData();
+  };
+
+  const refreshData = async () => {
+    const response = await fetch(`/api/mycollection/${address}`);
+    const data = await response.json();
+    setDbEvents(data);
+    const response2 = await fetch(`/api/users/${address}`);
+    const data2 = await response2.json();
+    setName(data2.username);
+    setEmail(data2.email);
   };
 
   useEffect(() => {
@@ -50,7 +61,7 @@ function CollectionPage() {
     };
     fetchUser();
     fetchEvents();
-  }, [address]);
+  }, [address, open]);
 
   const handelClick = () => {
     setOpen(true);

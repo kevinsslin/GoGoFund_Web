@@ -7,13 +7,10 @@ import {
   DialogContent,
   InputLabel,
   TextField,
+  Alert,
 } from "@mui/material";
-import {
-  useAccount,
-  useContractWrite,
-  usePrepareContractWrite,
-  useTransaction,
-} from "wagmi";
+import Snackbar from "@mui/material/Snackbar";
+import { useAccount, useContractWrite, usePrepareContractWrite } from "wagmi";
 
 import type { nft } from "@/lib/types/db";
 import { PoolABI } from "@/utils/abis/Pool";
@@ -26,8 +23,8 @@ type FundDialogProps = {
 
 function FundDialog({ eventId, poolAddress, nfts }: FundDialogProps) {
   const [open, setOpen] = useState(false);
+  const [openSuccess, setOpensuccess] = useState(false);
   const { address } = useAccount();
-  const [txHash, setTxHash] = useState("");
   const [formData, setFormData] = useState({
     to: address || "",
     amounts: new Array(nfts?.length).fill(""),
@@ -57,6 +54,9 @@ function FundDialog({ eventId, poolAddress, nfts }: FundDialogProps) {
   const handleClose = () => {
     setOpen(false);
   };
+  const handleSSClose = () => {
+    setOpensuccess(false);
+  };
   const filteredNftsAndAmounts = nfts
     .map((nft, index) => ({
       nftId: nft.id,
@@ -85,26 +85,18 @@ function FundDialog({ eventId, poolAddress, nfts }: FundDialogProps) {
   const { writeAsync: mint } = useContractWrite(
     mintConfig ? mintConfig : mintBatchConfig,
   );
-  const { isSuccess } = useTransaction({
-    hash: txHash as `0x${string}`,
-  });
 
   const handleSubmit = async () => {
     const getTxHash = await mint?.();
     console.log("submitting", getTxHash);
-    setTxHash(getTxHash?.hash || "");
-    if (txHash) {
-      if (isSuccess) {
-        await fetch(`/api/events/${eventId}/transaction`, {
-          method: "POST",
-          body: JSON.stringify({
-            address: address?.toString(),
-            items: filteredNftsAndAmounts,
-          }),
-        });
-        console.log("Success");
-      }
-    }
+    await fetch(`/api/events/${eventId}/transaction`, {
+      method: "POST",
+      body: JSON.stringify({
+        address: address?.toString(),
+        items: filteredNftsAndAmounts,
+      }),
+    });
+    setOpensuccess(true);
     handleClose();
   };
 
@@ -147,6 +139,11 @@ function FundDialog({ eventId, poolAddress, nfts }: FundDialogProps) {
           </div>
         </DialogContent>
       </Dialog>
+      <Snackbar open={openSuccess} autoHideDuration={6000} onClose={handleSSClose}>
+        <Alert onClose={handleClose} severity="success" sx={{ width: "100%" }}>
+          Mint NFT success!
+        </Alert>
+      </Snackbar>
     </React.Fragment>
   );
 }

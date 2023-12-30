@@ -8,7 +8,6 @@ import { z } from "zod";
 import { db } from "@/db";
 import { usersTable, eventsTable, transactionTable } from "@/db/schema";
 
-
 const postEventRequestSchema = z.object({
   address: z.string(),
   title: z.string(),
@@ -113,7 +112,7 @@ export async function GET() {
           imageSrc: dbEvent.imageSrc,
           transactionCount: transactions.length, // Include the transaction count
         };
-      })
+      }),
     );
 
     return NextResponse.json(eventsWithTransactionCount, { status: 200 });
