@@ -17,8 +17,6 @@ import {
 
 import type { nft } from "@/lib/types/db";
 import { PoolABI } from "@/utils/abis/Pool";
-import { get } from "http";
-import { is } from "drizzle-orm";
 
 type FundDialogProps = {
   eventId: string;

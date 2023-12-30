@@ -53,3 +53,27 @@ export type eventDetailDto = {
   imageSrc: string;
   nfts: nft[]; // replace 'any' with the correct type for NFTs
 };
+
+export interface Transaction {
+  id: number;
+  displayId: string;
+  transactionDate: string;
+  items:  nft[];
+}
+
+
+export interface myCollectionEvent {
+  currency: string;
+  currentValue: number;
+  description: string;
+  displayId: string;
+  endDate: number;
+  eventAddress: string;
+  id: number;
+  imageSrc: string;
+  startDate: number;
+  status: string;
+  targetValue: number;
+  title: string;
+  transactions: Transaction[];
+}

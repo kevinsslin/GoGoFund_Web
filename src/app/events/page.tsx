@@ -31,8 +31,7 @@ function EventsPage() {
     const fetchData = async () => {
       const response = await fetch("/api/events");
       const data = await response.json();
-      const now = new Date().getTime();
-      setDbEvents(data.filter((e) => e.endDate > now));
+      setDbEvents(data);
     };
     fetchData();
   }, []);

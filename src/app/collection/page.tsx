@@ -1,22 +1,35 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-
-import EventCard from "../events/_components/EventCard";
+import EventCard from "./_component/collectionCard";
 import { Divider, Grid } from "@mui/material";
 import { useAccount } from "wagmi";
-
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
 import UserDialog from "@/components/UserDialog";
-
+import { Button } from "@mui/material";
 import AvatarSelector from "./_component/AvatarSelect";
-import type { allEventDto } from "@/lib/types/db";
+import type { myCollectionEvent, Transaction } from "@/lib/types/db";
 
 function CollectionPage() {
   const [open, setOpen] = useState(false);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const { address } = useAccount();
-  const [dbEvents, setDbEvents] = useState<allEventDto[]>([]);
+  const [dbEvents, setDbEvents] = useState<myCollectionEvent[] | null>(null);
+  const [selectedEvent, setSelectedEvent] = useState<Transaction[] | null>(null);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+
+  const handleCardClick = (event:Transaction[]) => {
+    setSelectedEvent(event);
+    console.log(event);
+    setIsDialogOpen(true);
+  };
+
+  const handleCloseDialog = () => {
+    setIsDialogOpen(false);
+  };
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -38,45 +51,8 @@ function CollectionPage() {
     setOpen(true);
   };
 
-  const mockdbevent = [
-    {
-      name: "name",
-      progess: 92.77,
-      person: 1000,
-      money: 9999,
-      time: 20,
-      id: 1,
-    },
-    { name: "apple", progess: 9.7, person: 102, money: 9, time: 320, id: 2 },
-    { name: "kevin", progess: 10.1, person: 1, money: 1314, time: 200, id: 3 },
-    {
-      name: "wp1121",
-      progess: 22.1,
-      person: 30,
-      money: 99678,
-      time: 48,
-      id: 4,
-    },
-    { name: "ntu", progess: 59.77, person: 92, money: 778594, time: 60, id: 5 },
-    {
-      name: "kk",
-      progess: 80.2,
-      person: 1980,
-      money: 95532,
-      time: 3944,
-      id: 6,
-    },
-    {
-      name: "books",
-      progess: 100.77,
-      person: 863,
-      money: 78443,
-      time: 302,
-      id: 7,
-    },
-  ];
-
   return (
+    <>
     <main className="flex flex-row justify-center space-x-40 pl-32 pr-32">
       <div className="flex flex-col items-start">
         <AvatarSelector />
@@ -88,7 +64,7 @@ function CollectionPage() {
         >
           edit profile
         </button>
-        <p className="pt-6 text-lg">{dbEvents.length} collections</p>
+        <p className="pt-6 text-lg">{dbEvents?dbEvents.length:0} collections</p>
       </div>
       <div className="flex w-[60%] flex-col items-start">
         <p className="flex justify-start p-2 text-4xl font-bold">
@@ -101,37 +77,71 @@ function CollectionPage() {
         />
         <div className="p-4"></div>
         <Grid container spacing={3} direction="row" justifyContent="flex-start">
-          {dbEvents.length === 0 ? (
+          {!dbEvents ? (
             <p className="text-4xl">You have no events now.</p>
           ) : (
-            dbEvents.map((e) => (
-              <Grid
-                item
-                xs={12}
-                sm={12}
-                md={6}
-                lg={4}
-                xl={4}
-                className="p-10"
-                key={e.id}
-              >
-                <EventCard
-                  id={e.id?.toString()}
-                  key={e.id}
-                  name={e.name}
-                  currency="NTD"
-                  progess={e.progess}
-                  money={e.money}
-                  person={e.person}
-                  time={e.time}
-                />
-              </Grid>
-            ))
+            (
+              dbEvents.map((e) => {
+                const timeRemaining =
+                (e.endDate - new Date().getTime()) / (1000 * 60 * 60 * 24);
+              const daysRemaining =
+                timeRemaining > 0 ? Math.ceil(timeRemaining) : 0;
+
+              // Calculate progress
+              const progress =
+                e.targetValue !== 0 ? (e.currentValue / e.targetValue) * 100 : 0;
+              return (
+                <Grid
+                  item
+                  xs={12}
+                  sm={12}
+                  md={6}
+                  lg={4}
+                  xl={4}
+                  className="p-10"
+                  key={e.displayId}
+                >
+                  <Button
+                    onClick={() => handleCardClick(e.transactions)}
+                  >
+                  <EventCard
+                    id={e.displayId}
+                    key={e.displayId}
+                    name={e.title}
+                    currency={e.currency}
+                    progess={progress}
+                    money={e.currentValue}
+                    person={0}
+                    time={daysRemaining}
+                  />
+                  </Button>
+                </Grid>)
+              }
+            )
+            )
           )}
         </Grid>
       </div>
       <UserDialog open={open} setOpen={setOpen} />
     </main>
+    <Dialog open={isDialogOpen} onClose={handleCloseDialog}>
+      {selectedEvent && selectedEvent.map((transaction, index) => (
+        <React.Fragment key={index}>
+          <DialogTitle>
+            {transaction.transactionDate}
+          </DialogTitle>
+          <DialogContent className="space-y-2">
+            {transaction.items.map((nft, nftIndex) => (
+              <div className="flex flex-row space-x-4" key={nftIndex}>
+                  {nft.name}
+                  {nft.price}
+              </div>
+            ))}
+          </DialogContent>
+        </React.Fragment>
+      ))}
+      </Dialog>
+    </>
   );
 }
 

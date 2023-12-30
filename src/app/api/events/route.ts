@@ -2,7 +2,7 @@ import { NextResponse, type NextRequest } from "next/server";
 
 // TODO: recover it after publish feature
 // import { eq, not } from "drizzle-orm";
-import { eq } from "drizzle-orm";
+import { eq, not } from "drizzle-orm";
 import { z } from "zod";
 
 import { db } from "@/db";
@@ -135,7 +135,7 @@ export async function GET() {
   try {
     const dbEvents = await db.query.eventsTable.findMany({
       // TODO: recover it after finish publish feature
-      // where: not(eq(eventsTable.status, "pending")),
+      where: not(eq(eventsTable.status, "pending")),
     });
 
     return NextResponse.json(
