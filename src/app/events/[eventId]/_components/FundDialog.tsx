@@ -8,29 +8,29 @@ import {
   InputLabel,
   TextField,
 } from "@mui/material";
-import { useAccount, useContractWrite, usePrepareContractWrite } from "wagmi";
+import {
+  useAccount,
+  useContractWrite,
+  usePrepareContractWrite,
+  useTransaction,
+} from "wagmi";
 
+import type { nft } from "@/lib/types/db";
 import { PoolABI } from "@/utils/abis/Pool";
 
-type nft = {
-  tokenId: number;
-  price: number;
-  totalAmount: number;
-  nowAmount: number;
-};
-
 type FundDialogProps = {
+  eventId: string;
   poolAddress: string;
   nfts: nft[];
 };
 
-function FundDialog({ poolAddress, nfts }: FundDialogProps) {
+function FundDialog({ eventId, poolAddress, nfts }: FundDialogProps) {
   const [open, setOpen] = useState(false);
   const { address } = useAccount();
-
+  const [txHash, setTxHash] = useState("");
   const [formData, setFormData] = useState({
     to: address || "",
-    amounts: new Array(nfts.length).fill(""),
+    amounts: new Array(nfts?.length).fill(""),
   });
   const [totalPrice, setTotalPrice] = useState(0);
 
@@ -57,23 +57,52 @@ function FundDialog({ poolAddress, nfts }: FundDialogProps) {
   const handleClose = () => {
     setOpen(false);
   };
+  const filteredNftsAndAmounts = nfts
+    .map((nft, index) => ({
+      nftId: nft.id,
+      quantity: Number(formData.amounts[index]),
+    }))
+    .filter((item) => item.quantity > 0);
 
-  const { config } = usePrepareContractWrite({
+  const filteredNfts = filteredNftsAndAmounts.map((item) => item.nftId);
+  const filteredAmounts = filteredNftsAndAmounts.map((item) => item.quantity);
+
+  const { config: mintBatchConfig } = usePrepareContractWrite({
     address: poolAddress as `0x${string}`,
     abi: PoolABI,
     functionName: "mintBatch",
-    args: [
-      formData.to,
-      nfts.map((nft) => nft.tokenId),
-      formData.amounts.map(Number),
-    ],
+    args: [formData.to, filteredNfts, filteredAmounts],
   });
 
-  const { write } = useContractWrite(config);
+  const { config: mintConfig } = usePrepareContractWrite({
+    address: poolAddress as `0x${string}`,
+    abi: PoolABI,
+    functionName: "mint",
+    args: [formData.to, filteredNfts[0], filteredAmounts[0]],
+  });
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    write?.();
+  // const { write:mintBatch, isSuccess:isMintBatchSuccess } = useContractWrite(mintBatchConfig ? mintBatchConfig : mintConfig);
+  const { writeAsync: mint, isSuccess: isMintSuccess } = useContractWrite(
+    mintConfig ? mintConfig : mintBatchConfig,
+  );
+  const { isSuccess } = useTransaction({
+    hash: txHash as `0x${string}`,
+  });
+
+  const handleSubmit = async () => {
+    const getTxHash = await mint?.();
+    console.log("submitting", getTxHash);
+    setTxHash(getTxHash?.hash || "");
+    if (isMintSuccess && isSuccess && txHash) {
+      console.log("isContractSuccess");
+      await fetch(`/api/events/${eventId}/transaction`, {
+        method: "POST",
+        body: JSON.stringify({
+          address: address?.toString(),
+          items: filteredNftsAndAmounts,
+        }),
+      });
+    }
     handleClose();
   };
 
@@ -94,11 +123,12 @@ function FundDialog({ poolAddress, nfts }: FundDialogProps) {
         <DialogTitle>Order</DialogTitle>
         <DialogContent>
           {nfts.map((nft, index) => (
-            <div key={nft.tokenId}>
-              <InputLabel htmlFor={`tokenId-${nft.tokenId}`}>
-                {`Token ID: ${nft.tokenId}, Price: ${nft.price}`}
+            <div key={nft.id}>
+              <InputLabel htmlFor={`tokenId-${nft.id}`}>
+                {`Token ID: ${nft.id}, Price: ${nft.price}`}
               </InputLabel>
               <TextField
+                label={`Amount for Token ID ${nft.id}`}
                 value={formData.amounts[index]}
                 onChange={(e) => handleInputChange(index, e.target.value)}
                 className="pb-2"
@@ -110,7 +140,7 @@ function FundDialog({ poolAddress, nfts }: FundDialogProps) {
           ))}
           <div className="flex flex-row justify-between">
             <p className="pt-2 text-xl font-bold">Total Price: {totalPrice}</p>
-            <Button disabled={!write} onClick={handleSubmit}>
+            <Button disabled={!mint} onClick={handleSubmit}>
               Submit
             </Button>
           </div>

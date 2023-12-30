@@ -3,7 +3,7 @@ import { NextResponse, type NextRequest } from "next/server";
 import { eq } from "drizzle-orm";
 
 import { db } from "@/db";
-import { usersTable, eventsTable, nftsTable } from "@/db/schema";
+import { usersTable, eventsTable } from "@/db/schema";
 
 // GET /api/events/myevents/:address
 /// Get My Events and associated NFTs
@@ -36,12 +36,10 @@ export async function GET(
 
     return NextResponse.json(
       dbEvents.map((dbEvent) => {
-        const dbNft = db.query.nftsTable.findMany({
-          where: eq(nftsTable.eventId, dbEvent.displayId),
-        });
         return {
           id: dbEvent.id,
           displayId: dbEvent.displayId,
+          description: dbEvent.description,
           title: dbEvent.title,
           startDate: dbEvent.startDate,
           endDate: dbEvent.endDate,
@@ -49,7 +47,6 @@ export async function GET(
           currentValue: dbEvent.currentValue,
           currency: dbEvent.currency,
           imageSrc: dbEvent.imageSrc,
-          nfts: dbNft,
         };
       }),
       { status: 200 },

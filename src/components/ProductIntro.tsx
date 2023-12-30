@@ -5,47 +5,23 @@ import React, { useState } from "react";
 
 import { Divider } from "@mui/material";
 
-interface Product {
-  id: number;
-  name: string;
-  description: string;
-}
+import type { nft } from "@/lib/types/db";
 
-const mockproducts: Product[] = [
-  {
-    id: 1,
-    name: "Product1",
-    description:
-      "apple apple vsdsvf erfgvefdbvedrbve rfbrtbrthbr tghbrtbhnrynhrhb rnbrnr hnyrnrynybyntynytn rthbrthb rthbtrhbrt htr hrth rthr",
-  },
-  {
-    id: 2,
-    name: "Product2",
-    description: "banana apple vsdsvf erfgvefd hbtrhbrt htr hrth rthr",
-  },
-  {
-    id: 3,
-    name: "Product3",
-    description:
-      "cat dbvedrbve rfbrtbrthbr tghbrtbhnrynhrhb rnbrnr hnyrnrynybyntynytn rthbrthb rthbtrhbrt htr hrth rthr",
-  },
-];
+function ProductIntro({ nfts = [] }: { nfts: nft[] }) {
+  const [selectedProduct, setSelectedProduct] = useState<nft | null>(null);
 
-function ProductIntro() {
-  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
-
-  const handleSelectProduct = (product: Product) => {
+  const handleSelectProduct = (product: nft) => {
     setSelectedProduct(product);
   };
 
   return (
     <div>
       <div className="flex flex-row justify-start space-x-8 pb-2">
-        {mockproducts.map((product) => (
+        {nfts.map((product) => (
           <button
-            key={product.id}
+            key={product.displayId}
             onClick={() => handleSelectProduct(product)}
-            className="text-4xl font-bold hover:text-dark-blue"
+            className="p-2 text-4xl font-bold text-dark-blue hover:border"
           >
             {product.name}
           </button>
@@ -65,16 +41,18 @@ function ProductIntro() {
             <p className="break-all p-2 text-xl">
               {selectedProduct.description}
             </p>
-          </div>
-        ) : (
-          <div>
-            <p className="break-all p-2 pt-2 text-3xl font-bold">
-              {mockproducts[0].name}
+            <p className="break-all p-2 text-3xl font-bold">
+              {selectedProduct.totalAmount}
             </p>
             <p className="break-all p-2 text-xl">
-              {mockproducts[0].description}
+              remain : {selectedProduct.totalAmount-selectedProduct.nowAmount}
+            </p>
+            <p className="break-all p-2 text-3xl font-bold">
+              {selectedProduct.price}
             </p>
           </div>
+        ) : (
+          <p>請選擇一個商品</p>
         )}
       </div>
     </div>

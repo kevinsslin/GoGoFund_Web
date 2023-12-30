@@ -10,6 +10,7 @@ export type createEventDto = {
 };
 
 export type allEventDto = {
+  id: number;
   displayId: string;
   description: string;
   title: string;
@@ -18,7 +19,7 @@ export type allEventDto = {
   targetValue: number;
   currentValue: number;
   currency: string;
-  image: File | null;
+  imageSrc: string;
 };
 
 export type updateEventType = {
@@ -28,6 +29,7 @@ export type updateEventType = {
 };
 
 export type nft = {
+  id: number;
   displayId: string;
   name: string;
   totalAmount: number;
@@ -38,12 +40,13 @@ export type nft = {
 };
 
 export type eventDetailDto = {
+  displayId: string;
   id: number;
   eventAddress: string;
   title: string;
   description: string;
-  startDate: string; // or Date
-  endDate: string; // or Date
+  startDate: number; // or Date
+  endDate: number; // or Date
   targetValue: number;
   currentValue: number;
   currency: string;

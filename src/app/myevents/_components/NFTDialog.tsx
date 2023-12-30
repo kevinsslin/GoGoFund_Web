@@ -3,7 +3,7 @@
 import { useState } from "react";
 import React from "react";
 
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 
 import { DialogTitle } from "@mui/material";
 import Button from "@mui/material/Button";
@@ -26,12 +26,15 @@ interface FormData {
   imageSrc: string;
 }
 
-function GetFondDialog() {
+interface NFTDialogProps {
+  onRefresh: () => Promise<void>;
+}
+
+function GetFondDialog({ onRefresh }: NFTDialogProps) {
   const [open, setOpen] = React.useState(false);
   const { address } = useAccount();
   const { eventId } = useParams();
-  const router = useRouter();
-
+  const [resultAddress, setResultAddress] = useState("");
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -94,7 +97,7 @@ function GetFondDialog() {
         // Handle error: Display it in UI, etc.
       } else {
         console.log("Success");
-        router.refresh();
+        await onRefresh();
       }
     } catch (error) {
       console.error("Error:", error);
@@ -117,10 +120,13 @@ function GetFondDialog() {
     ],
     onSuccess: (data) => {
       console.log("Success", data);
+
+      setResultAddress(data.result?.toString() || "");
+      console.log(resultAddress);
     },
   });
 
-  const { write } = useContractWrite(config);
+  const { write, isSuccess } = useContractWrite(config);
   const handlePublish = async () => {
     try {
       const response = await fetch(`/api/events/${eventId}/publish`);
@@ -143,6 +149,13 @@ function GetFondDialog() {
           maxSupplys: tempData.maxSupplys,
         });
         write?.();
+        if (isSuccess) {
+          console.log("isContractSuccess");
+          await fetch(`/api/myevents/${address}/${eventId}/publish`, {
+            method: "PUT",
+            body: JSON.stringify({ eventAddress: resultAddress }),
+          });
+        }
       }
     } catch (error) {
       console.error("Error:", error);
@@ -161,7 +174,7 @@ function GetFondDialog() {
         className="h-15 m-4 flex w-64 items-center justify-center rounded-2xl bg-dark-blue p-4 text-xl font-bold text-white"
         onClick={handlePublish}
       >
-        Pubkish
+        Publish
       </button>
       <Dialog
         open={open}

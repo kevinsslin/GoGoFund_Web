@@ -77,7 +77,7 @@ function GetFundDialog() {
   // Define handleSubmit to create a new event
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    
+
     for (const [key, value] of Object.entries(formData)) {
       if (value === "") {
         alert(`Please fill in the ${key} field.`);
@@ -91,7 +91,7 @@ function GetFundDialog() {
       alert("Incorrect date: The date cannot be earlier than today.");
       return;
     }
-    
+
     if (endDate < startDate) {
       alert(
         "Incorrect date: The end date cannot be earlier than the start date.",
@@ -109,7 +109,7 @@ function GetFundDialog() {
       return;
     }
     handleClose();
-    
+
     try {
       const response = await fetch("/api/events", {
         method: "POST",
@@ -120,8 +120,8 @@ function GetFundDialog() {
         console.error("Error from API:", errorData.error);
         // Handle error: Display it in UI, etc.
       } else {
-        const eventData = await response.json();
-        router.push(`/myevents/${eventData.displayId}`);
+        const { event } = await response.json();
+        router.push(`/myevents/${event.displayId}`);
       }
     } catch (error) {
       console.error("Error:", error);

@@ -34,6 +34,7 @@ export async function GET(
     return NextResponse.json(
       {
         id: dbEvent.id,
+        displayId: dbEvent.displayId,
         eventAddress: dbEvent.eventAddress,
         title: dbEvent.title,
         description: dbEvent.description,
