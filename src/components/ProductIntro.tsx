@@ -45,7 +45,7 @@ function ProductIntro({ nfts = [] }: { nfts: nft[] }) {
               {selectedProduct.totalAmount}
             </p>
             <p className="break-all p-2 text-xl">
-              remain : {selectedProduct.totalAmount-selectedProduct.nowAmount}
+              remain : {selectedProduct.totalAmount - selectedProduct.nowAmount}
             </p>
             <p className="break-all p-2 text-3xl font-bold">
               {selectedProduct.price}

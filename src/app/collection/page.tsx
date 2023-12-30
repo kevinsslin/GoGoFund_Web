@@ -9,22 +9,29 @@ import { useAccount } from "wagmi";
 import UserDialog from "@/components/UserDialog";
 
 import AvatarSelector from "./_component/AvatarSelect";
-import { use } from "chai";
+import type { allEventDto } from "@/lib/types/db";
 
 function CollectionPage() {
   const [open, setOpen] = useState(false);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const { address } = useAccount();
+  const [dbEvents, setDbEvents] = useState<allEventDto[]>([]);
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchUser = async () => {
       const response = await fetch(`/api/users/${address}`);
       const data = await response.json();
       setName(data.username);
       setEmail(data.email);
     };
-    fetchData();
+    const fetchEvents = async () => {
+      const reponse = await fetch(`/api/mycollection/${address}`);
+      const data = await reponse.json();
+      setDbEvents(data);
+    }
+    fetchUser();
+    fetchEvents();
   }, [address]);
 
   const handelClick = () => {
@@ -68,14 +75,7 @@ function CollectionPage() {
       id: 7,
     },
   ];
-  useEffect(() => {
-    const fetchData = async () => {
-      const response = await fetch(`/api/mycollection/${address}`);
-      const data = await response.json();
-      console.log(data);
-    };
-    fetchData();
-  }, [address]);
+
   return (
     <main className="flex flex-row justify-center space-x-40 pl-32 pr-32">
       <div className="flex flex-col items-start">
@@ -88,7 +88,7 @@ function CollectionPage() {
         >
           edit profile
         </button>
-        <p className="pt-6 text-lg">{mockdbevent.length} collections</p>
+        <p className="pt-6 text-lg">{dbEvents.length} collections</p>
       </div>
       <div className="flex w-[60%] flex-col items-start">
         <p className="flex justify-start p-2 text-4xl font-bold">
@@ -101,10 +101,10 @@ function CollectionPage() {
         />
         <div className="p-4"></div>
         <Grid container spacing={3} direction="row" justifyContent="flex-start">
-          {mockdbevent.length === 0 ? (
+          {dbEvents.length === 0 ? (
             <p className="text-4xl">You have no events now.</p>
           ) : (
-            mockdbevent.map((e) => (
+            dbEvents.map((e) => (
               <Grid
                 item
                 xs={12}
