@@ -21,10 +21,6 @@ import FundDialog from "./_components/FundDialog";
 function CircularProgressWithLabel(
   props: CircularProgressProps & { value: number },
 ) {
-  // 如果大於100%就顯示100%
-  if (props.value > 100) {
-    props.value = 100;
-  }
   return (
     <Box sx={{ position: "relative", display: "inline-flex" }}>
       <CircularProgress variant="determinate" {...props} size="6rem" />
