@@ -32,8 +32,17 @@ function MyEventsPage() {
           <GetFondDialog />
         </div>
         <Grid container spacing={3} direction="row" justifyContent="flex-start">
-          {dbEvents &&
+          {Array.isArray(dbEvents) &&
             dbEvents.map((e) => {
+              if (
+                !e ||
+                !e.endDate ||
+                !e.currentValue ||
+                !e.targetValue ||
+                !e.displayId
+              ) {
+                return null;
+              }
               // Calculate time remaining in days
               const timeRemaining =
                 (e.endDate - new Date().getTime()) / (1000 * 60 * 60 * 24);
@@ -64,7 +73,7 @@ function MyEventsPage() {
                     currency={e.currency}
                     progess={progress}
                     money={e.currentValue}
-                    person={0} // Assuming this is correct; replace with actual data if available
+                    person={0} // TODO: Assuming this is correct; replace with actual data if available
                     time={daysRemaining}
                   />
                 </Grid>
