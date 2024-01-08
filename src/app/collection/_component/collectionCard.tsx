@@ -20,6 +20,8 @@ export type CardListProps = {
   money: number;
   person: number;
   time: number;
+  isFulfilled: boolean;
+  isPending: boolean;
 };
 
 export default function EventCard({
